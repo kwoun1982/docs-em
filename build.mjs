@@ -10,6 +10,7 @@ const DOCS = join(ROOT, 'docs');
 
 // 카테고리 표시 라벨 (디렉토리명 → 사람용)
 const CAT_LABELS = {
+  '00_결정': '결정해야 할 것',
   '01_시스템구성': '시스템 구성',
   '02_기획서': '기획서',
   '03_DATABASE': 'DATABASE',
@@ -70,6 +71,23 @@ function rewriteLinks(html, currentId) {
 
 const cats = collect();
 
+// ```mermaid 코드블록 → <pre class="mermaid"> (mermaid.js가 렌더)
+function mermaidBlocks(html) {
+  return html.replace(
+    /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+    (_m, code) => {
+      // marked가 escape한 엔티티를 mermaid가 읽도록 복원
+      const src = code
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+      return `<pre class="mermaid">${src}</pre>`;
+    }
+  );
+}
+
 // 마크다운 → HTML (문서별)
 marked.setOptions({ gfm: true, breaks: false });
 const docsHtml = {};
@@ -77,6 +95,7 @@ for (const c of cats) {
   for (const d of c.docs) {
     let h = marked.parse(d.md);
     h = rewriteLinks(h, d.id);
+    h = mermaidBlocks(h);
     docsHtml[d.id] = h;
   }
 }
@@ -178,6 +197,14 @@ const html = `<!DOCTYPE html>
     padding:16px;overflow-x:auto;margin:16px 0;
   }
   #content pre code{background:none;padding:0;color:#e6edf3;font-size:12.5px;line-height:1.6}
+  /* mermaid 다이어그램: 코드블록 스타일 제거, 중앙 정렬 */
+  #content pre.mermaid{
+    background:#0f141b;border:1px solid var(--border);border-radius:8px;
+    padding:20px;text-align:center;overflow-x:auto;
+    font-family:inherit;color:inherit;
+  }
+  #content pre.mermaid svg{max-width:100%;height:auto}
+  #content pre.mermaid:not([data-processed]){color:var(--muted);font-size:12px}
   #content table{
     border-collapse:collapse;width:100%;margin:18px 0;font-size:13.5px;display:block;overflow-x:auto;
   }
@@ -208,16 +235,26 @@ const html = `<!DOCTYPE html>
       ${articles}
     </div>
   </main>
-<script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad:false, theme:'dark', securityLevel:'loose',
+    themeVariables:{ fontSize:'14px', fontFamily:'-apple-system,BlinkMacSystemFont,sans-serif' } });
+
   const links = document.querySelectorAll('.doc-link');
   const docs = document.querySelectorAll('article.doc');
   const content = document.getElementById('content');
+
+  async function renderMermaid(article){
+    const blocks = article.querySelectorAll('pre.mermaid:not([data-processed])');
+    if(blocks.length){ try{ await mermaid.run({ nodes: blocks }); }catch(e){ console.error(e); } }
+  }
   function show(id){
-    let found=false;
-    docs.forEach(d=>{ const on = d.dataset.id===id; d.hidden=!on; if(on) found=true; });
-    if(!found){ id='${firstId}'; docs.forEach(d=>d.hidden = d.dataset.id!==id); }
+    let active=null;
+    docs.forEach(d=>{ const on = d.dataset.id===id; d.hidden=!on; if(on) active=d; });
+    if(!active){ id='${firstId}'; docs.forEach(d=>{ const on=d.dataset.id===id; d.hidden=!on; if(on) active=d; }); }
     links.forEach(l=>l.classList.toggle('active', l.dataset.id===id));
     content.scrollTop=0;
+    if(active) renderMermaid(active);  // 처음 표시될 때만 렌더(이후 data-processed로 스킵)
   }
   function current(){
     const h=decodeURIComponent(location.hash.replace(/^#/,''));

@@ -68,6 +68,14 @@
     padding:16px;overflow-x:auto;margin:16px 0;
   }
   #content pre code{background:none;padding:0;color:#e6edf3;font-size:12.5px;line-height:1.6}
+  /* mermaid 다이어그램: 코드블록 스타일 제거, 중앙 정렬 */
+  #content pre.mermaid{
+    background:#0f141b;border:1px solid var(--border);border-radius:8px;
+    padding:20px;text-align:center;overflow-x:auto;
+    font-family:inherit;color:inherit;
+  }
+  #content pre.mermaid svg{max-width:100%;height:auto}
+  #content pre.mermaid:not([data-processed]){color:var(--muted);font-size:12px}
   #content table{
     border-collapse:collapse;width:100%;margin:18px 0;font-size:13.5px;display:block;overflow-x:auto;
   }
@@ -91,7 +99,8 @@
 <body>
   <nav id="sidebar">
     <div class="brand">docs-em<small>로컬 LMStudio 한국어 문서 RAG · 설계 문서</small></div>
-    <div class="cat"><div class="cat-label">시스템 구성</div><a class="doc-link" href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F00_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EA%B0%9C%EC%9A%94.md" data-id="01_시스템구성/00_프로젝트개요.md">프로젝트 개요 (docs-em)</a>
+    <div class="cat"><div class="cat-label">결정해야 할 것</div><a class="doc-link" href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-id="00_결정/00_결정해야할것_통합.md">결정해야 할 것 — 한눈에 보기</a></div>
+<div class="cat"><div class="cat-label">시스템 구성</div><a class="doc-link" href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F00_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EA%B0%9C%EC%9A%94.md" data-id="01_시스템구성/00_프로젝트개요.md">프로젝트 개요 (docs-em)</a>
 <a class="doc-link" href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D%EA%B2%B0%EC%A0%95%EC%84%9C.md" data-id="01_시스템구성/01_기술스택결정서.md">기술스택 결정서</a>
 <a class="doc-link" href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F02_%EB%A1%9C%EC%BB%AC%ED%99%98%EA%B2%BD_LMStudio%EC%8B%A4%EC%B8%A1.md" data-id="01_시스템구성/02_로컬환경_LMStudio실측.md">LMStudio 로컬 환경 실측</a>
 <a class="doc-link" href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F03_%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD%EC%85%8B%EC%97%85.md" data-id="01_시스템구성/03_개발환경셋업.md">03. 개발환경 셋업</a></div>
@@ -113,7 +122,468 @@
   </nav>
   <main id="content">
     <div id="content-inner">
-      <article class="doc" data-id="01_시스템구성/00_프로젝트개요.md" hidden><h1>프로젝트 개요 (docs-em)</h1>
+      <article class="doc" data-id="00_결정/00_결정해야할것_통합.md" hidden><h1>결정해야 할 것 — 한눈에 보기</h1>
+<p>이 문서는 흩어져 있는 <strong>&quot;사람이 직접 골라야 하는 항목&quot;</strong> 만 한 곳에 모은 것입니다. 기존 문서들은 그대로 두고, 여기서는 <strong>무엇을·왜·어떻게 고르는지</strong>를 쉬운 말로 다시 설명합니다.</p>
+<blockquote>
+<p>정본(SSOT)은 [시작프롬프트.md] 와 <a href="#01_%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C%25EA%25B5%25AC%25EC%2584%25B1%2F01_%25EA%25B8%25B0%25EC%2588%25A0%25EC%258A%25A4%25ED%2583%259D%25EA%25B2%25B0%25EC%25A0%2595%25EC%2584%259C.md" data-nav>01_시스템구성/01_기술스택결정서.md</a> 입니다. 숫자·근거가 충돌하면 그쪽이 우선입니다. 이 문서는 <strong>요약·길잡이</strong>입니다.</p>
+</blockquote>
+<hr>
+<h2>0. 용어 먼저 (3개만 알면 됨)</h2>
+<table>
+<thead>
+<tr>
+<th>표시</th>
+<th>뜻</th>
+<th>사용자가 할 일</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DECISION</strong></td>
+<td>돈(다운로드)·디스크·둘 중 택1처럼 <strong>사람이 골라야</strong> 진행되는 것</td>
+<td><strong>고른다</strong></td>
+</tr>
+<tr>
+<td><strong>[확인필요]</strong></td>
+<td>아직 &quot;사실&quot;이 확인 안 된 것 (지원 여부, 정확한 값 등)</td>
+<td><strong>먼저 확인한다</strong></td>
+</tr>
+<tr>
+<td><strong>권장 확정</strong></td>
+<td>이미 1순위로 정해져 있어 손댈 필요 없는 것</td>
+<td>그냥 둔다 (참고만)</td>
+</tr>
+</tbody></table>
+<p>핵심: <strong>DECISION은 고르는 것</strong>, <strong>[확인필요]는 확인하는 것</strong>. 이 둘만 신경 쓰면 됩니다.</p>
+<hr>
+<h2>1. 전체 결정 지도</h2>
+<p>먼저 결정들이 서로 어떻게 엮여 있는지 봅니다. <strong>위에서 아래로</strong> 결정해 나가면 됩니다.</p>
+<pre class="mermaid">flowchart TD
+    Start([시작]) --> Q1{한국어가<br/>주 사용 언어인가?}
+
+    Q1 -->|예| D2[BGE-M3 임베딩<br/>교체 검토 진입]
+    Q1 -->|아니오| Keep[현재 nomic 유지<br/>교체 불필요]
+
+    D2 --> Q2{GGUF 1~2GB<br/>다운로드 허용?}
+    Q2 -->|예| Verify[골든셋으로<br/>Recall@1 재측정]
+    Q2 -->|아니오| Keep
+    Verify -->|개선 확인됨| Adopt[BGE-M3 채택<br/>인덱스 재생성]
+    Verify -->|개선 없음| Keep
+
+    Start --> Store{벡터스토어<br/>택1}
+    Store -->|디스크 효율·메타필터| Lance[LanceDB]
+    Store -->|최소구성·예제많음| Chroma[ChromaDB]
+
+    Start --> Gen{기본 생성모델<br/>택1}
+    Gen -->|긴 문맥 필요| Gemma[gemma-4-e4b<br/>ctx 65536]
+    Gen -->|추론 품질 우선| Qwen[qwen3.5-9b<br/>ctx 8192]
+
+    Start --> L3{L3 단계<br/>리랭커 도입?}
+    L3 -->|품질 더 필요| Rerank[BGE-reranker-v2-m3<br/>+ 서빙방식 확인필요]
+    L3 -->|아직 불필요| Skip[생략]
+
+    classDef decision fill:#1f6feb33,stroke:#58a6ff,color:#e6edf3;
+    classDef pick fill:#23863633,stroke:#3fb950,color:#e6edf3;
+    class Q1,Q2,Store,Gen,L3 decision;
+    class Lance,Chroma,Gemma,Qwen,Adopt,Keep,Rerank,Skip pick;
+</pre>
+<p>요약하면 결정은 4갈래입니다: <strong>① 임베딩 교체 여부</strong>, <strong>② 벡터스토어 택1</strong>, <strong>③ 생성모델 택1</strong>, <strong>④ 리랭커 도입(L3)</strong>. 나머지는 작은 부속 결정입니다.</p>
+<hr>
+<h2>2. 지금 당장 골라야 하는 것 (우선순위 순)</h2>
+<p>아래 표만 채우면 L1 개발을 시작할 수 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>결정 항목</th>
+<th>선택지</th>
+<th>권장</th>
+<th>언제 필요</th>
+<th>출처</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>한국어 주언어 여부</strong></td>
+<td>예 / 아니오</td>
+<td>(사용자 답)</td>
+<td>지금</td>
+<td>§B-9 #1</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>벡터스토어</strong></td>
+<td>LanceDB / ChromaDB</td>
+<td>LanceDB</td>
+<td>L1 시작 전</td>
+<td>ADR-09</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>기본 생성모델</strong></td>
+<td>gemma-4-e4b / qwen3.5-9b</td>
+<td>gemma-4-e4b</td>
+<td>L1 시작 전</td>
+<td>§B-9 #8</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>BM25 엔진</strong></td>
+<td>rank_bm25 / 기타</td>
+<td>rank_bm25</td>
+<td>L2</td>
+<td>ADR-08</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>reasoning 대응 방식</strong></td>
+<td>코드 폴백 / 프리셋 수정</td>
+<td>코드 폴백(필수)</td>
+<td>L1</td>
+<td>§B-9 #10</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>BGE-M3 다운로드</strong></td>
+<td>예 / 아니오</td>
+<td>(측정 후 결정)</td>
+<td>L2</td>
+<td>ADR-07</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>리랭커 도입·서빙</strong></td>
+<td>도입 / 생략 + 서빙방식</td>
+<td>L3에서 결정</td>
+<td>L3</td>
+<td>ADR-11</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>인덱스 헤더 저장 위치</strong></td>
+<td>사이드카 / 스토어내장</td>
+<td>사이드카 파일</td>
+<td>L1</td>
+<td>DB §1-2</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>백업 보관 정책</strong></td>
+<td>개수·경로</td>
+<td>권장 기본값</td>
+<td>운영</td>
+<td>런북 §4</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 각 결정 자세히 (쉬운 설명)</h2>
+<h3>결정 ① 임베딩 모델을 BGE-M3로 바꿀까?</h3>
+<p><strong>무슨 문제냐면</strong>: 지금 쓰는 임베딩 모델(<code>nomic</code>)이 한국어에 약합니다. 실제로 &quot;연차 휴가 신청 절차&quot;를 검색하면 <strong>정답이 1등이 아니라 3등</strong>으로 나옵니다(Recall@1 = 0, 정답이 오답보다 0.018 낮음). 이건 추측이 아니라 <strong>직접 측정된 사실</strong>입니다.</p>
+<p><strong>대안 후보</strong>: BGE-M3 (한국어 더 잘함, 1024차원, MIT 라이선스, 다운로드 1~2GB)</p>
+<table>
+<thead>
+<tr>
+<th>비교</th>
+<th>현재 nomic</th>
+<th>BGE-M3 (후보)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>차원</td>
+<td>768</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>정규화(norm)</td>
+<td>1.0 보장 (재정규화 금지)</td>
+<td><strong>보장 안 됨 → 재측정 필요</strong></td>
+</tr>
+<tr>
+<td>한국어</td>
+<td>약함 (실측)</td>
+<td>우수 (외부 사양, <strong>우리 측정 아님</strong>)</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>—</td>
+<td>8192</td>
+</tr>
+<tr>
+<td>비용</td>
+<td>0 (이미 서빙 중)</td>
+<td>GGUF 1~2GB 다운로드</td>
+</tr>
+</tbody></table>
+<p><strong>고르는 기준 (순서대로)</strong>:</p>
+<pre class="mermaid">flowchart LR
+    A[한국어 주언어?] -->|예| B[GGUF 다운로드 허용?]
+    A -->|아니오| X[nomic 유지]
+    B -->|예| C[골든셋 단독변수로<br/>Recall@1 재측정]
+    B -->|아니오| X
+    C -->|nomic보다 개선됨| D[채택 + 인덱스 재생성]
+    C -->|개선 없음| X
+    classDef q fill:#1f6feb33,stroke:#58a6ff,color:#e6edf3;
+    class A,B,C q;
+</pre>
+<blockquote>
+<p><strong>함정 주의</strong>: &quot;BGE-M3가 한국어 잘한다&quot;는 <strong>남의 사양</strong>입니다. 우리 데이터로 직접 재보기 전엔 채택하면 안 됩니다(원칙 D2). 그리고 차원이 768→1024로 바뀌면 <strong>기존 인덱스를 전부 다시 만들어야</strong> 합니다.</p>
+</blockquote>
+<hr>
+<h3>결정 ② 벡터스토어: LanceDB vs ChromaDB</h3>
+<p><strong>무슨 선택이냐면</strong>: 임베딩 벡터를 저장하고 검색할 데이터베이스를 하나 고릅니다. 둘 다 <strong>서버 없이 파일로 동작</strong>(임베디드)하고 완전 로컬이라 어느 쪽이든 제약은 만족합니다.</p>
+<table>
+<thead>
+<tr>
+<th>비교</th>
+<th>LanceDB (권장)</th>
+<th>ChromaDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강점</td>
+<td>디스크 효율, 컬럼형 메타필터, 빠른 성장</td>
+<td>API 단순, RAG 예제 풍부</td>
+</tr>
+<tr>
+<td>약점</td>
+<td>생태계 비교적 신생</td>
+<td>대규모 성능 [확인필요]</td>
+</tr>
+<tr>
+<td>이런 경우 선택</td>
+<td>디스크 효율·메타필터 중시</td>
+<td>최소 구성·예제 친화</td>
+</tr>
+</tbody></table>
+<p><strong>권장</strong>: 잘 모르겠으면 <strong>LanceDB</strong>. 어느 쪽을 고르든 코드는 얇은 <code>VectorStore</code> 인터페이스 뒤에 숨겨서 나중에 바꾸기 쉽게 만듭니다.</p>
+<hr>
+<h3>결정 ③ 기본 생성모델: gemma vs qwen</h3>
+<p><strong>무슨 선택이냐면</strong>: 답변을 생성할 LLM을 고릅니다. 둘 다 LMStudio에 이미 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th>비교</th>
+<th>gemma-4-e4b (권장)</th>
+<th>qwen3.5-9b</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>컨텍스트</td>
+<td><strong>65536</strong> (매우 김)</td>
+<td>8192</td>
+</tr>
+<tr>
+<td>강점</td>
+<td>긴 문맥 → 청크 많이 넣기 가능</td>
+<td>추론 품질</td>
+</tr>
+<tr>
+<td>주의</td>
+<td>4B급이라 품질 한계 가능 [추정]</td>
+<td>문맥 짧아 청크 수 제한</td>
+</tr>
+</tbody></table>
+<p><strong>권장</strong>: <strong>gemma-4-e4b</strong> (긴 컨텍스트가 RAG에 유리). 단, <strong>세 모델 모두 reasoning 이슈</strong>(아래 ⑤)가 있으니 폴백 처리부터 검증한 뒤 품질을 재평가합니다.</p>
+<hr>
+<h3>결정 ④ reasoning 대응 방식 (사실상 필수)</h3>
+<p><strong>무슨 문제냐면</strong>: 생성 모델 3종이 전부 <strong>답을 엉뚱한 곳에 담아 보냅니다</strong>. 정상 자리(<code>content</code>)는 비어 있고, 실제 답이 <code>reasoning_content</code>(사고 과정 칸)에 들어옵니다. 게다가 사고가 안 끝나서 &quot;한 문장&quot; 질문에 <strong>12,972자</strong>를 토해내고 잘립니다.</p>
+<pre class="mermaid">flowchart TD
+    R[모델 응답 수신] --> C{content가<br/>비었나?}
+    C -->|아니오| OK[그대로 사용]
+    C -->|예| F[reasoning_content로 폴백]
+    F --> T{<think> 태그<br/>있나?}
+    T -->|예| Clean[think 블록 제거<br/>최종답만 추출]
+    T -->|아니오| Warn[원문 반환<br/>+경고 표식]
+    Clean --> L{잘렸나?<br/>finish=length}
+    OK --> L
+    L -->|예| Retry[max_tokens×3<br/>1회 재시도]
+    L -->|아니오| Done[완료]
+    Retry --> Done
+    classDef q fill:#1f6feb33,stroke:#58a6ff,color:#e6edf3;
+    class C,T,L q;
+</pre>
+<p><strong>무효 확인된 우회책 (쓰지 말 것)</strong>: <code>/no_think</code>, <code>enable_thinking=false</code>, <code>reasoning_effort=low</code>, <code>max_tokens=4000</code> — <strong>전부 효과 없음</strong>(실측).</p>
+<p><strong>선택지</strong>:</p>
+<ul>
+<li><strong>A. 코드 폴백</strong> (권장·필수): 위 흐름을 <code>chat()</code> 래퍼 한 곳에 구현. 모델이 어떻든 동작.</li>
+<li><strong>B. LMStudio 프리셋 수정</strong>: reasoning 종료 토큰 설정. 근본 해결이지만 <strong>메뉴 위치가 버전마다 달라 [확인필요]</strong>. B가 되더라도 A는 안전망으로 둡니다.</li>
+</ul>
+<hr>
+<h3>결정 ⑤ 리랭커 도입 (L3 단계)</h3>
+<p><strong>무슨 선택이냐면</strong>: 1차 검색 결과를 더 정밀한 모델(cross-encoder)로 한 번 더 재정렬해 정확도를 올립니다. <strong>L3(후반) 단계</strong> 항목이라 지금 당장은 아닙니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>후보</td>
+<td>BGE-reranker-v2-m3 (권장)</td>
+</tr>
+<tr>
+<td>비용</td>
+<td>모델 다운로드 (<strong>DECISION</strong>)</td>
+</tr>
+<tr>
+<td>서빙 방식</td>
+<td><strong>[확인필요]</strong> — LMStudio가 리랭커 엔드포인트를 줄지 불확실</td>
+</tr>
+<tr>
+<td>대안 서빙</td>
+<td><code>sentence-transformers</code>/<code>FlagEmbedding</code> 별도 로컬 프로세스</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>L3 진입 <strong>전에</strong> 서빙 방식부터 검증해야 합니다. 안 되면 L3 핵심 산출물이 막힙니다.</p>
+</blockquote>
+<hr>
+<h2>4. [확인필요] 목록 — 결정 전에 사실부터 확인할 것</h2>
+<p>이건 &quot;고르는 것&quot;이 아니라 <strong>&quot;확인하는 것&quot;</strong> 입니다. 대부분 BGE-M3로 바꿀 때 한 번에 확인하면 됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>확인할 것</th>
+<th>왜</th>
+<th>확인 방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BGE-M3의 <code>normalized</code>(norm=1.0?)</td>
+<td>정규화 안 되면 유사도 왜곡</td>
+<td>임베딩 1건 뽑아 L2 norm 측정</td>
+</tr>
+<tr>
+<td>BGE-M3의 <code>metric</code>(cosine=dot?)</td>
+<td>norm 결과에 종속</td>
+<td>norm 측정 후 판단</td>
+</tr>
+<tr>
+<td>BGE-M3 prefix 요구사항</td>
+<td>e5 계열은 prefix 필수</td>
+<td>모델 카드 확인</td>
+</tr>
+<tr>
+<td>리랭커 서빙 호환</td>
+<td>LMStudio 지원 불확실</td>
+<td>L3 전 검증</td>
+</tr>
+<tr>
+<td>Windows 동작</td>
+<td>절차가 macOS 기준</td>
+<td>해당 OS에서 테스트</td>
+</tr>
+<tr>
+<td>네이티브 휠 설치(lancedb/kiwipiepy)</td>
+<td>빌드 실패 가능</td>
+<td>설치 시점 확인</td>
+</tr>
+<tr>
+<td>Kiwi 버전</td>
+<td>BM25 인덱스 무효화 키</td>
+<td>설치 버전 기록</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 부속 결정 (작은 것들)</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>선택</th>
+<th>권장</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>인덱스 헤더 저장 위치</td>
+<td>사이드카 <code>_index_header.json</code> / 스토어 내장</td>
+<td><strong>사이드카</strong>(스토어 종속 회피). 둘 다 있으면 사이드카가 정본</td>
+</tr>
+<tr>
+<td>백업 보관 개수·경로</td>
+<td>운영 정책</td>
+<td>런북 권장 기본값</td>
+</tr>
+<tr>
+<td>원문(<code>data/</code>) 백업 포함 여부</td>
+<td>포함 / 제외</td>
+<td>외부 원본 있으면 제외 가능</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 이미 정해진 것 (참고만 — 손댈 필요 없음)</h2>
+<p>아래는 <strong>DECISION이 아니라 권장 확정</strong>입니다. 고민하지 말고 그대로 쓰면 됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>정해진 선택</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>언어</td>
+<td>Python 3.11+</td>
+</tr>
+<tr>
+<td>추론 SDK</td>
+<td><code>openai</code> SDK (<code>base_url</code>만 localhost로)</td>
+</tr>
+<tr>
+<td>토큰/길이 계산</td>
+<td>문자 수 1차 + HF 토크나이저 (<code>usage</code> 신뢰 금지)</td>
+</tr>
+<tr>
+<td>문서 파싱</td>
+<td><code>pymupdf</code>(PDF) + <code>python-docx</code>(DOCX)</td>
+</tr>
+<tr>
+<td>청킹 분할기</td>
+<td><code>langchain-text-splitters</code> (분할기 부품만)</td>
+</tr>
+<tr>
+<td>문장 분리</td>
+<td><code>kss</code></td>
+</tr>
+<tr>
+<td>형태소/BM25 토큰</td>
+<td><code>Kiwi</code> (kiwipiepy)</td>
+</tr>
+<tr>
+<td>하이브리드 결합</td>
+<td>RRF (k=60)</td>
+</tr>
+<tr>
+<td>오케스트레이션</td>
+<td>자체 얇은 파이프라인 (프레임워크 본체 안 씀)</td>
+</tr>
+</tbody></table>
+<p>전체 파이프라인은 이렇게 흐릅니다:</p>
+<pre class="mermaid">flowchart LR
+    Doc[문서<br/>PDF/DOCX] --> Parse[파싱<br/>pymupdf/python-docx]
+    Parse --> Chunk[청킹<br/>kss + 분할기]
+    Chunk --> Embed[임베딩<br/>nomic→BGE-M3?]
+    Embed --> Store[(벡터스토어<br/>LanceDB/ChromaDB)]
+    Chunk --> BM25[BM25 색인<br/>Kiwi]
+
+    Query[질문] --> QEmbed[질의 임베딩]
+    QEmbed --> Store
+    Query --> BM25
+    Store --> Fusion[RRF 결합]
+    BM25 --> Fusion
+    Fusion --> Rr[리랭커<br/>L3·선택]
+    Rr --> Gen[답변 생성<br/>gemma/qwen]
+    Gen --> Ans[답변+출처]
+
+    classDef dec fill:#1f6feb33,stroke:#58a6ff,color:#e6edf3;
+    class Embed,Store,Rr,Gen dec;
+</pre>
+<p>파란색 박스가 <strong>결정이 필요한 지점</strong>입니다.</p>
+<hr>
+<blockquote>
+<p>더 깊은 근거가 필요하면: 스택 결정 전체는 <a href="#01_%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C%25EA%25B5%25AC%25EC%2584%25B1%2F01_%25EA%25B8%25B0%25EC%2588%25A0%25EC%258A%25A4%25ED%2583%259D%25EA%25B2%25B0%25EC%25A0%2595%25EC%2584%259C.md" data-nav>01_기술스택결정서</a>, 인덱스 헤더는 <a href="#03_DATABASE%2F01_%25EC%259D%25B8%25EB%258D%25B1%25EC%258A%25A4_%25EB%25A9%2594%25ED%2583%2580%25EB%258D%25B0%25EC%259D%25B4%25ED%2584%25B0_%25EC%2584%25A4%25EA%25B3%2584.md" data-nav>01_인덱스_메타데이터_설계</a>, 로드맵은 <a href="#02_%25EA%25B8%25B0%25ED%259A%258D%25EC%2584%259C%2F02_%25EB%25B2%2594%25EC%259C%2584_%25EB%25A7%2588%25EC%259D%25BC%25EC%258A%25A4%25ED%2586%25A4.md" data-nav>02_범위_마일스톤</a>, 교체 절차는 <a href="#05_%25EC%259A%25B4%25EC%2598%2581_%25ED%258F%2589%25EA%25B0%2580%2F01_%25EC%259A%25B4%25EC%2598%2581_%25EB%259F%25B0%25EB%25B6%2581.md" data-nav>01_운영_런북</a>을 보세요.</p>
+</blockquote>
+</article>
+<article class="doc" data-id="01_시스템구성/00_프로젝트개요.md" hidden><h1>프로젝트 개요 (docs-em)</h1>
 <p>docs-em는 로컬 LMStudio만으로 한국어 사내 문서 검색 품질을 끌어올리는 RAG 파이프라인 프로젝트입니다. 이 문서는 가장 먼저 읽는 <strong>진입점</strong>으로, 무엇을·왜·어떻게의 큰 그림과 전체 문서맵을 제공합니다.</p>
 <blockquote>
 <p>관련: <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%25EA%25B8%25B0%25EC%2588%25A0%25EC%258A%25A4%25ED%2583%259D%25EA%25B2%25B0%25EC%25A0%2595%25EC%2584%259C.md" data-nav>01_기술스택결정서.md</a> · <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F02_%25EB%25A1%259C%25EC%25BB%25AC%25ED%2599%2598%25EA%25B2%25BD_LMStudio%25EC%258B%25A4%25EC%25B8%25A1.md" data-nav>02_로컬환경_LMStudio실측.md</a> · <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F03_%25EA%25B0%259C%25EB%25B0%259C%25ED%2599%2598%25EA%25B2%25BD%25EC%2585%258B%25EC%2597%2585.md" data-nav>03_개발환경셋업.md</a> · 불변식 정본: <a href="#99_AI%25EC%25B0%25B8%25EC%25A1%25B0%2F01_%25EC%258B%25A4%25EC%25B8%25A1%25EC%25A0%259C%25EC%2595%25BD_%25EB%25B6%2588%25EB%25B3%2580%25EC%258B%259D.md" data-nav>99_AI참조/01_실측제약_불변식.md</a> · 정본 SSOT: <a href="#" data-ext title="문서 외부: %EC%8B%9C%EC%9E%91%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8.md" class="ext-link">시작프롬프트.md</a></p>
@@ -7869,20 +8339,30 @@ GEN_MODEL=google/gemma-4-e4b
 </article>
     </div>
   </main>
-<script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad:false, theme:'dark', securityLevel:'loose',
+    themeVariables:{ fontSize:'14px', fontFamily:'-apple-system,BlinkMacSystemFont,sans-serif' } });
+
   const links = document.querySelectorAll('.doc-link');
   const docs = document.querySelectorAll('article.doc');
   const content = document.getElementById('content');
+
+  async function renderMermaid(article){
+    const blocks = article.querySelectorAll('pre.mermaid:not([data-processed])');
+    if(blocks.length){ try{ await mermaid.run({ nodes: blocks }); }catch(e){ console.error(e); } }
+  }
   function show(id){
-    let found=false;
-    docs.forEach(d=>{ const on = d.dataset.id===id; d.hidden=!on; if(on) found=true; });
-    if(!found){ id='01_시스템구성/00_프로젝트개요.md'; docs.forEach(d=>d.hidden = d.dataset.id!==id); }
+    let active=null;
+    docs.forEach(d=>{ const on = d.dataset.id===id; d.hidden=!on; if(on) active=d; });
+    if(!active){ id='00_결정/00_결정해야할것_통합.md'; docs.forEach(d=>{ const on=d.dataset.id===id; d.hidden=!on; if(on) active=d; }); }
     links.forEach(l=>l.classList.toggle('active', l.dataset.id===id));
     content.scrollTop=0;
+    if(active) renderMermaid(active);  // 처음 표시될 때만 렌더(이후 data-processed로 스킵)
   }
   function current(){
     const h=decodeURIComponent(location.hash.replace(/^#/,''));
-    return h || '01_시스템구성/00_프로젝트개요.md';
+    return h || '00_결정/00_결정해야할것_통합.md';
   }
   window.addEventListener('hashchange',()=>show(current()));
   // 본문 내 data-nav 링크 클릭 시 해시 변경 → show 트리거
