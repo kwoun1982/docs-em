@@ -164,7 +164,7 @@
     Q1 -->|아니오| Keep[현재 nomic 유지<br/>교체 불필요]
 
     D2 --> Q2{GGUF 1~2GB<br/>다운로드 허용?}
-    Q2 -->|예| Verify[골든셋으로<br/>Recall@1 재측정]
+    Q2 -->|예| Verify["골든셋으로<br/>Recall@1 재측정"]
     Q2 -->|아니오| Keep
     Verify -->|개선 확인됨| Adopt[BGE-M3 채택<br/>인덱스 재생성]
     Verify -->|개선 없음| Keep
@@ -317,7 +317,7 @@
 <pre class="mermaid">flowchart LR
     A[한국어 주언어?] -->|예| B[GGUF 다운로드 허용?]
     A -->|아니오| X[nomic 유지]
-    B -->|예| C[골든셋 단독변수로<br/>Recall@1 재측정]
+    B -->|예| C["골든셋 단독변수로<br/>Recall@1 재측정"]
     B -->|아니오| X
     C -->|nomic보다 개선됨| D[채택 + 인덱스 재생성]
     C -->|개선 없음| X
