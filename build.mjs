@@ -230,9 +230,8 @@ const html = `<!DOCTYPE html>
 </body>
 </html>`;
 
-const OUT = join(ROOT, 'site');
-mkdirSync(OUT, { recursive: true });
-writeFileSync(join(OUT, 'index.html'), html, 'utf8');
-// GitHub Pages 게시 폴더로 site/ 사용 → Jekyll 처리 비활성화
-writeFileSync(join(OUT, '.nojekyll'), '', 'utf8');
-console.log(`빌드 완료: site/index.html (${cats.reduce((n, c) => n + c.docs.length, 0)}개 문서, ${Math.round(Buffer.byteLength(html) / 1024)}KB)`);
+// GitHub Pages 게시 소스는 루트(/)만 허용(/site 불가) → 루트에 출력
+writeFileSync(join(ROOT, 'index.html'), html, 'utf8');
+// Jekyll 처리 비활성화(밑줄 폴더명 등 그대로 서빙)
+writeFileSync(join(ROOT, '.nojekyll'), '', 'utf8');
+console.log(`빌드 완료: index.html (${cats.reduce((n, c) => n + c.docs.length, 0)}개 문서, ${Math.round(Buffer.byteLength(html) / 1024)}KB)`);
