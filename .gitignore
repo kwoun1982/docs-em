@@ -1,0 +1,4 @@
+node_modules/
+package-lock.json
+.DS_Store
+시작프롬프트.md
