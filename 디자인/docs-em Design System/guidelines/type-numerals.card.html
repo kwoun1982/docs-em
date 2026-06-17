@@ -1,0 +1,26 @@
+<!-- @dsCard group="Type" viewport="700x176" name="Tabular numerals" subtitle="Mono with tnum — scores align on the decimal" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px 22px; background: var(--bg-base); }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; font-feature-settings: "tnum" 1, "zero" 1; }
+  th { text-align: left; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-subtle); font-weight: 600; padding: 0 0 8px; font-family: var(--font-sans); }
+  td { padding: 5px 0; border-top: 1px solid var(--border-subtle); color: var(--fg-muted); }
+  td.id { color: var(--fg-subtle); }
+  td.n { text-align: right; color: var(--fg-default); letter-spacing: -0.005em; }
+  .ok { color: var(--signal); }
+  .down { color: var(--warn); }
+</style>
+</head>
+<body>
+  <table>
+    <tr><th>document</th><th style="text-align:right">recall@5</th><th style="text-align:right">faithful</th><th style="text-align:right">latency</th></tr>
+    <tr><td class="id">policy_2024_v3</td><td class="n ok">0.941</td><td class="n">0.908</td><td class="n">1,284ms</td></tr>
+    <tr><td class="id">onboarding_ko</td><td class="n">0.872</td><td class="n down">0.713</td><td class="n">992ms</td></tr>
+    <tr><td class="id">infra_runbook</td><td class="n ok">0.915</td><td class="n">0.884</td><td class="n">1,640ms</td></tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!-- @dsCard group="Colors" viewport="700x190" name="Normal signals — teal & green" subtitle="Teal = connection/accent · Green = success/Recall" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px; background: #0D1117; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grp .sw { height: 50px; border-radius: var(--radius-md); display: flex; align-items: flex-end; padding: 8px; margin-bottom: 12px; }
+  .h { font-family: var(--font-mono); font-size: 11px; color: #04231F; font-weight: 600; }
+  .role { font-size: 11px; color: var(--fg-muted); margin-bottom: 10px; }
+  .pills { display: flex; gap: 8px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; padding: 4px 9px; border-radius: var(--radius-md); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+</style>
+</head>
+<body>
+  <div class="grp">
+    <div class="role">TEAL — 연결 정상 · 강조 액션 · 포커스</div>
+    <div class="sw" style="background:#2DD4BF"><span class="h">#2DD4BF</span></div>
+    <div class="pills">
+      <span class="pill" style="background:rgba(45,212,191,0.10);color:#2DD4BF;border:1px solid rgba(45,212,191,0.40)"><span class="dot" style="background:#2DD4BF"></span>localhost:1234</span>
+      <span class="pill" style="background:rgba(45,212,191,0.10);color:#2DD4BF;border:1px solid rgba(45,212,191,0.40)">100% LOCAL</span>
+    </div>
+  </div>
+  <div class="grp">
+    <div class="role">GREEN — 성공 · Recall 달성 · 점수 상승</div>
+    <div class="sw" style="background:#3FB950"><span class="h">#3FB950</span></div>
+    <div class="pills">
+      <span class="pill" style="background:rgba(63,185,80,0.10);color:#3FB950;border:1px solid rgba(63,185,80,0.40)"><span class="dot" style="background:#3FB950"></span>색인됨</span>
+      <span class="pill" style="background:rgba(63,185,80,0.10);color:#3FB950;border:1px solid rgba(63,185,80,0.40)">G1 PASS · ▲ +0.012</span>
+    </div>
+  </div>
+</body>
+</html>

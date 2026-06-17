@@ -1,0 +1,33 @@
+<!-- @dsCard group="Colors" viewport="700x192" name="Risk & info" subtitle="Amber retry · Red fail/regression · Blue meta" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px; background: #0D1117; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .sw { height: 46px; border-radius: var(--radius-md); display: flex; align-items: flex-end; padding: 7px; margin-bottom: 11px; }
+  .h { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+  .role { font-size: 10.5px; color: var(--fg-muted); margin-bottom: 9px; line-height: 1.4; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11.5px; padding: 4px 8px; border-radius: var(--radius-md); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="role">AMBER — 재시도 · thinking 잘림 · 신뢰불가</div>
+    <div class="sw" style="background:#D29922"><span class="h" style="color:#1a1206">#D29922</span></div>
+    <span class="pill" style="background:rgba(210,153,34,0.10);color:#D29922;border:1px solid rgba(210,153,34,0.40)"><span class="dot" style="background:#D29922"></span>RETRY</span>
+  </div>
+  <div>
+    <div class="role">RED — 실패 · 회귀 · Recall@1=0</div>
+    <div class="sw" style="background:#F85149"><span class="h" style="color:#fff">#F85149</span></div>
+    <span class="pill" style="background:rgba(248,81,73,0.10);color:#F85149;border:1px solid rgba(248,81,73,0.40)"><span class="dot" style="background:#F85149"></span>FAIL · REGRESS</span>
+  </div>
+  <div>
+    <div class="role">BLUE — 중립 링크 · 메타정보 (상태색과 분리)</div>
+    <div class="sw" style="background:#58A6FF"><span class="h" style="color:#06142b">#58A6FF</span></div>
+    <span class="pill" style="background:rgba(88,166,255,0.10);color:#58A6FF;border:1px solid rgba(88,166,255,0.40)">[로그]</span>
+  </div>
+</body>
+</html>

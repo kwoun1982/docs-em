@@ -7,6 +7,7 @@ docs-em의 UI/UX 시안을 생성하기 위한 Claude Design 입력 프롬프트
 | 파일 | 내용 |
 |---|---|
 | [00_ClaudeDesign_프롬프트.md](./00_ClaudeDesign_프롬프트.md) | **Claude Design에 그대로 붙여넣을 프롬프트 본문.** 3화면(질의응답/인덱싱/평가) 전체 UI/UX 명세 |
+| [01_디자인시스템_참조.md](./01_디자인시스템_참조.md) | **개발 참조.** 위 프롬프트로 Claude Design이 생성한 디자인 시스템(CSS 토큰·21개 컴포넌트·3화면 UI 키트)을 개발에서 쓰기 쉽게 정리. 원본 자산은 `디자인/docs-em Design System/` |
 
 ## 사용 방법
 

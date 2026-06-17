@@ -1,0 +1,67 @@
+<!-- @dsCard group="Components" viewport="700x300" name="Forms" subtitle="Button · Segmented · IconButton · Input · Select" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  body { margin: 0; padding: 22px; background: var(--bg-base); }
+  .grid { display: flex; flex-direction: column; gap: 18px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-subtle); width: 76px; flex-shrink: 0; }
+  #root { opacity: 0; transition: opacity .2s; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Button, IconButton, Input, Select, Switch, Segmented } = window.DocsEmDesignSystem_afe3d1;
+    function Row({ label, children }) {
+      return <div className="row"><span className="lbl">{label}</span>{children}</div>;
+    }
+    function Demo() {
+      const [on, setOn] = React.useState(true);
+      const [mode, setMode] = React.useState("hybrid");
+      return (
+        <div className="grid">
+          <Row label="Button">
+            <Button variant="primary">전송</Button>
+            <Button variant="secondary" iconLeft={<IconGlyph n="rotate-cw" />}>재색인</Button>
+            <Button variant="ghost">취소</Button>
+            <Button variant="danger">삭제</Button>
+          </Row>
+          <Row label="Segmented">
+            <Segmented value={mode} onChange={setMode} size="sm" options={[
+              { value: "vector", label: "벡터" }, { value: "bm25", label: "BM25" }, { value: "hybrid", label: "하이브리드 RRF" },
+            ]} />
+          </Row>
+          <Row label="Icon">
+            <IconButton icon="search" variant="outline" />
+            <IconButton icon="settings-2" />
+            <IconButton icon="panel-left" active />
+            <IconButton icon="trash-2" />
+          </Row>
+          <Row label="Input">
+            <div style={{ width: 210 }}><Input icon="search" placeholder="문서 검색…" /></div>
+            <div style={{ width: 190 }}><Input mono placeholder="휴가규정.pdf" /></div>
+          </Row>
+          <Row label="Select / Switch">
+            <div style={{ width: 230 }}><Select options={["gemma-4-e4b · ctx 65536", "qwen3.5-9b · ctx 8192"]} /></div>
+            <Switch checked={on} onChange={setOn} label="리랭킹" />
+          </Row>
+        </div>
+      );
+    }
+    function IconGlyph({ n }) {
+      const { Icon } = window.DocsEmDesignSystem_afe3d1;
+      return <Icon name={n} size={15} />;
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    document.getElementById("root").style.opacity = 1;
+  </script>
+</body>
+</html>
