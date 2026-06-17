@@ -69,7 +69,7 @@ def rrf(rank_lists: list[list[str]], k: int = 60) -> dict[str, float]:
 
 - **Kiwi 토큰화**: `kiwipiepy`의 Kiwi로 형태소 분석 후 토큰(형태소 표층형) 리스트를 만든다. 동일 토크나이저를 인덱싱 시점과 질의 시점에 **동일하게** 적용한다.
 - **BM25 인덱스**: `rank_bm25`(BM25Okapi)로 전체 청크 코퍼스를 인덱싱. 코퍼스는 vector_store에서 전체 Chunk를 읽어 구성한다.
-- **Kiwi 버전 = BM25 인덱스 무효화 키**: BM25 인덱스를 디스크에 캐시할 경우, 사이드카 메타에 `kiwi_version`(`kiwipiepy.__version__` 또는 `Kiwi().version` 실측)과 코퍼스 청크 수·해시를 기록한다. 로드 시 현재 Kiwi 버전과 다르면 **인덱스를 폐기하고 재빌드**(무음 통과 금지, 재빌드 로그 남김). 캐시를 안 쓰면 매 호출 인메모리 재빌드라도 무방하나, 그 경우에도 사용한 `kiwi_version`을 SearchHit/로그로 노출한다.
+- **Kiwi 버전 = BM25 인덱스 무효화 키**: BM25 인덱스를 디스크에 캐시할 경우, 사이드카 메타에 `kiwi_version`(`from importlib.metadata import version; version("kiwipiepy")` — 패키지 메타데이터 기반이 가장 robust)과 코퍼스 청크 수·해시를 기록한다. 로드 시 현재 Kiwi 버전과 다르면 **인덱스를 폐기하고 재빌드**(무음 통과 금지, 재빌드 로그 남김). 캐시를 안 쓰면 매 호출 인메모리 재빌드라도 무방하나, 그 경우에도 사용한 `kiwi_version`을 SearchHit/로그로 노출한다.
 - **dense 경로**: 기존대로 질의 임베딩(`embed([query])[0]`) → vector_store.search로 상위 후보. 점수 내림차순.
 - **결합**:
   - `use_bm25=False`: dense 결과만 반환. 각 hit의 `source="dense"`, `score`=dense 점수, `rank`=**0-기반(첫 결과 rank=0, SearchHit 계약 §1/§4.1)**.
@@ -141,8 +141,8 @@ else:
     print('관찰: 하이브리드만으로 1 전환 안 됨 — 정상 범위. 다음 레버=L3 리랭커(BGE-reranker-v2-m3, §A-2④)로 이월.')
 "
 
-# 4) Kiwi 버전(BM25 무효화 키) 실측 출력
-python -c "import kiwipiepy; print('kiwi_version=', getattr(kiwipiepy,'__version__','unknown'))"
+# 4) Kiwi 버전(BM25 무효화 키) 실측 출력 — 패키지 메타데이터 기반(가장 robust)
+python -c "from importlib.metadata import version; print('kiwi_version=', version('kiwipiepy'))"
 
 # 5) 외부 API 호출 0건 가드 — localhost 외 base_url 흔적 검사
 grep -rEn "api\.openai\.com|api\.anthropic\.com|api\.cohere|generativelanguage" src/ && echo "VIOLATION INV-3" || echo "OK: 외부 API 흔적 없음"

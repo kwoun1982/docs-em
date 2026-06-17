@@ -26,7 +26,7 @@ python -c "import openai, numpy; print('deps ok')" 2>/dev/null
 확정 환경 사실(발명 금지, 그대로 사용):
 - LMStudio 엔드포인트: `http://localhost:1234/v1`, OpenAI 호환, `api_key="lm-studio"`(더미).
 - 임베딩 모델: `text-embedding-nomic-embed-text-v1.5` (768차원, 출력 norm=1.0 — 이미 L2 정규화됨).
-- 생성 모델 기본값: `google/gemma-4-e4b`. (대안 `qwen3.5-9b`, `qwen3.6-35b-a3b` — 이 페이즈에선 기본값만으로 충분.)
+- 생성 모델 기본값: `google/gemma-4-e4b`. (대안 `qwen/qwen3.5-9b`, `qwen/qwen3.6-35b-a3b` — 이 PC 실측 LMStudio id, prefix `qwen/` 필수. 이 페이즈에선 기본값만으로 충분.)
 - 런타임 Python 3.11+. LLM 클라이언트는 `openai` SDK(`base_url`만 localhost로). 수치 계산은 `numpy`.
 
 설정 골격이 없으면 이 페이즈 안에서 최소 구성으로 만들되, 모델명·base_url·api_key는 환경변수/`config`에서 읽고 코드에 하드코딩한 fallback만 위 확정값으로 둔다.

@@ -8037,6 +8037,86 @@ def make_client() -&gt; OpenAI:
 <li><strong>INV-7</strong>: 정량 증명. 골든셋 Recall@k·MRR·nDCG로 증명. 회귀 케이스 합격선 Recall@1=1. 변수 1개씩만 변경 측정.</li>
 <li><strong>INV-8</strong>: prefix 효과 미미(nomic 0.687→0.695). 단 e5 계열 교체 시 <code>query:</code>/<code>passage:</code> prefix 필수.</li>
 </ul>
+<hr>
+<h2>6. 이 PC 실행 환경 (실측 2026-06-17, macOS arm64)</h2>
+<p>이 프롬프트 묶음은 <strong>이 PC에서 실행</strong>하는 것을 기준으로 환경을 실측·보정했습니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>실측</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OS / 아키텍처</td>
+<td>macOS (darwin 25.5.0), arm64 (Apple Silicon)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>기본 <code>python3</code></td>
+<td><strong>3.14.5</strong> — 무심코 쓰면 네이티브 휠 미존재</td>
+<td>⚠️ <code>--python 3.11</code> 명시 필수</td>
+</tr>
+<tr>
+<td>Python 3.11</td>
+<td>uv로 3.11.13 설치됨(<code>/Users/kykwoun/.local/bin/python3.11</code>)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>uv</td>
+<td>0.8.4</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>LMStudio</td>
+<td><code>http://localhost:1234/v1</code> 가동</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>생성 모델 id</td>
+<td><code>google/gemma-4-e4b</code>, <code>qwen/qwen3.5-9b</code>, <code>qwen/qwen3.6-35b-a3b</code> (+<code>qwen/qwen3.6-27b</code>, <code>qwen/qwen3-vl-30b</code>) — <strong>prefix 포함</strong></td>
+<td>✅ (prefix 필수)</td>
+</tr>
+<tr>
+<td>임베딩 모델</td>
+<td><code>text-embedding-nomic-embed-text-v1.5</code> 로드됨</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>BGE-M3 / BGE-reranker</td>
+<td><strong>미로드</strong> — 페이즈 6/8 진입 전 LMStudio에서 로드</td>
+<td>⏳ 해당 페이즈에서 로드</td>
+</tr>
+<tr>
+<td>핵심 패키지</td>
+<td>kss 4.x(상한 고정), kiwipiepy 0.23.2, lancedb 0.33.0, pymupdf·python-docx·rank-bm25 — arm64 휠 존재</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h3>페이즈 0 시작 전 체크리스트 (1회)</h3>
+<pre><code class="language-bash"># 1) uv + Python 3.11 확인 (기본 python3=3.14 사용 금지)
+uv --version                                  # 0.8.4 기대
+uv python list | grep 3.11                     # 3.11.x 존재 확인
+
+# 2) LMStudio 가동 + 실제 모델 id 확인 (settings에 prefix 포함해 그대로 기록)
+curl -s http://localhost:1234/v1/models | python3 -c &quot;import sys,json; [print(m[&#39;id&#39;]) for m in json.load(sys.stdin)[&#39;data&#39;]]&quot;
+#   → google/gemma-4-e4b, qwen/qwen3.5-9b, qwen/qwen3.6-35b-a3b, text-embedding-nomic-embed-text-v1.5 등
+
+# 3) (페이즈 6 진입 전에만) BGE-M3 로드 확인
+curl -s http://localhost:1234/v1/models | grep -i bge || echo &quot;BGE 미로드 — LMStudio UI에서 로드 후 페이즈6 진입&quot;
+</code></pre>
+<h3>이 PC 기준 보정 사항 (이미 프롬프트에 반영됨)</h3>
+<ul>
+<li><strong>모델 id prefix</strong>: <code>qwen/qwen3.5-9b</code> 등 — LMStudio 실측 id 그대로(prefix 없으면 <code>chat()</code> 404).</li>
+<li><strong>kss 버전 상한</strong>: <code>kss&gt;=4.5,&lt;5</code> — 최신 6.x는 mecab/pecab 백엔드가 4.x와 비호환이라 macOS arm64에서 깨짐. 설치 실패 시 정규식 종결어미 규칙으로 폴백.</li>
+<li><strong>Python 3.11 고정</strong>: 모든 <code>uv venv</code>는 <code>--python 3.11</code>. 기본 3.14로 만들면 lancedb/kiwipiepy 휠 미존재.</li>
+<li><strong>lancedb 핀</strong>: <code>&gt;=0.33,&lt;0.34</code>(실측 0.33.0). <code>_distance</code> 반환범위는 설치 후 버전 확인하고 주석.</li>
+<li><strong>kiwi 버전 조회</strong>: <code>importlib.metadata.version(&quot;kiwipiepy&quot;)</code>(메타데이터 기반, 가장 robust).</li>
+</ul>
+<blockquote>
+<p>참고: macOS의 <code>grep</code>은 BSD 계열이지만 <code>-rnE</code>·<code>-rniE</code>·<code>\b</code>를 모두 지원하므로 검증 명령은 그대로 동작합니다(실측 확인됨).</p>
+</blockquote>
 </article>
 <article class="doc" data-id="07_실행프롬프트/01_페이즈0_setup.md" hidden><blockquote>
 <p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
@@ -8051,8 +8131,8 @@ def make_client() -&gt; OpenAI:
 <ul>
 <li>코드가 이미 있는지: <code>test -d src/llm &amp;&amp; echo &quot;이미 스캐폴딩됨 — 중복 생성 금지, 누락분만 채움&quot; || echo &quot;신규 스캐폴딩&quot;</code></li>
 <li>이 리포지토리에는 설계 문서 사이트(<code>index.html</code>, <code>build.mjs</code>, <code>docs/</code>, <code>node_modules/</code>, <code>package.json</code>)가 이미 존재할 수 있다. <strong>그것들을 절대 삭제·수정하지 마라.</strong> Python 프로젝트 파일을 그 옆에 추가하는 것이다.</li>
-<li>전제 사실: LMStudio가 <code>http://localhost:1234/v1</code>에서 OpenAI 호환 서버로 떠 있고, 임베딩 모델 <code>text-embedding-nomic-embed-text-v1.5</code>와 생성 모델 <code>google/gemma-4-e4b</code>(대안 qwen3.5-9b/qwen3.6-35b-a3b)가 로드되어 있어야 한다. api_key는 더미 <code>&quot;lm-studio&quot;</code>.</li>
-<li>런타임: Python 3.11+, 패키지 관리자 uv. (<code>uv --version</code>으로 존재 확인. 없으면 <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>.)</li>
+<li>전제 사실(이 PC 실측 2026-06-17): LMStudio가 <code>http://localhost:1234/v1</code>에서 OpenAI 호환 서버로 떠 있고, 임베딩 모델 <code>text-embedding-nomic-embed-text-v1.5</code>와 생성 모델 <code>google/gemma-4-e4b</code>(대안 <code>qwen/qwen3.5-9b</code>·<code>qwen/qwen3.6-35b-a3b</code> — <strong>prefix <code>qwen/</code> 필수</strong>)가 로드되어 있다. api_key는 더미 <code>&quot;lm-studio&quot;</code>. <strong>시작 전 <code>curl -s http://localhost:1234/v1/models</code>로 실제 id를 확인하고 settings에 그대로(prefix 포함) 기록</strong>할 것(불일치 시 chat() 404).</li>
+<li>런타임: Python 3.11+, 패키지 관리자 uv 0.8.4. <strong>기본 <code>python3</code>이 3.14.5이므로 반드시 <code>uv venv --python 3.11</code>로 3.11 고정</strong>(3.14는 lancedb/kiwipiepy 등 네이티브 휠 미존재). uv로 3.11.13 이미 설치돼 있어 그대로 작동.</li>
 </ul>
 <h3>절대 규칙 (이 페이즈에서 위반 금지 — INV 발췌)</h3>
 <ul>
@@ -8075,15 +8155,17 @@ dependencies = [
   &quot;openai&gt;=1.30&quot;,          # LLM 클라이언트 (base_url만 localhost)
   &quot;pyyaml&gt;=6.0&quot;,
   &quot;python-dotenv&gt;=1.0&quot;,
-  &quot;lancedb&gt;=0.6&quot;,          # 벡터스토어 (확정)
+  &quot;lancedb&gt;=0.33,&lt;0.34&quot;,   # 벡터스토어 (확정). 이 PC 실측 0.33.0 — _distance API는 코드 전 버전 확인(아래 NOTE)
   &quot;pymupdf&gt;=1.24&quot;,         # PDF 파싱
   &quot;python-docx&gt;=1.1&quot;,      # DOCX 파싱
-  &quot;kss&gt;=4.5&quot;,              # 한국어 문장분리
-  &quot;kiwipiepy&gt;=0.17&quot;,       # 형태소/BM25 토큰화
-  &quot;rank-bm25&gt;=0.2&quot;,        # BM25
+  &quot;kss&gt;=4.5,&lt;5&quot;,           # 한국어 문장분리. NOTE: 최신 6.x는 mecab/pecab 백엔드가 4.x와 비호환 → macOS arm64에서 설치·동작 깨짐. 4.x로 상한 고정. 설치 실패 시 정규식 종결어미 규칙 자체구현으로 폴백(§B-6)
+  &quot;kiwipiepy&gt;=0.17&quot;,       # 형태소/BM25 토큰화 (이 PC 실측 0.23.2, arm64 휠 존재)
+  &quot;rank-bm25&gt;=0.2&quot;,        # BM25 (이 PC 실측 0.2.2)
   &quot;langchain-text-splitters&gt;=0.2&quot;,  # 청킹 분할기 부품
   &quot;numpy&gt;=1.26&quot;,
 ]
+# NOTE(이 PC 실측 2026-06-17, macOS arm64): 기본 python3=3.14.5라 반드시 `uv venv --python 3.11`로 3.11 고정(3.14는 lancedb/kiwipiepy 휠 미존재).
+# NOTE(lancedb): 설치 직후 `python -c &quot;import lancedb; print(lancedb.__version__)&quot;`로 버전 확정 후, cosine _distance 반환범위를 코드 주석에 명시(임의 단정 금지).
 
 [project.optional-dependencies]
 dev = [&quot;pytest&gt;=8.0&quot;]
@@ -8164,7 +8246,7 @@ def assert_within_embed_limit(text: str, max_chars: int = DEFAULT_MAX_CHARS_FALL
   base_url: http://localhost:1234/v1
   api_key: lm-studio
   gen_model: google/gemma-4-e4b
-  gen_alternatives: [qwen3.5-9b, qwen3.6-35b-a3b]  # NOTE: 모델 id prefix(qwen/) 표기 통일은 페이즈2 스위칭 전 확정. 이 페이즈 미사용이라 영향 없음 — 후속 페이즈로 미뤄도 무방.
+  gen_alternatives: [qwen/qwen3.5-9b, qwen/qwen3.6-35b-a3b]  # 이 PC 실측 LMStudio id (prefix qwen/ 필수 — 누락 시 chat() 404). 추가 로드 모델: qwen/qwen3.6-27b, qwen/qwen3-vl-30b(멀티모달, 비범위)
   max_tokens: 4000
 embed:
   model: text-embedding-nomic-embed-text-v1.5
@@ -8294,7 +8376,7 @@ python -c &quot;import openai, numpy; print(&#39;deps ok&#39;)&quot; 2&gt;/dev/n
 <ul>
 <li>LMStudio 엔드포인트: <code>http://localhost:1234/v1</code>, OpenAI 호환, <code>api_key=&quot;lm-studio&quot;</code>(더미).</li>
 <li>임베딩 모델: <code>text-embedding-nomic-embed-text-v1.5</code> (768차원, 출력 norm=1.0 — 이미 L2 정규화됨).</li>
-<li>생성 모델 기본값: <code>google/gemma-4-e4b</code>. (대안 <code>qwen3.5-9b</code>, <code>qwen3.6-35b-a3b</code> — 이 페이즈에선 기본값만으로 충분.)</li>
+<li>생성 모델 기본값: <code>google/gemma-4-e4b</code>. (대안 <code>qwen/qwen3.5-9b</code>, <code>qwen/qwen3.6-35b-a3b</code> — 이 PC 실측 LMStudio id, prefix <code>qwen/</code> 필수. 이 페이즈에선 기본값만으로 충분.)</li>
 <li>런타임 Python 3.11+. LLM 클라이언트는 <code>openai</code> SDK(<code>base_url</code>만 localhost로). 수치 계산은 <code>numpy</code>.</li>
 </ul>
 <p>설정 골격이 없으면 이 페이즈 안에서 최소 구성으로 만들되, 모델명·base_url·api_key는 환경변수/<code>config</code>에서 읽고 코드에 하드코딩한 fallback만 위 확정값으로 둔다.</p>
@@ -9129,7 +9211,7 @@ python -c &quot;from eval.evaluate import evaluate; r=evaluate(use_bm25=False, u
 <ul>
 <li><strong>Kiwi 토큰화</strong>: <code>kiwipiepy</code>의 Kiwi로 형태소 분석 후 토큰(형태소 표층형) 리스트를 만든다. 동일 토크나이저를 인덱싱 시점과 질의 시점에 <strong>동일하게</strong> 적용한다.</li>
 <li><strong>BM25 인덱스</strong>: <code>rank_bm25</code>(BM25Okapi)로 전체 청크 코퍼스를 인덱싱. 코퍼스는 vector_store에서 전체 Chunk를 읽어 구성한다.</li>
-<li><strong>Kiwi 버전 = BM25 인덱스 무효화 키</strong>: BM25 인덱스를 디스크에 캐시할 경우, 사이드카 메타에 <code>kiwi_version</code>(<code>kiwipiepy.__version__</code> 또는 <code>Kiwi().version</code> 실측)과 코퍼스 청크 수·해시를 기록한다. 로드 시 현재 Kiwi 버전과 다르면 <strong>인덱스를 폐기하고 재빌드</strong>(무음 통과 금지, 재빌드 로그 남김). 캐시를 안 쓰면 매 호출 인메모리 재빌드라도 무방하나, 그 경우에도 사용한 <code>kiwi_version</code>을 SearchHit/로그로 노출한다.</li>
+<li><strong>Kiwi 버전 = BM25 인덱스 무효화 키</strong>: BM25 인덱스를 디스크에 캐시할 경우, 사이드카 메타에 <code>kiwi_version</code>(<code>from importlib.metadata import version; version(&quot;kiwipiepy&quot;)</code> — 패키지 메타데이터 기반이 가장 robust)과 코퍼스 청크 수·해시를 기록한다. 로드 시 현재 Kiwi 버전과 다르면 <strong>인덱스를 폐기하고 재빌드</strong>(무음 통과 금지, 재빌드 로그 남김). 캐시를 안 쓰면 매 호출 인메모리 재빌드라도 무방하나, 그 경우에도 사용한 <code>kiwi_version</code>을 SearchHit/로그로 노출한다.</li>
 <li><strong>dense 경로</strong>: 기존대로 질의 임베딩(<code>embed([query])[0]</code>) → vector_store.search로 상위 후보. 점수 내림차순.</li>
 <li><strong>결합</strong>:<ul>
 <li><code>use_bm25=False</code>: dense 결과만 반환. 각 hit의 <code>source=&quot;dense&quot;</code>, <code>score</code>=dense 점수, <code>rank</code>=<strong>0-기반(첫 결과 rank=0, SearchHit 계약 §1/§4.1)</strong>.</li>
@@ -9209,8 +9291,8 @@ else:
     print(&#39;관찰: 하이브리드만으로 1 전환 안 됨 — 정상 범위. 다음 레버=L3 리랭커(BGE-reranker-v2-m3, §A-2④)로 이월.&#39;)
 &quot;
 
-# 4) Kiwi 버전(BM25 무효화 키) 실측 출력
-python -c &quot;import kiwipiepy; print(&#39;kiwi_version=&#39;, getattr(kiwipiepy,&#39;__version__&#39;,&#39;unknown&#39;))&quot;
+# 4) Kiwi 버전(BM25 무효화 키) 실측 출력 — 패키지 메타데이터 기반(가장 robust)
+python -c &quot;from importlib.metadata import version; print(&#39;kiwi_version=&#39;, version(&#39;kiwipiepy&#39;))&quot;
 
 # 5) 외부 API 호출 0건 가드 — localhost 외 base_url 흔적 검사
 grep -rEn &quot;api\.openai\.com|api\.anthropic\.com|api\.cohere|generativelanguage&quot; src/ &amp;&amp; echo &quot;VIOLATION INV-3&quot; || echo &quot;OK: 외부 API 흔적 없음&quot;
@@ -9423,7 +9505,7 @@ grep -n &quot;def rerank&quot; src/retrieve/rerank.py 2&gt;/dev/null || echo &qu
 <li><code>src/retrieve/rerank.py</code>에 <code>rerank</code>가 있으면 <code>rerank(query, hits, top_n=top_n)</code>로 상위 <code>top_n</code> 추림. 없으면 hits 상위 <code>top_n</code> 슬라이스. (둘 중 무엇을 썼는지 결과 메타에 <code>&quot;reranked&quot;: bool</code>로 기록.)</li>
 <li><strong>근거 부족 가드(추측 금지)</strong>: 추린 hits가 비었으면 즉시
 <code>{&quot;text&quot;: &quot;확실하지 않습니다. 관련 문서를 찾지 못했습니다.&quot;, &quot;citations&quot;: []}</code> 반환.</li>
-<li><strong>컨텍스트 예산 절삭(INV-4, 문자 기준)</strong>: 모델별 ctx 한계를 <code>config/settings.yaml</code>에서 읽되, 없으면 모델명으로 폴백한다. 폴백 매핑은 fully-qualified id 기준으로도 동작해야 한다 — <code>model</code>에서 <code>&quot;/&quot;</code> 앞 공급자 접두(<code>google/</code>, <code>qwen/</code>)를 제거(또는 <code>endswith</code> 매칭)해 <strong>정규화한 뒤</strong> 조회한다(<code>google/gemma-4-e4b</code>/<code>gemma-4-e4b</code>→65536, <code>qwen/qwen3.5-9b</code>/<code>qwen3.5-9b</code>→8192, <code>qwen/qwen3.6-35b-a3b</code>/<code>qwen3.6-35b-a3b</code>→8192; ctx는 실측, 파라미터수는 [추정]). 정규화 후에도 미스면 보수적 최소 폴백(8192)으로 fail-closed. <strong>출력 여유분과 프롬프트 골격을 뺀 문자 예산</strong>을 잡고, 컨텍스트 청크를 순서대로 누적하다 예산 초과 직전에서 멈춘다. 절삭이 일어나면 그 사실을 결과 메타에 남긴다(무음 통과 금지). <code>usage.prompt_tokens</code> 사용 금지.</li>
+<li><strong>컨텍스트 예산 절삭(INV-4, 문자 기준)</strong>: 모델별 ctx 한계를 <code>config/settings.yaml</code>에서 읽되, 없으면 모델명으로 폴백한다. 폴백 매핑은 fully-qualified id 기준으로도 동작해야 한다 — <code>model</code>에서 <code>&quot;/&quot;</code> 앞 공급자 접두(<code>google/</code>, <code>qwen/</code>)를 <code>model.split(&quot;/&quot;)[-1]</code>로 제거해 <strong>정규화한 뒤</strong> 조회한다(<code>google/gemma-4-e4b</code>/<code>gemma-4-e4b</code>→65536, <code>qwen/qwen3.5-9b</code>/<code>qwen3.5-9b</code>→8192, <code>qwen/qwen3.6-35b-a3b</code>/<code>qwen3.6-35b-a3b</code>→8192, <code>qwen/qwen3.6-27b</code>→8192[추정·이 PC 추가 로드 모델]; ctx는 실측, 파라미터수는 [추정]). 정규화 후에도 미스면 보수적 최소 폴백(8192)으로 fail-closed. <strong>출력 여유분과 프롬프트 골격을 뺀 문자 예산</strong>을 잡고, 컨텍스트 청크를 순서대로 누적하다 예산 초과 직전에서 멈춘다. 절삭이 일어나면 그 사실을 결과 메타에 남긴다(무음 통과 금지). <code>usage.prompt_tokens</code> 사용 금지.</li>
 <li><strong>프롬프트 구성</strong>: 시스템 메시지에 규칙(제공 컨텍스트만 근거로, 모르면 &quot;확실하지 않습니다&quot;, 답변 끝에 사용한 출처를 청크 라벨로 표기)을 넣고, 각 컨텍스트 청크를 <strong>고유 라벨(예 <code>[1] (chunk_id=...)</code>)</strong> 과 함께 user 메시지에 직렬화한다. <strong>라벨↔Chunk 매핑</strong>(라벨 → 해당 Chunk 객체 전체)을 보관한다 — 인용 변환 시 <code>doc_id</code>/<code>source_path</code>/<code>meta</code>를 꺼내야 하므로 chunk_id만이 아니라 Chunk 참조를 잡아둔다.</li>
 <li><strong>생성</strong>: <code>chat(messages, model=model, max_tokens=4000)</code> 호출(평문 str 수신). 빈값/length는 <code>chat()</code>가 이미 흡수했다고 신뢰 — <code>answer()</code>에서 재처리 금지.</li>
 <li><strong>인용 추출·변환(무결성)</strong>: 생성 텍스트에서 사용된 라벨/chunk_id를 파싱해 매핑으로 해당 Chunk를 복원한다. <strong>전달한 컨텍스트 청크 집합과 교집합만</strong> 채택(부분집합 강제, 컨텍스트 밖 식별자 폐기). 모델이 출처를 안 달았으면 컨텍스트 상위 청크를 보수적으로 채우되, 발명은 금지. 채택된 각 Chunk를 <strong>정본 citation 객체로 변환</strong>한다:<ul>
