@@ -192,14 +192,17 @@
 <hr>
 <h2>2. 지금 당장 골라야 하는 것 (우선순위 순)</h2>
 <p>아래 표만 채우면 L1 개발을 시작할 수 있습니다.</p>
+<blockquote>
+<p>✅ <strong>2026-06-17: 9개 결정 모두 권장값으로 확정</strong>했습니다(사용자 지시). 단 #3·#6·#7은 <strong>&quot;선택/도입 확정&quot;과 &quot;측정·검증 후 채택&quot;을 분리</strong>하며, 아래 §2.1 안전망이 함께 지켜져야 합니다. 총기획점검 결과 불변식 하드 충돌은 없습니다.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
 <th>#</th>
 <th>결정 항목</th>
 <th>선택지</th>
-<th>권장</th>
-<th>언제 필요</th>
+<th>✅ 확정 (안전망)</th>
+<th>단계</th>
 <th>출처</th>
 </tr>
 </thead>
@@ -207,7 +210,7 @@
 <td>1</td>
 <td><strong>한국어 주언어 여부</strong></td>
 <td>예 / 아니오</td>
-<td>✅ <strong>예 (확정, 2026-06-17)</strong></td>
+<td>✅ <strong>예</strong> (확정 2026-06-17)</td>
 <td>지금</td>
 <td>§B-9 #1</td>
 </tr>
@@ -215,7 +218,7 @@
 <td>2</td>
 <td><strong>벡터스토어</strong></td>
 <td>LanceDB / ChromaDB</td>
-<td>LanceDB</td>
+<td>✅ <strong>LanceDB</strong> — create_index에 cosine/dot metric 명시(기본 L2 유클리드 금지), 얇은 <code>VectorStore</code> Protocol 뒤로 숨겨 휠 빌드 실패 시 ChromaDB 폴백 보존</td>
 <td>L1 시작 전</td>
 <td>ADR-09</td>
 </tr>
@@ -223,15 +226,15 @@
 <td>3</td>
 <td><strong>기본 생성모델</strong></td>
 <td>gemma-4-e4b / qwen3.5-9b</td>
-<td>gemma-4-e4b</td>
-<td>L1 시작 전</td>
+<td>✅ <strong>gemma-4-e4b</strong> (ctx 65536) — &#39;4B급 품질 한계 가능[추정]&#39; 유지. 품질 검증은 L2(폴백 해소 후 단일변수 측정), 미달 시 settings로 qwen3.5-9b 롤백</td>
+<td>선택 L1전·검증 L2</td>
 <td>§B-9 #8</td>
 </tr>
 <tr>
 <td>4</td>
 <td><strong>BM25 엔진</strong></td>
 <td>rank_bm25 / 기타</td>
-<td>rank_bm25</td>
+<td>✅ <strong>rank_bm25</strong> (소규모·in-memory, Kiwi 동일 버전 강제·버전을 인덱스 무효화 키로). L2에서 단독 on/off 기여도 측정 후 채택</td>
 <td>L2</td>
 <td>ADR-08</td>
 </tr>
@@ -239,23 +242,23 @@
 <td>5</td>
 <td><strong>reasoning 대응 방식</strong></td>
 <td>코드 폴백 / 프리셋 수정</td>
-<td>코드 폴백(필수)</td>
+<td>✅ <strong>코드 폴백(필수)</strong> — content 빈값→reasoning_content + <code>&lt;think&gt;</code> 정제 + length 시 max_tokens×3 1회 재시도(INV-2/5/6). 프리셋 수정 성공해도 코드 폴백은 안전망 상시 유지</td>
 <td>L1</td>
 <td>§B-9 #10</td>
 </tr>
 <tr>
 <td>6</td>
-<td><strong>BGE-M3 다운로드</strong></td>
+<td><strong>BGE-M3 다운로드·교체</strong></td>
 <td>예 / 아니오</td>
-<td>(측정 후 결정)</td>
-<td>L2</td>
+<td>✅ <strong>다운로드·교체 실험 착수</strong>(확정) / <strong>채택은 측정 게이트</strong> — L1 하네스 골든셋 임베딩 단독변수 Recall@1이 nomic 대비 개선될 때만 승격(768→1024 재인덱싱+norm 재측정+INV-1 갱신 동반). 미개선 시 nomic 롤백</td>
+<td>다운로드 즉시·채택 L2</td>
 <td>ADR-07</td>
 </tr>
 <tr>
 <td>7</td>
 <td><strong>리랭커 도입·서빙</strong></td>
 <td>도입 / 생략 + 서빙방식</td>
-<td>L3에서 결정</td>
+<td>✅ <strong>도입</strong>(BGE-reranker-v2-m3) / <strong>서빙방식 [확인필요] 유지</strong> — 로컬 전용(INV-3), L3 진입 전 서빙 실측 검증 선행 + 골든셋 on/off로 Recall@1=1·비퇴행 입증 후 최종 채택(임베딩 교체와 동시 점등 금지)</td>
 <td>L3</td>
 <td>ADR-11</td>
 </tr>
@@ -263,7 +266,7 @@
 <td>8</td>
 <td><strong>인덱스 헤더 저장 위치</strong></td>
 <td>사이드카 / 스토어내장</td>
-<td>사이드카 파일</td>
+<td>✅ <strong>사이드카 <code>_index_header.json</code></strong>(정본) — tmp 작성 후 os.replace 원자 교체, 벡터 적재 완료 후 헤더 마지막 기록(커밋 마커). 게이트 판정은 사이드카만</td>
 <td>L1</td>
 <td>DB §1-2</td>
 </tr>
@@ -271,16 +274,31 @@
 <td>9</td>
 <td><strong>백업 보관 정책</strong></td>
 <td>개수·경로</td>
-<td>권장 기본값</td>
+<td>✅ <strong>런북 §6 권장 기본값</strong> (일일7/주간4·월간3, <code>backup/index_YYYYMMDD_HHMMSS/</code>) — 인덱스 변경 전 백업·복원 후 연차휴가 Recall@1 유지 검증 불변</td>
 <td>운영</td>
-<td>런북 §4</td>
+<td>런북 §6</td>
 </tr>
 </tbody></table>
+<h3>2.1 확정해도 절대 면제되지 않는 안전망 (불변)</h3>
+<p>권장값을 확정했더라도 아래는 <strong>항상 지켜야</strong> 합니다. 이것이 무너지면 확정이 침묵 오류(silent wrong)로 바뀝니다.</p>
+<ul>
+<li><strong>INV-7 (변수 1개씩·정량 증명)</strong>: #4·#6·#7의 <strong>채택</strong>은 골든셋 단독변수 on/off 측정 후에만. <strong>BGE-M3 교체와 리랭커 on을 동시 점등 금지.</strong> 측정 없는 &quot;효과 있음/재평가&quot; 단정 금지.</li>
+<li><strong>INV-1 (재정규화 금지·교체 시 norm 재측정)</strong>: #6 채택 시 768→1024 전체 재인덱싱 + norm 재측정 + INV-1 가드 갱신 필수. #2 LanceDB는 metric을 <strong>cosine/dot로 명시</strong>(기본 L2 유클리드 금지) — norm을 지켜도 metric 누락 시 침묵 오답.</li>
+<li><strong>INV-2/5/6 (reasoning 폴백)</strong>: 3종 모델 공통 BLOCKING. 기본모델(#3)을 바꿔도 <strong>폴백 게이트 제거 금지</strong>. 재시도는 max_tokens×3 <strong>딱 1회</strong>, 2회째 length는 경고 부착 반환(무한 루프 금지). 우회옵션 4종은 전부 무효(실측).</li>
+<li><strong>#6 채택 게이트</strong>: &quot;다운로드&quot;는 즉시 확정이나 &quot;<strong>채택 판정</strong>&quot;은 L1 하네스 측정 후. <strong>미개선 시 nomic 인덱스 롤백</strong> 절차를 런북 §6에 명문화 필요. BGE-M3의 <code>prefix</code>·<code>normalized</code>·<code>metric</code>은 모델 카드 확인 전까지 <strong>[확인필요]</strong> — nomic 경험 이식 금지.</li>
+<li><strong>#7 서빙 [확인필요]</strong>: L3 진입 전 서빙 실측 검증 선행. LMStudio가 cross-encoder rerank 엔드포인트를 줄지 미확인 → <strong>로컬 전용(INV-3) 유지, 외부 API 우회 금지.</strong></li>
+<li><strong>#3 생성품질 측정 정의 부재</strong>: 현 골든셋은 retrieval 전용. #3 &quot;재평가&quot; 게이트가 공허하지 않으려면 생성 정답성/충실도(faithfulness) 측정 정의 추가가 선행돼야 함.</li>
+<li><strong>#8 원자성 규칙 신규 필요</strong>: 사이드카 쓰기 원자성(os.replace)·헤더 last-write 규칙이 현재 문서에 없음 → 명문화 없으면 헤더-벡터 불일치. → 03_DATABASE/01 갱신 대상.</li>
+<li><strong>#2 VectorStore Protocol 미정의</strong>: &quot;ChromaDB 롤백 가능&quot;의 전제. L1 착수 시 내부 API에 <code>add/search/delete</code> 시그니처 명세 선행(미선행 시 LanceDB lock-in).</li>
+</ul>
+<blockquote>
+<p>위 항목 중 <strong>신규 문서 작업이 필요한 것</strong>(런북 §6 롤백 스텝, 03_DATABASE 원자성 규칙, 내부 API VectorStore Protocol, 생성품질 측정 정의)은 L1 착수 시 각 전담 문서에서 구체화합니다.</p>
+</blockquote>
 <hr>
 <h2>3. 각 결정 자세히 (쉬운 설명)</h2>
 <h3>결정 ① 임베딩 모델을 BGE-M3로 바꿀까?</h3>
 <blockquote>
-<p>✅ <strong>결정 #1(한국어 주언어)이 &quot;예&quot;로 확정</strong>되어(2026-06-17) <strong>BGE-M3 교체 검토 경로가 활성화</strong>됐습니다. 단 이는 &quot;검토 진입&quot;이며 <strong>채택 확정이 아닙니다</strong>. 채택은 아래 흐름대로 GGUF 다운로드 허용(결정 #6) → 골든셋 단독변수 재측정 → nomic 대비 개선 확인을 거쳐야 합니다(원칙 D2: 남의 사양만으로 채택 금지).</p>
+<p>✅ <strong>확정(2026-06-17)</strong>: 한국어 주언어(#1) 확정 + <strong>BGE-M3 GGUF 다운로드·교체 실험 착수(#6)도 확정</strong>됐습니다. 단 <strong>&quot;다운로드·교체 시도&quot;와 &quot;채택&quot;은 분리</strong>됩니다 — 채택은 아래 흐름대로 골든셋 단독변수 재측정 → nomic 대비 개선이 <strong>숫자로 확인될 때만</strong> 승격하며, 미개선 시 nomic으로 롤백합니다(원칙 D2: 남의 사양만으로 채택 금지). 즉 다운로드는 진행하되, 채택 게이트는 살아 있습니다.</p>
 </blockquote>
 <p><strong>무슨 문제냐면</strong>: 지금 쓰는 임베딩 모델(<code>nomic</code>)이 한국어에 약합니다. 실제로 &quot;연차 휴가 신청 절차&quot;를 검색하면 <strong>정답이 1등이 아니라 3등</strong>으로 나옵니다(Recall@1 = 0, 정답이 오답보다 0.018 낮음). 이건 추측이 아니라 <strong>직접 측정된 사실</strong>입니다.</p>
 <p><strong>대안 후보</strong>: BGE-M3 (한국어 더 잘함, 1024차원, MIT 라이선스, 다운로드 1~2GB)</p>
@@ -414,7 +432,10 @@
 </ul>
 <hr>
 <h3>결정 ⑤ 리랭커 도입 (L3 단계)</h3>
-<p><strong>무슨 선택이냐면</strong>: 1차 검색 결과를 더 정밀한 모델(cross-encoder)로 한 번 더 재정렬해 정확도를 올립니다. <strong>L3(후반) 단계</strong> 항목이라 지금 당장은 아닙니다.</p>
+<p><strong>무슨 선택이냐면</strong>: 1차 검색 결과를 더 정밀한 모델(cross-encoder)로 한 번 더 재정렬해 정확도를 올립니다. <strong>L3(후반) 단계</strong> 항목이라 지금 당장 구현은 아닙니다.</p>
+<blockquote>
+<p>✅ <strong>도입 확정(2026-06-17)</strong> — <code>BGE-reranker-v2-m3</code> 도입. 단 <strong>서빙 방식은 [확인필요]로 유지</strong>하며, L3 진입 전 로컬 서빙 실측 검증을 선행하고 골든셋 on/off로 연차휴가 Recall@1=1·전체 비퇴행을 입증한 뒤 최종 채택합니다(임베딩 교체와 동시 점등 금지).</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -424,15 +445,15 @@
 </thead>
 <tbody><tr>
 <td>후보</td>
-<td>BGE-reranker-v2-m3 (권장)</td>
+<td>BGE-reranker-v2-m3 (✅ 도입 확정)</td>
 </tr>
 <tr>
 <td>비용</td>
-<td>모델 다운로드 (<strong>DECISION</strong>)</td>
+<td>모델 다운로드 (확정)</td>
 </tr>
 <tr>
 <td>서빙 방식</td>
-<td><strong>[확인필요]</strong> — LMStudio가 리랭커 엔드포인트를 줄지 불확실</td>
+<td><strong>[확인필요]</strong> — LMStudio가 리랭커 엔드포인트를 줄지 불확실. 로컬 전용(INV-3) 유지, 외부 API 우회 금지</td>
 </tr>
 <tr>
 <td>대안 서빙</td>
@@ -621,7 +642,7 @@
 </tr>
 <tr>
 <td>현재 단계</td>
-<td>코드 없음, 스택 미확정, <code>docs/</code>만 작성 중 (구현은 나중)</td>
+<td>코드 없음, <strong>스택 확정(2026-06-17)</strong>, <code>docs/</code>만 작성 중 (구현은 나중)</td>
 </tr>
 </tbody></table>
 <blockquote>
@@ -725,8 +746,7 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>DECISION</strong> (시작프롬프트.md §B-9 #2) — BGE-M3 GGUF(1~2GB) 다운로드 및 채택 여부는 사용자 결정 사항입니다. 디스크/다운로드 비용 vs 한국어 변별력 트레이드오프. 허용 시 768→1024 인덱스 재생성 + norm 재측정이 따릅니다.
-✅ <strong>확정</strong> (시작프롬프트.md §B-9 #1, 2026-06-17) — 주 사용 언어는 <strong>한국어</strong>(사용자 결정) → BGE-M3 교체 검토 강력 권장(채택은 측정 후 결정 — §B-9 #2).</p>
+<p>✅ <strong>확정</strong> (시작프롬프트.md §B-9 #1·#2, 2026-06-17) — 주 사용 언어는 <strong>한국어</strong>, BGE-M3 GGUF <strong>다운로드·교체 실험 착수도 확정</strong>. 단 <strong>채택</strong>은 골든셋 단독변수 Recall@1이 nomic 대비 개선될 때만 승격하며(768→1024 재인덱싱 + norm 재측정 + INV-1 가드 갱신 동반), 미개선 시 nomic 롤백. <code>prefix</code>·<code>normalized</code>·<code>metric</code>은 모델 카드 확인 전까지 [확인필요].</p>
 </blockquote>
 <p>→ 임베딩 교체 확정·실험은 <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D%EA%B2%B0%EC%A0%95%EC%84%9C.md" data-nav>01_기술스택결정서.md</a>(시작프롬프트.md §B-5)에서 진행합니다.</p>
 <hr>
@@ -777,12 +797,12 @@
 </ol>
 <p><strong>근본 대응 (병행)</strong>: LMStudio <strong>프리셋의 reasoning 종료 토큰(stop 토큰) 점검</strong> — 모델 프리셋에서 종료 토큰이 누락되면 무한 사고가 발생합니다. 해당 설정 <strong>메뉴 위치는 [확인필요]</strong>. 코드 폴백은 증상 완화이고, 프리셋 점검이 근본 경로입니다.</p>
 <blockquote>
-<p><strong>DECISION</strong> (시작프롬프트.md §B-9 #8) — 답변 생성 <strong>기본 모델</strong>: 권장값 <code>gemma-4-e4b</code>(ctx 65536, 긴 컨텍스트 강점). 단 4B급이라 추론 품질 한계 가능 → 위 BLOCKING 해결 후 재평가. 사용자 결정 사항.</p>
+<p>✅ <strong>확정</strong> (시작프롬프트.md §B-9 #8, 2026-06-17) — 답변 생성 <strong>기본 모델 = <code>gemma-4-e4b</code></strong>(ctx 65536, 긴 컨텍스트 강점). 단 4B급이라 추론 품질 한계 가능[추정] → L2에서 BLOCKING 해결 후 생성품질 단일변수 검증, 미달 시 settings로 <code>qwen3.5-9b</code> 롤백.</p>
 </blockquote>
 <p>→ 폴백 게이트 구현 명세·코드는 <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>04_아키텍처_API/02_내부API_인터페이스.md</a>와 <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>99_AI참조/01_실측제약_불변식.md</a>(시작프롬프트.md §B-4·§B-7) 참조.</p>
 <hr>
-<h2>6. 기술 스택 (미확정·권장)</h2>
-<p>아래는 권장안이며 <strong>미확정</strong>입니다(시작프롬프트.md §B-6·§B-9). 확정은 <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D%EA%B2%B0%EC%A0%95%EC%84%9C.md" data-nav>01_기술스택결정서.md</a>에서 진행합니다.</p>
+<h2>6. 기술 스택 (확정 2026-06-17)</h2>
+<p>아래 스택은 <strong>권장값으로 확정</strong>됐습니다(시작프롬프트.md §B-6·§B-9, 결정 상세 <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정/00_결정해야할것_통합.md</a>). 확정 근거·ADR은 <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D%EA%B2%B0%EC%A0%95%EC%84%9C.md" data-nav>01_기술스택결정서.md</a>에서 다룹니다.</p>
 <table>
 <thead>
 <tr>
@@ -812,7 +832,7 @@
 </tr>
 <tr>
 <td>벡터스토어</td>
-<td><strong>DECISION</strong> (§B-9 #4) — LanceDB(임베디드) 또는 ChromaDB(간편). 규모 시 Qdrant</td>
+<td>✅ <strong>LanceDB</strong> (§B-9 #4, 임베디드) — metric cosine·dot 명시, VectorStore Protocol 뒤로 ChromaDB 폴백 보존</td>
 </tr>
 <tr>
 <td>BM25</td>
@@ -943,7 +963,7 @@
 </tr>
 <tr>
 <td>스택</td>
-<td>미확정 (권장안만 존재, DECISION 3건 미확정 — #1 한국어 주언어는 2026-06-17 확정)</td>
+<td><strong>9개 DECISION 모두 권장값으로 확정 (2026-06-17)</strong> — #3·#6·#7 채택은 측정·검증 게이트 유지. 확정 상세는 <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정/00_결정해야할것_통합.md</a></td>
 </tr>
 <tr>
 <td>임베딩</td>
@@ -2090,7 +2110,7 @@ print(&quot; reasoning_content =&quot;, repr((getattr(ch.message, &#39;reasoning
 <li>생성 3종 ctx: qwen3.6-35b-a3b=8192, qwen3.5-9b=8192, gemma-4-e4b=65536. 모두 로컬·<code>parallel=4</code>. 기본 생성모델 선택은 미확정 <strong>DECISION</strong>(§B-9 #8).</li>
 <li>생성 3종 공통: <code>content</code> 빈값 + <code>reasoning_content</code> 응답 + 무한 사고로 <code>length</code> 잘림(12,972자) → 폴백·정제·재시도 필수.</li>
 <li>임베딩 입력 개수·길이 상한은 <strong>[확인필요]</strong>(§3.3) — §5 env_check로 측정해 해소.</li>
-<li>현재 코드 없음·스택 미확정. 본 문서는 환경 실측·점검 절차 정리 단계.</li>
+<li>현재 코드 없음·스택 확정(2026-06-17). 본 문서는 환경 실측·점검 절차 정리 단계.</li>
 </ul>
 <blockquote>
 <p>상세 정본은 → 시작프롬프트.md §B-12(실측 사실 요약) 참조. AI 에이전트용 불변식 체크리스트는 → <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>99_AI참조/01_실측제약_불변식.md</a>.</p>
@@ -2104,7 +2124,7 @@ print(&quot; reasoning_content =&quot;, repr((getattr(ch.message, &#39;reasoning
 <hr>
 <h2>0. 전제와 범위</h2>
 <ul>
-<li><strong>현재 단계</strong>: 코드 없음·스택 미확정, <code>docs/</code>만 작성 중입니다. 이 문서는 &quot;구현 착수 직전에 갖춰둘 환경&quot;을 정의합니다. 실제 패키지 설치는 구현 시작 시점에 수행합니다.</li>
+<li><strong>현재 단계</strong>: 코드 없음·<strong>스택 확정(2026-06-17)</strong>, <code>docs/</code>만 작성 중입니다. 이 문서는 &quot;구현 착수 직전에 갖춰둘 환경&quot;을 정의합니다. 실제 패키지 설치는 구현 시작 시점에 수행합니다.</li>
 <li><strong>로컬 전용 원칙</strong>: 모든 임베딩·생성·리랭킹은 로컬 LMStudio(<code>http://localhost:1234/v1</code>, OpenAI 호환)에서 수행합니다. 외부 클라우드 API(OpenAI/Anthropic/Cohere)는 절대 호출하지 않습니다. → 시작프롬프트.md §A-0 참조.</li>
 <li><strong>이 문서가 다루지 않는 것</strong>(링크로만):<ul>
 <li>스택 선택 근거·대안 비교, 모든 <strong>DECISION</strong> 확정 → 01_기술스택결정서.md <em>(작성 예정)</em> (시작프롬프트.md §B-6)</li>
@@ -2578,7 +2598,7 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 </tr>
 <tr>
 <td>상태</td>
-<td>초안 (docs/ 작성 단계, 코드 없음, 스택 미확정)</td>
+<td>초안 (docs/ 작성 단계, 코드 없음, <strong>스택 확정 2026-06-17</strong>)</td>
 </tr>
 <tr>
 <td>SSOT</td>
@@ -3034,7 +3054,7 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 <tr>
 <td>단일 모델 한계</td>
 <td>하이브리드(벡터+BM25, RRF) + 리랭킹</td>
-<td>스택 미확정</td>
+<td>✅ 스택 확정 (BM25=rank_bm25, RRF, 리랭커 도입)</td>
 </tr>
 <tr>
 <td>생성모델 BLOCKING</td>
@@ -3087,23 +3107,33 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 <td>§B-9 #1</td>
 </tr>
 <tr>
-<td>BGE-M3 GGUF(1~2GB) 다운로드·적용 (768→1024 재인덱싱 동반)</td>
-<td><strong>DECISION</strong></td>
+<td>BGE-M3 GGUF(1~2GB) 다운로드·교체 실험</td>
+<td>✅ <strong>다운로드 확정 (2026-06-17)</strong> / 채택은 골든셋 단독변수 측정 게이트 (768→1024 재인덱싱+norm 재측정 동반)</td>
 <td>§B-9 #2</td>
 </tr>
 <tr>
+<td>BGE-M3 prefix·normalized·metric</td>
+<td>[확인필요] (모델 카드 확인 전 nomic 경험 이식 금지)</td>
+<td>§B-5</td>
+</tr>
+<tr>
 <td>벡터스토어 선택 (LanceDB vs ChromaDB)</td>
-<td><strong>DECISION</strong></td>
+<td>✅ <strong>LanceDB 확정 (2026-06-17)</strong> / metric cosine·dot 명시, VectorStore Protocol 뒤 ChromaDB 폴백 보존</td>
 <td>§B-9 #4</td>
 </tr>
 <tr>
-<td>답변 생성 기본 모델 선택 (gemma-4-e4b 권장)</td>
-<td><strong>DECISION</strong></td>
+<td>답변 생성 기본 모델 선택</td>
+<td>✅ <strong>gemma-4-e4b 확정 (2026-06-17)</strong> / L2 생성품질 단일변수 검증 후 재평가, 미달 시 qwen3.5-9b 롤백</td>
 <td>§B-9 #8</td>
 </tr>
 <tr>
+<td>리랭커 도입</td>
+<td>✅ <strong>도입 확정 (2026-06-17, L3)</strong> / 로컬 서빙 방식은 아래 [확인필요]</td>
+<td>§B-9 #9</td>
+</tr>
+<tr>
 <td>리랭커 로컬 서빙 방식</td>
-<td>[확인필요]</td>
+<td>[확인필요] (L3 진입 전 실측 검증·로컬 전용 유지)</td>
 <td>§B-9 #9</td>
 </tr>
 <tr>
@@ -4074,20 +4104,21 @@ L1(평가 하네스)              ──재사용─▶ L2, L3 (동일 골든셋
 </tr>
 <tr>
 <td>R-7</td>
-<td>스택 미확정에 따른 재작업</td>
+<td>스택 확정됐으나 측정 후 채택 항목(BGE-M3·리랭커) 번복 시 재작업</td>
 <td>전 단계</td>
 <td>일정 지연</td>
-<td>얇은 파이프라인·교체 가능 추상화로 결합도 최소화</td>
+<td>얇은 파이프라인·교체 가능 추상화로 결합도 최소화. 채택 게이트로 번복 비용 최소화</td>
 </tr>
 </tbody></table>
 <hr>
 <h2>8. 현재 상태 · 다음 행동</h2>
 <ul>
-<li>현재: <strong>코드 없음, 스택 미확정, docs/만 작성 단계.</strong> 구현은 이후 진행합니다.</li>
-<li>즉시 선행 결정 필요(<strong>DECISION</strong>):<ul>
-<li>벡터스토어 선택(LanceDB ↔ ChromaDB) → 스키마 <a href="#03_DATABASE%2F00_%EB%B2%A1%ED%84%B0%EC%8A%A4%ED%86%A0%EC%96%B4_%EC%8A%A4%ED%82%A4%EB%A7%88.md" data-nav>03_DATABASE/00_벡터스토어_스키마.md</a>, 설계 <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>04_아키텍처_API/02_내부API_인터페이스.md</a></li>
-<li>BGE-M3 GGUF(1~2GB) 다운로드 여부 → L2 착수 조건 (채택 시 전체 재인덱싱 동반)</li>
-<li><strong>기본 생성모델 선택 — <code>gemma-4-e4b</code> 권장</strong>(긴 ctx 65536 유리, 4B급 품질 한계 가능 → reasoning 폴백 게이트 적용 후 재평가, SSOT §B-9 #8)</li>
+<li>현재: <strong>코드 없음, 스택 확정(2026-06-17), docs/만 작성 단계.</strong> 구현은 이후 진행합니다.</li>
+<li>✅ <strong>선행 결정 완료(2026-06-17, 권장값 확정)</strong> — 상세·안전망은 <a href="#docs%2F00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정/00_결정해야할것_통합.md</a> §2:<ul>
+<li>벡터스토어 = <strong>LanceDB</strong>(metric cosine·dot 명시, VectorStore Protocol 뒤 ChromaDB 폴백 보존)</li>
+<li>BGE-M3 GGUF <strong>다운로드·교체 실험 확정</strong> — 단 채택은 골든셋 단독변수 Recall@1 개선 확인 게이트(미개선 시 nomic 롤백, 전체 재인덱싱+norm 재측정 동반)</li>
+<li>기본 생성모델 = <strong><code>gemma-4-e4b</code></strong>(ctx 65536) — L2 생성품질 단일변수 검증 후 재평가, 미달 시 qwen3.5-9b 롤백</li>
+<li>리랭커 = <strong>도입 확정</strong>(BGE-reranker-v2-m3, L3) — 서빙 방식은 [확인필요] 유지, L3 진입 전 실측 검증 선행</li>
 </ul>
 </li>
 <li>다음 문서: → 지표·골든셋 정본 <a href="#" data-ext title="문서 외부: 시작프롬프트.md" class="ext-link">시작프롬프트.md</a> §B-8, 운영 트리거 <a href="#05_%EC%9A%B4%EC%98%81_%ED%8F%89%EA%B0%80%2F01_%EC%9A%B4%EC%98%81_%EB%9F%B0%EB%B6%81.md" data-nav>05_운영_평가/01_운영_런북.md</a>, 컴포넌트 구조 <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>04_아키텍처_API/02_내부API_인터페이스.md</a></li>
@@ -4921,7 +4952,7 @@ def check_header(current: dict, stored: dict | None) -&gt; HeaderState:
 </tr>
 </tbody></table>
 <blockquote>
-<p>모든 필드명·타입은 권장안이며 <strong>코드는 아직 없습니다(스택 미확정, 시작프롬프트.md §B-9).</strong> 인메모리 타입 <code>Chunk</code>의 시그니처는 <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>02_내부API_인터페이스.md</a> §1을, 적재 컬럼은 <a href="#03_DATABASE%2F00_%EB%B2%A1%ED%84%B0%EC%8A%A4%ED%86%A0%EC%96%B4_%EC%8A%A4%ED%82%A4%EB%A7%88.md" data-nav>00_벡터스토어_스키마.md</a> §1을 정본으로 따릅니다.</p>
+<p>모든 필드명·타입은 권장안이며 <strong>코드는 아직 없습니다(스택은 2026-06-17 확정, 시작프롬프트.md §B-9).</strong> 인메모리 타입 <code>Chunk</code>의 시그니처는 <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>02_내부API_인터페이스.md</a> §1을, 적재 컬럼은 <a href="#03_DATABASE%2F00_%EB%B2%A1%ED%84%B0%EC%8A%A4%ED%86%A0%EC%96%B4_%EC%8A%A4%ED%82%A4%EB%A7%88.md" data-nav>00_벡터스토어_스키마.md</a> §1을 정본으로 따릅니다.</p>
 </blockquote>
 <hr>
 <h2>2. 청크 논리 레코드 스키마</h2>
@@ -8174,7 +8205,7 @@ def chat(client, model, messages, max_tokens=4000, _depth=0):
 </tr>
 </tbody></table>
 <hr>
-<p>현재 상태: 코드 없음, 스택 미확정, <code>docs/</code>만 작성 단계입니다. 구현 규칙은 위와 같으며 실제 구현은 이후 단계에서 진행합니다.</p>
+<p>현재 상태: 코드 없음, <strong>스택 확정(2026-06-17)</strong>, <code>docs/</code>만 작성 단계입니다. 구현 규칙은 위와 같으며 실제 구현은 이후 단계에서 진행합니다.</p>
 </article>
 <article class="doc" data-id="99_AI참조/01_실측제약_불변식.md" hidden><h1>실측 제약 불변식 (변경금지)</h1>
 <p>AI가 절대 위반하면 안 되는 docs-em 실측사실 체크리스트 INV-1~INV-8과 위반 시 발생하는 실패를 정의합니다.</p>
