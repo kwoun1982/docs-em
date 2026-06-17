@@ -1,0 +1,184 @@
+> **이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.**
+> 페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 [00_실행개요.md](./00_실행개요.md) 참조.
+> 정본: [00_결정 통합](../00_결정/00_결정해야할것_통합.md) · [내부 API 계약](../04_아키텍처_API/02_내부API_인터페이스.md) · [불변식 INV-1~8](../99_AI참조/01_실측제약_불변식.md)
+
+# 페이즈 4: 검색(dense) · 평가 하네스 · 골든셋 → L1 게이트
+
+### 이 페이즈의 목표
+로컬 nomic 임베딩 기반 dense-only 검색(`search()`)과 정량 평가 하네스(`evaluate()`)·골든셋을 구축하고, 회귀 케이스 "연차 휴가 신청 절차"가 **정답 3위 · 정답score − 1위오답score ≈ −0.018(정답이 더 낮음) · Recall@1=0**으로 재현됨을 정확히 측정한다. 이 페이즈는 결함을 **고치는** 단계가 아니라 베이스라인을 **측정·고정**하는 단계다.
+
+### 사전 조건 (이전 페이즈 산출물 — 컨텍스트 초기화 후 파일에서 상태 확인)
+이 프롬프트만으로 실행하되, 아래 산출물이 이미 존재한다고 가정한다. **먼저 파일 존재와 시그니처를 읽어 확인하라.**
+
+확인 명령:
+```bash
+ls -la config/settings.yaml \
+      src/embed/embedder.py \
+      src/store/vector_store.py \
+      src/ingest/chunker.py \
+      data/  2>/dev/null
+python -c "import lancedb, yaml, numpy; print('deps ok')"
+```
+
+각 파일에서 다음을 코드로 확인한다(없거나 시그니처가 다르면 작업 중단하고 보고):
+- `src/embed/embedder.py` — `embed(texts: list[str], model="text-embedding-nomic-embed-text-v1.5") -> list[Vector]` 가 존재하고 빈입력에 `[]` 반환, norm 가드(`abs(norm-1.0)<1e-3`) 포함.
+- `src/store/vector_store.py` — `VectorStore` Protocol(`add`/`search`/`delete`)과 LanceDB 구현. `create_index`가 **metric=cosine 또는 dot 명시**(기본 L2 금지). 사이드카 `_index_header.json` 존재.
+- `src/ingest/chunker.py` — `Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)` 타입. **`chunk_id` 형식은 정본 계약 `{doc_id}#{chunk_index}`**(02_데이터모델_청크.md §5.1·§5.2). `chunk_index`는 **0-base 정수**이며, 파싱은 `chunk_id.rsplit("#",1)` 후 `int(idx)`이므로 **`#cNN`처럼 `int()`로 파싱 불가능한 형태를 만들지 말 것**.
+- `config/settings.yaml` — 임베딩 모델명·dim(768)·norm·metric 플래그·`top_k`.
+- `data/` 아래 **인덱싱 완료된 LanceDB 테이블**이 있어야 한다. 없으면 보고 후 중단한다.
+
+**인덱싱 스크립트 부재 시 중단 사유 식별(단독 실행자용)**: `data/`를 채우는 **인덱싱 스크립트는 페이즈 3 이전(L1 인제스트)의 산출물이며, 03_개발환경셋업.md §5 scaffold에는 포함되지 않는다**(scaffold는 `src/ingest/{loaders,chunker}.py`·`src/store/vector_store.py`의 **빈 파일만** 생성). 즉 사내문서(휴가규정·출장경비 포함)를 `loaders → chunker → embedder → vector_store.add`로 적재하는 **인덱싱 진입점(예: `scripts/index.py` 또는 `src/ingest`의 실행 함수)은 이전 페이즈에서 작성·실행되어 있어야 한다.** 이 진입점과 `data/` 인덱스가 둘 다 없으면 **이 페이즈를 시작할 수 없다 → "페이즈 3 인덱싱 산출물 부재"로 명시 보고 후 중단**(이 페이즈에서 인덱싱을 새로 만들지 말 것).
+
+회귀 케이스 정답 청크 id는 골든셋에 명시한다. 인덱스의 실제 `chunk_id`와 골든셋 `relevant_ids`가 **반드시 일치**해야 하므로, 인덱스에서 휴가규정 문서의 실제 chunk_id(`{doc_id}#{정수}` 형식)를 조회해 골든셋 값을 맞춘다.
+
+### 절대 규칙 (이 페이즈에서 위반 금지)
+- **INV-1 재정규화 금지**: 질의 임베딩도 nomic 출력 그대로 사용. 코드에서 L2 재정규화 추가 금지. norm 가드는 embedder에 이미 있음 — search에서 중복 정규화하지 말 것.
+- **INV-3 외부 API 금지**: 임베딩/검색 전 구간 `localhost:1234` 외 호출 0건. OpenAI/Anthropic/Cohere SDK 사용 금지.
+- **INV-7 정량 증명**: Recall@1/3/5/10·MRR·nDCG@10로 증명. 변수는 한 번에 하나만. 이 페이즈 베이스라인은 **nomic 768 · dense-only(use_bm25=False) · 고정 청크** 단일 구성으로만 측정.
+- **INV-8 prefix 일관성**: 질의 임베딩의 prefix 규칙은 **인덱싱과 동일**해야 한다. nomic은 prefix 효과 미미하나(0.687→0.695), 인덱싱이 prefix를 썼으면 질의도 동일 prefix, 안 썼으면 질의도 무. 둘이 다르면 측정 무효.
+- **메트릭 일관성**: 검색 거리 metric은 인덱스 생성 시 metric(cosine/dot)과 동일. L2(유클리드) 사용 금지.
+- 이 페이즈에서 BM25·RRF·리랭커·BGE-M3는 **만들지도 호출하지도 않는다**(다음 페이즈). 게이트는 "결함 재현"이므로 점수를 끌어올리려 손대지 말 것.
+
+### 작업 지시
+
+**1) `src/retrieve/search.py` — dense-only 검색 (신규)**
+
+타입과 시그니처는 계약 고정:
+```python
+# SearchHit(chunk, score, rank, source ∈ {"dense","bm25","rrf","rerank"})
+# rank: int — 0부터(02_내부API_인터페이스.md §1 "rank 0부터", §4.1 "rank 0부터 연속")
+def search(query: str, *, top_k: int = 30, use_bm25: bool = True) -> list[SearchHit]:
+    ...
+```
+이 페이즈 구현 범위:
+- `use_bm25` 인자는 **시그니처에 두되**, 이 페이즈에서는 `use_bm25=False` 경로만 구현한다. `use_bm25=True`로 호출되면 `NotImplementedError("BM25 path: phase 5")`를 발생시킨다(무음 폴백 금지).
+- dense 경로: `embed([query])[0]`로 질의 벡터 1개 생성(빈 질의면 빈 결과 반환). `VectorStore.search(query_vector, top_k=top_k)`로 후보를 받아 **score 내림차순** 정렬, **`rank`를 0부터 부여(0..N-1 연속, SearchHit.rank 계약 0-base)**, `source="dense"`로 `SearchHit` 리스트 반환.
+- score는 "클수록 유사"가 되도록 정규화한다: vector_store가 **distance**(작을수록 유사)를 주면 cosine은 `score = 1 - distance`, dot은 음수화 없이 유사도 그대로 — vector_store가 실제로 무엇을 반환하는지 코드로 확인 후 단조 변환만 적용(임의 재정규화 금지).
+- 질의 임베딩 모델·prefix는 인덱싱과 동일(`config/settings.yaml`에서 읽음). 하드코딩 모델명과 settings가 다르면 settings 우선.
+
+**2) `eval/queries.yaml` — 골든셋 (신규)**
+
+형식(계약·문서 일치). `relevant_ids`의 chunk_id는 **정본 형식 `{doc_id}#{정수}`**(02_데이터모델_청크.md §5.1)이며, **아래 값은 자리표시자다 — 반드시 인덱스에서 조회한 실제 chunk_id로 대체하라**(`#c03` 같은 비정수 접미는 `int()` 파싱 계약을 깨므로 금지):
+```yaml
+version: 1
+queries:
+  - id: q001
+    query: "연차 휴가 신청 절차"
+    relevant_ids: ["<휴가규정 doc_id>#<정수 chunk_index>", "..."]   # 자리표시자 — 인덱스 실제값으로 교체
+    note: "회귀 케이스. 현재 정답 3위, 정답score가 1위 오답(출장경비)보다 약 0.018 낮음(정답-오답≈-0.018). 목표 Recall@1=1"
+    tags: [regression, hr, korean]
+  - id: q002
+    query: "출장 경비 정산 한도"
+    relevant_ids: ["<travel_expense doc_id>#<정수 chunk_index>"]      # 자리표시자 — 인덱스 실제값으로 교체
+    tags: [hr, korean]
+  # ... 최소 20개(권장 50개). 도메인 분산(인사/총무/규정/절차)
+```
+- 최소 20개 질의. `q001` 연차휴가 회귀 케이스 **필수 포함**, `tags`에 `regression`.
+- `relevant_ids`는 **인덱스에 실재하는 chunk_id**여야 한다. 인덱스에서 조회해 채운다(아래 검증 명령으로 존재 확인). 위 예시의 `#<정수>`/`<doc_id>`는 형식만 보여주는 **자리표시자**이며, 실제 인덱스 값으로 교체하지 않으면 게이트가 실패한다.
+
+**3) `eval/evaluate.py` — 평가 하네스 (신규)**
+
+시그니처는 계약 고정:
+```python
+# EvalResult(recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query)
+def evaluate(
+    golden_path: str = "eval/queries.yaml",
+    *,
+    k_list: tuple[int, ...] = (1, 3, 5, 10),
+    use_bm25: bool = False,
+    use_rerank: bool = False,
+) -> EvalResult:
+    ...
+```
+- 골든셋 로드 → 각 질의에 `search(q.query, top_k=max(k_list+(10,)), use_bm25=use_bm25)` 호출 → 반환된 `SearchHit` 리스트에서 `chunk.chunk_id`를 순위대로 추출.
+- 지표 계산(아래 위치 인덱스 `i`는 **수학식의 1-base 순위**이며 `SearchHit.rank`(0-base) 필드와 **별개**다 — 혼동 금지):
+  - `Recall@k` = hit 기반: 상위 k에 `relevant_ids`가 하나라도 있으면 1.0, 평균.
+  - `MRR` = 첫 정답 순위의 역수 평균(`enumerate(ids, start=1)`의 위치 i 기준, 없으면 0).
+  - `nDCG@10` = `DCG@10 = Σ rel(i)/log2(i+1)`(i는 1-base 위치), `IDCG@10`은 정답을 1위부터 채운 값, 이진 relevance.
+- `use_rerank=True`는 이 페이즈에서 `NotImplementedError("rerank: phase 7")`.
+- `per_query`에 질의별 지표를 보존(회귀가 평균에 묻히지 않게).
+- 결과를 `reports/baseline.json`에 저장한다. **저장 직전 반드시 `import os; os.makedirs("reports", exist_ok=True)`로 디렉토리를 생성한다**(03_개발환경셋업.md §5 scaffold는 `reports/`를 만들지 않으므로 명시 생성 없으면 첫 실행에서 `FileNotFoundError`). 저장 내용은 풍부하게: `recall_at_1/3/5/10`·`mrr`·`ndcg_at_10`·`per_query`(질의별 상세) + 측정 구성 메타(모델명·dim·metric·`use_bm25=False`).
+- `evaluate` 모듈에 CLI 진입점(`python -m eval.evaluate` 또는 `python eval/evaluate.py`)을 두어 summary 표와 `q001` 회귀 행을 출력.
+
+**4) 베이스라인 리포트 저장**
+- `reports/baseline.json`은 **`evaluate()`가 단독으로 생성·기록한다**(위 3의 풍부한 내용). 회귀 케이스 `q001`의 정답 순위(0-base `rank` 및 1-base 위치)와 1위 오답과의 score 격차(`정답score − 1위오답score`, 부호 음수 기대)를 `per_query`에 함께 기록한다. **별도 검증 스크립트가 이 파일을 다시 `json.dump`로 덮어쓰지 않는다**(읽어서 확인만).
+
+### 산출물 (생성/수정 파일)
+- 신규 `src/retrieve/search.py`
+- 신규 `src/retrieve/__init__.py`(없으면)
+- 신규 `eval/queries.yaml`
+- 신규 `eval/evaluate.py`
+- 신규 `eval/__init__.py`(없으면)
+- 신규 `reports/baseline.json`(실측 결과 — `evaluate()`가 생성, `reports/`도 `os.makedirs`로 생성)
+- (선택) `tests/test_search.py`, `tests/test_evaluate.py`
+
+### 완료 기준 (통과 못 하면 다음 페이즈 금지)
+1. `search("연차 휴가 신청 절차", use_bm25=False)`가 score 내림차순 `SearchHit` 리스트를 반환하고, 각 hit `source=="dense"`, **`rank`가 0..N-1 연속(0-base, SearchHit.rank 계약)**.
+2. `search(..., use_bm25=True)` 호출 시 `NotImplementedError` 발생(무음 폴백 없음).
+3. `evaluate()`가 `EvalResult`(recall_at_1/3/5/10·mrr·ndcg_at_10·per_query)를 반환하고 `reports/baseline.json` 저장(`reports/`는 `os.makedirs(exist_ok=True)`로 생성, per_query·메타 포함).
+4. **L1 게이트(핵심)**: `q001`(연차휴가)에서 **정답 청크가 3위(1-base 위치 3, 0-base rank 2)**, **`정답score − 1위오답(출장경비)score ≈ −0.018`(정답이 더 낮음, 부호 음수·자릿수 일치)**, 따라서 **`recall_at_1` 기여 0 / 이 질의 RR = 1/3 ≈ 0.333**. 이 결함이 **정확히 재현**되어야 통과. 우연히 1위로 나오면(측정 환경·prefix·metric 불일치 의심) **통과 아님 → 인덱스/prefix/metric 일치를 재점검**.
+5. 골든셋 질의 ≥ 20개, `q001`에 `regression` 태그, 모든 `relevant_ids`가 **정본 형식 `{doc_id}#{정수}`**이며 인덱스에 실재(`#cNN` 비정수 접미 금지).
+6. 외부 네트워크 호출 0건(임베딩만 localhost:1234).
+
+### 검증 명령
+```bash
+# 의존성·산출물 존재
+python -c "import yaml,math,lancedb; print('deps ok')"
+test -f eval/queries.yaml && test -f src/retrieve/search.py && test -f eval/evaluate.py || echo "MISSING FILE"
+
+# 골든셋 규모·회귀 태그·chunk_id 정본 형식(int 파싱 가능)
+python - <<'PY'
+import yaml
+g = yaml.safe_load(open("eval/queries.yaml", encoding="utf-8"))["queries"]
+assert len(g) >= 20, f"골든셋 {len(g)}개 < 20"
+q1 = next(q for q in g if q["id"] == "q001")
+assert "regression" in q1["tags"] and "연차" in q1["query"]
+# 모든 relevant_ids가 정본 {doc_id}#{정수} 형식인지(02_데이터모델_청크.md §5.2 int(idx) 파싱 계약)
+for q in g:
+    for cid in q["relevant_ids"]:
+        doc_id, idx = cid.rsplit("#", 1)
+        int(idx)  # '#c03' 등 비정수면 ValueError로 즉시 실패
+print(f"골든셋 {len(g)}개, q001 회귀 케이스 OK, chunk_id 정본 형식 OK")
+PY
+
+# use_bm25=True 차단 확인
+python - <<'PY'
+from src.retrieve.search import search
+try:
+    search("x", use_bm25=True); print("FAIL: BM25 should raise")
+except NotImplementedError: print("BM25 path blocked OK")
+PY
+
+# L1 게이트: 회귀 재현 확인 + 베이스라인 측정(저장은 evaluate()가 수행, 여기선 읽어서 확인만)
+python - <<'PY'
+from src.retrieve.search import search
+from eval.evaluate import evaluate
+import json, os, yaml
+
+g = yaml.safe_load(open("eval/queries.yaml", encoding="utf-8"))["queries"]
+rel = set(next(q for q in g if q["id"]=="q001")["relevant_ids"])
+
+hits  = search("연차 휴가 신청 절차", top_k=10, use_bm25=False)
+ids   = [h.chunk.chunk_id for h in hits]
+score = {h.chunk.chunk_id: h.score for h in hits}
+# 1-base 위치(수학식 순위). SearchHit.rank(0-base) 필드와 별개.
+pos   = next((i for i, c in enumerate(ids, 1) if c in rel), None)
+print("정답 순위(1-base):", pos, "(기대 3)")
+# 정본 부호 규약: 정답score - 1위오답score ≈ -0.018 (정답이 더 낮음)
+gap = round(max(score[c] for c in rel if c in score) - score[ids[0]], 6)
+print("정답score - 1위오답score 격차:", gap, "(기대 ≈ -0.018, 정답이 더 작음)")
+assert pos == 3, "L1 게이트 실패: 회귀가 3위로 재현되지 않음"
+
+res = evaluate("eval/queries.yaml", use_bm25=False)  # reports/baseline.json은 evaluate() 내부에서 os.makedirs 후 저장
+print("Recall@1:", res.recall_at_1, "MRR:", res.mrr, "nDCG@10:", res.ndcg_at_10)
+
+# 덮어쓰지 않고 읽어서 확인만(풍부한 per_query/메타 보존)
+assert os.path.exists("reports/baseline.json"), "baseline.json 미생성(evaluate가 os.makedirs+저장해야 함)"
+saved = json.load(open("reports/baseline.json", encoding="utf-8"))
+assert "per_query" in saved, "baseline.json에 per_query 누락(스칼라만 저장됨 — 정보 손실)"
+print("baseline.json 확인 완료(per_query·메타 보존)")
+PY
+```
+
+### 다음 페이즈 핸드오프
+`search()`/`evaluate()`/골든셋·`reports/baseline.json`이 고정 베이스라인으로 존재한다. 다음 페이즈(BM25·RRF 하이브리드)는 `search(use_bm25=True)` 경로를 구현하고 **동일 골든셋·동일 evaluate로 변수 1개만 토글**해 베이스라인과 비교한다. 회귀 케이스 `q001`의 Recall@1=0이 깨지지 않았는지(또는 의도적으로 0→1 개선됐는지)를 per_query로 확인한다.

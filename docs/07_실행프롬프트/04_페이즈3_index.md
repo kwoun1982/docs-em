@@ -1,0 +1,222 @@
+> **이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.**
+> 페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 [00_실행개요.md](./00_실행개요.md) 참조.
+> 정본: [00_결정 통합](../00_결정/00_결정해야할것_통합.md) · [내부 API 계약](../04_아키텍처_API/02_내부API_인터페이스.md) · [불변식 INV-1~8](../99_AI참조/01_실측제약_불변식.md)
+
+# 페이즈 3: 벡터스토어 · 인덱싱 (LanceDB)
+
+### 이 페이즈의 목표
+얇은 `VectorStore` Protocol(add/search/delete) 뒤에 LanceDB 구현을 숨기고, 사이드카 `_index_header.json`을 커밋 마커로 쓰는 원자적·멱등 인덱싱 파이프라인(문서→chunk→embed→add)을 완성한다. 코사인/내적 metric을 명시(기본 L2 금지)하고, 정본 헤더 필드·fingerprint 기반 4상태 검사(`HeaderState`)·헤더 원자성·멱등(doc_id 단위 delete-then-insert)·재인덱싱 정합성을 단위 테스트로 증명한다.
+
+### 사전 조건 (정본 문서 + 이전 페이즈 산출물 — 코드 짜기 전 반드시 읽기)
+컨텍스트가 초기화된 상태이므로, **코드를 한 줄이라도 짜기 전에 아래 정본 문서를 직접 읽고 그 시그니처·필드명·정책을 그대로 따른다.** 정본과 충돌하는 자체 시그니처를 발명하지 마라(이 페이즈에서 가장 흔한 실패).
+
+읽어야 할 정본(우선순위 순):
+- `docs/03_DATABASE/01_인덱스_메타데이터_설계.md`
+  - §2 / §2.1 — 헤더 **필드명**(정본): `schema_version`, `embedding_model`, `dim`, `normalized`, `metric`, `embedding_endpoint`, `doc_prefix`, `query_prefix`, `chunker_version`, `built_at`, `doc_count`, `vector_count`, `fingerprint`.
+  - §2.2 — `index_fingerprint(embedding_model, dim, normalized, metric) -> str` (핵심4필드 sha256 16자). **이 함수를 그대로 재현/공유**한다.
+  - §3.1 — `check_header(current: dict, stored: dict | None) -> HeaderState`(Enum) **정본 시그니처·상태전이**. 그대로 구현.
+- `docs/03_DATABASE/00_벡터스토어_스키마.md`
+  - §1 / §1.1 — 물리 컬럼·`meta` dict↔평면(`page`/`section`/`meta_json`) 매핑.
+  - §2 — metric 규약(정규화 벡터는 cosine=dot, 기본 L2 함정).
+  - §4.1 — LanceDB 스키마·**`create_index`/`_distance` 호출 형태는 "버전 핀 후 [확인필요]"**(임의 가정 금지).
+- `docs/03_DATABASE/02_데이터모델_청크.md`
+  - §5 / §5.3 — ID 포맷 `{doc_id}#{chunk_index}`, **재색인 정책 = 같은 `doc_id` 청크를 먼저 삭제 후 재삽입**(stale 꼬리 청크 제거).
+- `docs/04_아키텍처_API/02_내부API_인터페이스.md`
+  - §1 — `Chunk`/`SearchHit`/`Vector` 타입. §2.2 — `embed()`/`_assert_normalized`(norm 가드는 embed() 내부에서 이미 수행). §4.1 — `SearchHit.score`는 단계별 스케일 의존.
+
+그 다음 이전 페이즈 산출물을 파일에서 확인한다. 없으면 이 페이즈를 시작하지 말고 빠진 산출물을 먼저 보고한다.
+
+```bash
+# 프로젝트 루트에서 실행. 진입점/시그니처 확인용.
+ls -la config/settings.yaml pyproject.toml
+sed -n '1,80p' src/embed/embedder.py     # embed()·assert_within_embed_limit·_assert_normalized 존재 확인
+sed -n '1,80p' src/ingest/chunker.py      # chunk()·Chunk 타입 존재 확인
+python -c "import lancedb; print('lancedb', lancedb.__version__)"
+grep -nE 'dim|norm|metric|nomic|model' config/settings.yaml
+```
+
+확인해야 할 계약(이전 페이즈에서 이미 고정됨 — 재정의 금지, import 해서 사용):
+- `from src.embed.embedder import embed, assert_within_embed_limit`
+  - `embed(texts: list[str], model="text-embedding-nomic-embed-text-v1.5") -> list[Vector]` (빈입력 → `[]` 즉시, **norm 가드는 embed() 반환 직전 `_assert_normalized`가 이미 수행** — 내부 API §2.2 불변식2, 768차원·norm=1.0)
+- `from src.ingest.chunker import chunk, Chunk`
+  - `chunk(doc, *, max_chars=500, overlap_chars=80, doc_type="manual") -> list[Chunk]`
+  - `Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)`
+- `config/settings.yaml`에 `embedding.model`·`embedding.dim=768`·`embedding.normalized=true`·`store.metric` 플래그가 있어야 한다(없으면 추가). **주의: settings 키는 `embedding.model`이지만 헤더 필드명은 `embedding_model`이다** — indexer가 `settings.embedding.model`을 읽어 헤더 `embedding_model`로 **매핑**한다(키 이름이 다름을 코드에서 명시).
+
+만약 `src/embed/embedder.py` 또는 `src/ingest/chunker.py`가 없으면 **중단**하고 "페이즈 1/2 산출물 누락"으로 보고한다. 이 페이즈에서 그 모듈을 새로 구현하지 않는다.
+
+### 절대 규칙 (이 페이즈에서 위반 금지)
+- **INV-1 (재정규화 금지)**: 임베딩은 이미 L2 정규화(norm=1.0). vector_store 안에서 벡터를 다시 정규화하지 마라.
+  - **가드 위치 — 단일 책임**: 정본 가드(`_assert_normalized`)는 이미 `embed()` 반환 직전에 "빈입력 스킵 + 배치 전체 assert"로 수행된다(내부 API §2.2). 따라서 **store/indexer에서 norm을 재가드하지 않는 것이 기본**이다. add 안에서 방어적 가드를 둘 경우 **중복임을 주석으로 명시**하고(`# INV-1 재확인 가드: embed() 내부 _assert_normalized와 중복. 회귀 시 어느 가드가 트립했는지 구분 위해 메시지에 'store-side' 표기`), 정본과 동일하게 "빈입력 스킵 후 배치 전체 `assert abs(n - 1.0) < 1e-3`"로 둔다. 개별 루프 assert 자체는 INV-1 위반이 아니나, 트립 출처가 모호해지지 않게 메시지로 구분한다.
+- **INV-3 (외부 API 금지)**: 이 페이즈는 임베딩을 `src.embed.embedder.embed()`로만 얻는다. 코드 어디에도 `localhost:1234` 외 네트워크 호출·OpenAI/Anthropic/Cohere SDK 직접 호출이 있어선 안 된다.
+- **metric 명시 (기본 L2 금지)**: LanceDB `create_index`/검색 시 metric을 반드시 `"cosine"` 또는 `"dot"`로 명시한다. 기본값(L2 유클리드)에 의존하면 안 된다. nomic은 정규화 벡터이므로 cosine을 기본으로 하되 settings에서 바꿀 수 있게 한다. **`create_index`/`_distance` 정확한 호출 형태는 설치 버전 문서로 확인**(스키마.md §4.1 주의 — "버전 핀 후 [확인필요]"). 임의 가정 금지.
+- **헤더 = 커밋 마커**: `_index_header.json`은 **벡터 적재가 모두 끝난 뒤 마지막에** 기록한다. 헤더 쓰기는 `os.replace`로 원자 교체(임시파일 → replace). 적재 도중 죽으면 헤더가 없거나 옛것이라 MISSING/REBUILD로 잡혀야 한다(무음으로 반쪽 인덱스 통과 금지).
+- **INV-7 정신 (정량/단일변수)**: 이 페이즈는 검색 품질을 바꾸지 않는다. fingerprint(핵심4필드)·schema_version을 헤더에 박아 다음 페이즈가 단일변수로 측정 가능하게 하고, 모델 교체(768→1024)가 fingerprint 기반 게이트로 REBUILD를 강제하게만 한다.
+
+### 작업 지시
+
+**1) `src/store/vector_store.py` 생성**
+
+(a) 타입·Protocol·상수
+- `SearchHit`/`Chunk`/`Vector`는 **공통 타입 모듈에서 import**한다(내부 API §1 정본). 공통 모듈이 아직 없으면 내부 API §1 시그니처 그대로 `@dataclass`로 정의(필드: `SearchHit(chunk, score, rank, source)` / `Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)`). 이 페이즈는 dense만 생성하므로 `source="dense"`.
+- `VectorStore` Protocol 정의: `add`, `search`, `delete` 3개 메서드. `typing.Protocol`로 얇게.
+  - `add(self, chunks: list[Chunk], vectors: list[Vector]) -> int`  # 실제 삽입된 개수 반환
+  - `search(self, query_vector: Vector, *, top_k: int = 30) -> list[SearchHit]`  # score 내림차순, source="dense"
+  - `delete(self, *, doc_id: str | None = None, chunk_ids: list[str] | None = None) -> int`
+
+(b) `LanceDBStore(VectorStore)` 구현
+- 생성자: `LanceDBStore(db_path: str, table_name: str = "chunks", *, dim: int = 768, metric: str = "cosine")`. metric 검증: `metric in {"cosine", "dot"}` 아니면 `ValueError`(L2 차단).
+- 스키마(스키마.md §1·§4.1 정본): `chunk_id`(PK, str, 포맷 `{doc_id}#{chunk_index}`), `doc_id`(str), `source_path`(str), `chunk_index`(int), `text`(str), `vector`(FixedSizeList[float32, dim]). `meta`의 `page`/`section`은 평면 컬럼(`page` int?, `section` str?), 그 외 키는 `meta_json`(JSON 문자열)으로 직렬화.
+- `add`:
+  1. `chunks`와 `vectors` 길이 일치 assert.
+  2. 빈 텍스트/공백 청크는 스킵(벡터도 함께 스킵). 빈입력이면 0 반환.
+  3. **norm 재확인 가드(선택, INV-1 중복 주석 필수)**: 위 "절대 규칙"대로 두려면 빈입력 스킵 후 배치 전체 `n = math.sqrt(sum(x*x)); assert abs(n - 1.0) < 1e-3, "store-side norm guard: {n}"`. 메시지에 `store-side` 표기. 재정규화 금지.
+  4. **멱등 = doc_id 단위 delete-then-insert(정본 §5.3·스키마.md §8)**: 같은 `doc_id`의 기존 청크를 **먼저 모두 삭제한 뒤** 새 청크를 삽입한다. 이렇게 해야 청크 수가 줄어든 재색인에서 **stale 꼬리 청크가 고아로 남지 않는다.** content_hash 기반 "존재 시 스킵" 멱등은 **도입하지 않는다**(고아 레코드를 남겨 정본 재색인 정책과 충돌). 반환은 이번에 삽입된 개수.
+     - 입력 `chunks`가 여러 `doc_id`를 포함할 수 있으므로, doc_id별로 묶어 각 doc_id에 대해 delete-then-insert.
+- `search`: LanceDB 검색에 metric을 `self.metric`으로 명시, `limit(top_k)`. **거리→score 변환은 설치 버전 문서로 `_distance` 의미를 확인한 뒤 일관 변환**(스키마.md §4.1). cosine에서 `_distance`가 `0=동일 ~ 2=반대`인지, `score = 1 - _distance`가 맞는지 **버전 확인 전 단정 금지**. 확인 결과를 코드 주석에 핀(예: `# lancedb x.y: cosine _distance∈[0,2], score=1-_distance`). dot이면 내적값을 그대로 score. score 내림차순 정렬, `rank` 0부터, `source="dense"`. 각 행을 `Chunk`로 복원(`meta_json` 역직렬화·`page`/`section` 합류)해 `SearchHit.chunk`에 담는다.
+- `delete`: `doc_id` 또는 `chunk_ids` 중 하나로 삭제, 삭제 행 수 반환. 둘 다 None이면 `ValueError`. (멱등 add가 내부적으로 이 delete를 doc_id로 호출.)
+
+(c) 사이드카 헤더 — **정본 필드·fingerprint·HeaderState로 같은 파일 안 구현**
+- 경로: `os.path.join(db_path, "_index_header.json")`.
+- `index_fingerprint`는 **정본(docs/03_DATABASE/01 §2.2)에서 import 하거나 동일 구현 재현**: 핵심4필드(`embedding_model`,`dim`,`normalized`,`metric`)를 `json.dumps(sort_keys=True, separators=(",",":"))` 후 sha256 16자.
+- `HeaderState`(Enum): `OK`/`REBUILD`/`WARN`/`MISSING`(정본 §3.1).
+- 헤더 기록 내용(**정본 필드명**, `model`/`count`/`written_at` 같은 자체 이름 금지):
+  ```json
+  {
+    "schema_version": 1,
+    "embedding_model": "<settings.embedding.model 매핑>",
+    "dim": 768,
+    "normalized": true,
+    "metric": "<cosine|dot>",
+    "embedding_endpoint": "http://localhost:1234/v1",
+    "doc_prefix": "search_document",
+    "query_prefix": "search_query",
+    "chunker_version": "v1",
+    "built_at": "<ISO8601 UTC>",
+    "doc_count": "<distinct doc 수>",
+    "vector_count": "<적재 row 수>",
+    "fingerprint": "<index_fingerprint(embedding_model,dim,normalized,metric)>"
+  }
+  ```
+- `write_header(db_path, header: dict) -> None`: `fingerprint`가 비어 있으면 `index_fingerprint(...)`로 채운다(또는 호출 전 채워졌는지 assert). 임시파일 `_index_header.json.tmp`에 쓰고 `os.replace(tmp, final)`로 원자 교체. **반드시 벡터 적재 완료 후 호출**.
+- `read_header(db_path) -> dict | None`: 사이드카 json을 읽어 `stored` dict 반환. 파일 없음/JSON 파싱 실패 → `None`.
+- `check_header(current: dict, stored: dict | None) -> HeaderState`: **정본 §3.1 시그니처·상태전이 그대로**. db_path 기반 `expected_*` 인자 형태는 **폐기**한다.
+  1. `stored is None` → `MISSING`.
+  2. `current["schema_version"] != stored["schema_version"]` → `REBUILD`(정본: 포맷 불일치).
+  3. `cur_fp = index_fingerprint(current...)`; `stored.get("fingerprint")` 가 `None`(레거시 헤더, fingerprint 키 없음) → `REBUILD`; `cur_fp != stored_fp` → `REBUILD`(모델/차원/정규화/메트릭 변경, 768→1024 포함).
+  4. `current.get("chunker_version") != stored.get("chunker_version")` → `WARN`.
+  5. 그 외 → `OK`.
+  - **무음 빈 문자열/None 반환 금지** — 항상 `HeaderState` 4값 중 하나.
+- (선택) `count` 정합 경고를 추가하고 싶으면 정본에 없는 자체 설계이므로 `# [추정] 자체 설계 — 정본 WARN(chunker_version)과 병행` 태그를 달고 `WARN`로만 둔다(정본 상태전이를 덮어쓰지 말 것). schema_version은 정본대로 **REBUILD**이지 WARN이 아니다.
+
+**2) 인덱싱 파이프라인 `src/store/indexer.py` 생성**
+- `index_documents(docs, *, db_path, table_name="chunks", embed_model=<settings.embedding.model>, metric=<settings.store.metric>, max_chars=500, overlap_chars=80, chunker_version="v1") -> dict` 함수 1개.
+- 흐름: 각 doc → `chunk(doc, max_chars=..., overlap_chars=...)` → 각 청크 텍스트에 `assert_within_embed_limit(text)`(INV-4 정신: 문자 수 기준 fail-closed) → 텍스트만 모아 배치 `embed(texts, model=embed_model)`(norm 가드는 embed 내부에서 수행) → `LanceDBStore.add(chunks, vectors)`(doc_id 단위 delete-then-insert 멱등) → **모든 add 성공 후 마지막에** `write_header(db_path, header)`.
+- 헤더 구성 시 **settings 키 → 헤더 필드 매핑**을 명시: `settings.embedding.model` → `embedding_model`, `settings.embedding.dim` → `dim`, `settings.embedding.normalized` → `normalized`, `settings.store.metric` → `metric`. `fingerprint`는 `index_fingerprint`로 계산. `doc_count`=distinct doc 수, `vector_count`=적재 row 수, `built_at`=현재 UTC ISO8601, `schema_version=1`, `chunker_version`=인자값, `embedding_endpoint`/`doc_prefix`/`query_prefix`는 settings 또는 상수.
+- 반환: `{"inserted": <int>, "skipped": <int>, "doc_count": <int>, "vector_count": <int>, "header": <header dict>}`.
+- 헤더는 add가 한 건이라도 실패하면 쓰지 않는다(반쪽 인덱스가 OK로 보이면 안 됨).
+
+**3) `config/settings.yaml` 보강(없는 키만 추가)**
+```yaml
+embedding:
+  model: text-embedding-nomic-embed-text-v1.5   # → 헤더 embedding_model 로 매핑
+  dim: 768                                        # → 헤더 dim
+  normalized: true                                # → 헤더 normalized
+  endpoint: http://localhost:1234/v1              # → 헤더 embedding_endpoint
+  doc_prefix: search_document                     # → 헤더 doc_prefix
+  query_prefix: search_query                      # → 헤더 query_prefix
+store:
+  backend: lancedb
+  db_path: data/index/lancedb
+  table: chunks
+  metric: cosine        # cosine | dot  (L2 금지) → 헤더 metric
+chunker:
+  version: v1                                     # → 헤더 chunker_version
+```
+> settings 키 이름(`embedding.model`)과 헤더 필드명(`embedding_model`)이 다르다. indexer가 매핑한다(위 §2).
+
+**4) 단위 테스트 `tests/test_vector_store.py` 생성** (네트워크·실모델 금지 — 임베딩은 고정 더미 단위벡터로 모킹)
+- `_unit_vec(seed)`: 임의 768차원 만들고 L2 정규화해 norm=1.0인 더미 벡터 생성(테스트 픽스처 한정).
+- **재색인 멱등(정본 §5.3) 테스트**:
+  - 같은 `doc_id`의 같은 `chunks`+`vectors`로 `add` 두 번 → 테이블 row 수 1배 유지(중복 없음).
+  - **꼬리 청크 제거 검증(핵심)**: 같은 `doc_id`를 청크 5개로 add → 같은 `doc_id`를 청크 3개로 재 add → 테이블에 그 doc_id 청크가 **정확히 3개**만 남고 chunk_index 3,4(꼬리)가 **고아로 남지 않음**을 검증.
+  - 다른 doc_id는 영향받지 않음.
+- **헤더 원자성 테스트**: `write_header` 중간 실패를 흉내(tmp 쓴 뒤 replace 전 예외) → 최종 파일이 옛 상태 그대로(부분 기록된 final 없음). 정상 경로에선 `os.replace`로 한 번에 바뀜.
+- **fingerprint·4상태(HeaderState) 테스트**:
+  - `read_header` 없음(stored=None) → `check_header(current, None) == HeaderState.MISSING`.
+  - 동일 current/stored → `OK`.
+  - `embedding_model`/`dim`/`normalized`/`metric` 중 하나 변경(fingerprint 달라짐) → `REBUILD`. 특히 `dim` 768→1024 → `REBUILD`.
+  - `schema_version` 불일치 → `REBUILD`.
+  - stored에 `fingerprint` 키 없음(레거시) → `REBUILD`.
+  - `chunker_version`만 불일치 → `WARN`.
+- **norm 가드 테스트(store-side 두는 경우)**: norm≠1인 벡터 add → `AssertionError`(메시지에 `store-side`). 정규화 벡터는 통과하고 store가 값을 다시 정규화하지 않음을 값 비교로 확인.
+- **metric 차단 테스트**: `LanceDBStore(..., metric="l2")` → `ValueError`.
+- 테스트는 `tmp_path`(pytest 픽스처)로 임시 db_path 사용.
+
+### 산출물
+- `src/store/vector_store.py` (신규) — VectorStore Protocol, LanceDBStore(doc_id 단위 멱등), `index_fingerprint`(정본 재현/import), `read_header`/`write_header`/`check_header`(HeaderState)
+- `src/store/indexer.py` (신규) — index_documents 파이프라인(settings→헤더 필드 매핑)
+- `config/settings.yaml` (수정) — embedding/store/chunker 키 보강
+- `tests/test_vector_store.py` (신규) — 재색인 멱등(꼬리 청크 제거)·헤더 원자성·fingerprint 4상태·norm 가드·metric 차단
+- (필요 시) `src/store/__init__.py`
+
+### 완료 기준 (통과 못 하면 다음 페이즈 금지)
+1. `pytest tests/test_vector_store.py -q` 전부 통과.
+2. metric이 코드/헤더 어디에도 L2로 새지 않음(아래 검증 명령 2가 비어 있음).
+3. `_index_header.json`이 **벡터 적재 성공 후에만** 생성되고, `os.replace` 경로로 쓰임(코드 검사).
+4. `check_header(current, stored)`가 `HeaderState`(OK/MISSING/REBUILD/WARN) **Enum**만 반환(str/빈값 없음). 정본 §3.1 상태전이와 일치(schema_version 불일치=REBUILD, 레거시 fingerprint 없음=REBUILD, chunker_version 불일치=WARN).
+5. 재색인 멱등: 같은 doc_id를 5청크→3청크로 재 add 시 row 수가 정확히 3, 꼬리(4,5번) 고아 없음.
+6. 헤더 필드명이 정본(`embedding_model`/`built_at`/`doc_count`/`vector_count`/`fingerprint` 등)과 일치(자체 이름 `model`/`count`/`written_at` 사용 안 함).
+
+### 검증 명령
+```bash
+# 1) 단위 테스트
+pytest tests/test_vector_store.py -q
+
+# 2) metric L2 누수 검사 (비어 있어야 통과)
+grep -rniE '\bl2\b|euclidean' src/store/ | grep -viE '금지|forbid|no.l2'
+
+# 3) 헤더가 마지막에 os.replace로 쓰이는지 코드 검사 (둘 다 매치돼야 함)
+grep -n 'os.replace' src/store/vector_store.py
+grep -n 'write_header' src/store/indexer.py
+
+# 4) 정본 헤더 필드명·HeaderState 사용 확인 (모두 매치돼야 함, 자체 이름 미사용)
+grep -nE 'embedding_model|built_at|doc_count|vector_count|fingerprint|HeaderState' src/store/vector_store.py
+grep -nE '"model"|"count"|"written_at"' src/store/vector_store.py   # 비어 있어야 함(자체 필드명 금지)
+
+# 5) lancedb _distance 변환식이 버전 확인 주석과 함께 박혔는지 (가정 금지 게이트)
+grep -nE '_distance|create_index' src/store/vector_store.py
+#   → cosine score 변환 위에 "# lancedb <버전>: cosine _distance∈[...] , score=..." 주석이 있어야 함.
+#     설치 버전 문서로 _distance 스케일을 확인하기 전에는 1-distance를 임의로 단정하지 말 것.
+
+# 6) HeaderState 스모크 (정본 시그니처 check_header(current, stored))
+python - <<'PY'
+import tempfile
+from src.store.vector_store import (
+    index_fingerprint, write_header, read_header, check_header, HeaderState,
+)
+d = tempfile.mkdtemp()
+cur = {
+    "schema_version": 1, "embedding_model": "text-embedding-nomic-embed-text-v1.5",
+    "dim": 768, "normalized": True, "metric": "cosine", "chunker_version": "v1",
+}
+cur["fingerprint"] = index_fingerprint(cur["embedding_model"], cur["dim"], cur["normalized"], cur["metric"])
+print("missing ->", check_header(cur, None))                                   # MISSING
+write_header(d, {**cur, "embedding_endpoint":"http://localhost:1234/v1",
+                 "doc_prefix":"search_document","query_prefix":"search_query",
+                 "built_at":"2026-06-17T00:00:00Z","doc_count":1,"vector_count":3})
+stored = read_header(d)
+print("ok ->", check_header(cur, stored))                                      # OK
+print("model/dim change ->", check_header({**cur, "embedding_model":"bge-m3", "dim":1024,
+    "fingerprint": index_fingerprint("bge-m3",1024,True,"cosine")}, stored))   # REBUILD
+print("schema change ->", check_header({**cur, "schema_version":2}, stored))   # REBUILD
+print("legacy(no fp) ->", check_header(cur, {k:v for k,v in stored.items() if k!="fingerprint"}))  # REBUILD
+print("chunker change ->", check_header({**cur, "chunker_version":"v2"}, stored))  # WARN
+PY
+```
+
+### 다음 페이즈 핸드오프
+페이즈 4(검색·하이브리드)는 `LanceDBStore.search(query_vector, top_k=30)`가 돌려주는 `list[SearchHit]`(source="dense")와 `_index_header.json`의 `embedding_model`/`dim`/`normalized`/`metric`/`fingerprint`를 이어받아, 질의 임베딩을 **인덱싱과 동일한 모델·prefix(`query_prefix`)** 로 만들어 dense 검색을 수행하고 BM25(rank_bm25)+RRF(k=60)로 결합한다. 검색 진입점에서 `check_header(current, read_header(db_path))`를 호출해 `REBUILD`/`MISSING`이면 **검색을 차단**(정본 §3.2)하고 재인덱싱(런북 §2)을 선행시킨다. 모델 교체(768→1024)는 fingerprint 불일치로 자동 REBUILD가 잡힌다.
+````
+
+**수정 요약(검수 지적 → 반영)**: check_header를 정본 `check_header(current, stored) -> HeaderState`로 교체(db_path/expected_* 폐기), `read_header` 얇은 로더 추가 / 헤더 필드를 정본명(`embedding_model`·`built_at`·`doc_count`/`vector_count`·`fingerprint` 등)으로 교체하고 `index_fingerprint` 재현 지시 / 상태전이를 정본에 정렬(schema_version·레거시 fingerprint 없음=REBUILD, chunker_version=WARN, count=[추정] 병행) / content_hash 멱등 폐기 후 doc_id 단위 delete-then-insert + 꼬리 청크 제거 테스트 / 사전조건에 정본 4문서 읽기 명시 / `_distance` 변환에 버전 확인 게이트 추가 / norm 가드 중복(embed() 내부와 겹침) store-side 표기 명시 / settings.`embedding.model`→헤더 `embedding_model` 매핑 명시.

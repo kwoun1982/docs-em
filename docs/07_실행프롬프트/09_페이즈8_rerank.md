@@ -1,0 +1,125 @@
+> **이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.**
+> 페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 [00_실행개요.md](./00_실행개요.md) 참조.
+> 정본: [00_결정 통합](../00_결정/00_결정해야할것_통합.md) · [내부 API 계약](../04_아키텍처_API/02_내부API_인터페이스.md) · [불변식 INV-1~8](../99_AI참조/01_실측제약_불변식.md)
+
+# 페이즈 8: 리랭킹 (L3) · 서빙 검증
+
+### 이 페이즈의 목표
+1차 검색 결과(20~50개)를 cross-encoder 리랭커(`BGE-reranker-v2-m3`)로 재정렬해 `top_n=5`를 산출하는 `rerank()`를 구현하고, **리랭커 서빙 방식을 실측 검증**한 뒤 골든셋으로 비퇴행을 증명한다(회귀 케이스 `Recall@1=1` 유지, 전체 `nDCG@10` 저하 0).
+
+### 사전 조건 — **하드 게이트 (이전 페이즈 0~7 산출물 필수, 미충족 시 즉시 중단)**
+이 페이즈는 **상류 검색·평가 스택(페이즈 0~7)이 이미 구현·검증된 상태**를 하드 선행조건으로 한다. 컨텍스트가 초기화된 상태로 실행되므로, 시작 전 아래를 **파일에서 직접 읽어** 존재·정상을 확인하라.
+
+> **주의**: 현 리포지터리는 docs 사이트(`docs/`, `index.html`)만 존재하는 **docs-only 상태**다(`src/`, `eval/`, `config/`, `scripts/` 디렉토리 자체가 부재 — `git ls-files`로 확인됨). 따라서 단독 실행 시 이 페이즈는 **사전조건 게이트에서 즉시 중단·보고만** 가능하며, 완료 기준(서빙 확정/게이트①②/추이 리포트) 중 어느 것도 달성 불가하다. 아래 게이트 중 **하나라도 부재·파손이면 멈추고 "이전 페이즈(0~7) 미완료"로 보고하라. 새 스택을 만들지 말 것**(상위 계약 위반, 변수 격리 붕괴).
+
+```bash
+# 0) 디렉토리 자체가 있는지 (없으면 docs-only → 즉시 중단)
+ls -d src eval config scripts 2>&1
+# 1) 검색·결합·평가 스택이 이미 존재하는지
+ls -1 src/retrieve/search.py src/retrieve/fusion.py src/retrieve/rerank.py eval/evaluate.py eval/queries.yaml config/settings.yaml 2>&1
+# 2) search()가 SearchHit 리스트를 반환하는지(시그니처 확인)
+grep -n "def search" src/retrieve/search.py
+grep -n "class SearchHit\|class EvalResult\|source" src/retrieve/*.py eval/*.py | grep -i "dense\|bm25\|rrf\|rerank\|class"
+# 3) evaluate()가 use_rerank 플래그를 받는지(없으면 이 페이즈에서 배선)
+grep -n "def evaluate\|use_rerank\|use_bm25" eval/evaluate.py
+# 4) 베이스라인 지표·인덱스·골든셋이 실제 존재하는지(L1~L2 추이 리포트의 입력)
+ls -1 eval/results/ 2>&1
+ls -1 data/ 2>&1   # 인덱스(벡터/사이드카 헤더) 존재 확인
+```
+
+**하드 게이트 판정**:
+- 위 0)에서 `src`/`eval`/`config`/`scripts` 중 하나라도 "No such file or directory"면 → **docs-only 상태**. 즉시 중단, "이전 페이즈(0~7) 미완료"로 보고하고 이 페이즈를 진행하지 마라.
+- 1)~3)의 파일·시그니처가 부재하면 → 중단·보고. **새로 만들지 마라**(상위 계약 위반).
+- 4)에서 `eval/results/`(베이스라인 지표)가 없고 **동시에** `data/`의 인덱스·`eval/queries.yaml` 골든셋도 없으면 → 베이스라인 재생성 자체가 불가능(연쇄 결손)하므로 **중단·보고**. (인덱스·골든셋이 있으면 4단계에서 `evaluate()`로 베이스라인을 재생성해 입력으로 쓴다. 그 외엔 재생성 시도 금지.)
+
+확인되어야 할 상류 계약(`docs/04_아키텍처_API/02_내부API_인터페이스.md` 정본):
+- `search(query, *, top_k=30, use_bm25=True) -> list[SearchHit]`가 score 내림차순으로 반환(리랭커의 입력).
+- `SearchHit(chunk, score, rank, source∈{dense|bm25|rrf|rerank})`, `Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)`.
+- **`EvalResult`는 `TypedDict`**: 키 `recall_at_1/3/5/10`, `mrr`, `ndcg_at_10`, **`per_query: list[dict]`**. (딕셔너리 키 접근으로만 다룬다. 속성 접근 금지.)
+- 골든셋 `eval/queries.yaml`에 회귀 케이스 "연차 휴가 신청 절차"(정답=휴가규정 chunk_id)가 포함돼 있어야 한다. 없으면 멈추고 보고하라.
+
+### 절대 규칙 (이 페이즈에서 위반 금지 — 관련 INV만 발췌)
+- **INV-3 외부 API 금지**: 리랭커도 100% 로컬. `base_url=localhost:1234` 외 어떤 HTTP 호출도 0건. cross-encoder를 LMStudio가 못 서빙하면 `sentence-transformers`/`FlagEmbedding`로 **별도 로컬 프로세스/in-process** 로드 — 모델 가중치는 로컬 디스크에서만 읽는다. 클라우드(OpenAI/Anthropic/Cohere rerank) 절대 금지.
+- **INV-7 정량 증명 / 변수 1개 원칙**: 이 페이즈에서 바꾸는 변수는 **리랭커 on/off 단 하나**. 임베딩 모델 교체(nomic↔BGE-M3)를 **동시에 점등하지 마라**. 임베딩은 직전 페이즈에서 확정된 모델 그대로 고정하고 리랭커만 토글한다. 회귀 케이스 합격선 `Recall@1=1`.
+- **INV-1 임베딩 재정규화 금지**: 리랭킹은 cross-encoder 점수이지 임베딩이 아니다. 임베딩 경로(`embed()`)·norm 가드를 건드리지 마라.
+- **INV-2/5/6 reasoning 폴백·정제·length 재시도**: `rerank()`는 생성 모델을 쓰지 않는다(`chat()` 경유 금지). `answer()`가 reasoning을 흡수하는 경로는 그대로 둔다.
+- 상위 함수 계약(시그니처) 고정. `search`/`evaluate`/`SearchHit`/`EvalResult` 시그니처·타입을 임의 변경하지 마라.
+
+### 작업 지시
+
+**1단계 — 서빙 방식 실측 검증 ([확인필요] 해소). 작성: `scripts/rerank_serving_check.py`**
+LMStudio가 cross-encoder rerank를 OpenAI 호환으로 서빙하는지 먼저 찍어 본다. 아래 순서로 fail-closed 판정:
+1. `GET http://localhost:1234/v1/models`에 reranker 모델이 떠 있는지 확인. 없으면 LMStudio 서빙 불가로 즉시 판정.
+2. (있으면) rerank 전용 엔드포인트(`/v1/rerank` 등) 또는 cross-encoder 점수 산출 가능 여부를 한 쌍(query, passage)으로 시험 호출. 정상 점수가 나오면 `serving="lmstudio"`.
+3. 둘 다 실패하면 **로컬 라이브러리 폴백**: `FlagEmbedding`(`FlagReranker("BAAI/bge-reranker-v2-m3", use_fp16=True)`) 또는 `sentence-transformers`(`CrossEncoder`)로 in-process 로드. 모델은 로컬 캐시/디스크에서만 로드(네트워크 다운로드가 필요하면 사전 다운로드 안내 후 중단 — 자동 외부 다운로드를 무음으로 수행하지 마라).
+4. 판정 결과를 `config/settings.yaml`의 `rerank:` 섹션에 기록: `enabled`, `model`, `serving∈{lmstudio|flagembedding|sentence_transformers}`, `top_n`, `first_stage_k`(20~50). 스크립트는 마지막에 선택된 serving 모드를 stdout으로 출력.
+
+**2단계 — `rerank()` 구현. 수정: `src/retrieve/rerank.py`** (시그니처 고정)
+```python
+def rerank(query: str, hits: list[SearchHit], *, top_n: int = 5) -> list[SearchHit]: ...
+```
+- 입력: `search()`의 1차 결과 20~50개. cross-encoder로 (query, hit.chunk.text) 쌍을 재점수.
+- 반환: `list[SearchHit]`, `source="rerank"`, `score`=리랭커 점수, `rank`=재점수 내림차순 1..N, 길이 `≤ top_n`.
+- serving 모드는 `config/settings.yaml`의 `rerank.serving`에서 읽어 분기(1단계 산출물 사용). 모델은 모듈 로드 시 1회만 초기화(요청마다 재로딩 금지).
+- 빈 `hits` → `[]` 즉시. `top_n ≤ 0` → 빈 리스트. fail-closed(서빙 미설정인데 호출되면 명시적 예외, 무음 통과 금지).
+
+**3단계 — `evaluate()`에 리랭커 배선. 수정: `eval/evaluate.py`** (시그니처 고정)
+```python
+def evaluate(golden_path="eval/queries.yaml", *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False) -> EvalResult: ...
+```
+- `use_rerank=True`면 질의별로 `search(query, top_k=first_stage_k, use_bm25=...)` → `rerank(query, hits, top_n=...)`를 거친 순위로 Recall@k·MRR·**nDCG@10** 산출. 1차 단계 k는 `settings.yaml`의 `rerank.first_stage_k`(20~50). top_n은 5.
+- **nDCG는 반드시 `k=10`으로 산출해 `EvalResult.ndcg_at_10` 키를 채운다.** 참조 문서 `docs/05_운영_평가/00_평가하네스_Recall.md`의 예시 코드는 `ndcg_k=5`(nDCG@5)로 되어 있으나, 계약 키는 `ndcg_at_10`이므로 **그 예시를 그대로 쓰지 말고 k=10으로 산출하라**(비퇴행 게이트가 `ndcg_at_10` 키를 측정한다 — k=5로 산출하면 게이트가 잘못 측정됨).
+- **`per_query`는 `list[dict]`로 채운다(계약 고정).** 각 항목에 최소한 `query`(질의 문자열)와 질의별 지표(`recall_at_1` 등)를 포함시켜, 회귀 케이스를 `query` 필드로 필터링해 추출할 수 있게 한다. (계약 자체를 dict-of-query로 바꾸지 마라 — `list[dict]` 유지.)
+- `use_rerank=False`는 기존 경로 그대로(베이스라인). **변수 1개 원칙**: 리랭커 측정 시 임베딩·청크·BM25 설정은 베이스라인과 동일하게 고정.
+- 결과를 `eval/results/`에 타임스탬프·플래그(`use_bm25`,`use_rerank`,임베딩모델)와 함께 JSON으로 저장(L1~L3 추이 리포트 입력).
+
+**4단계 — L1~L3 지표 추이 종합 리포트 생성. 작성: `eval/report.py` 또는 `scripts/trend_report.py`**
+- `eval/results/`의 과거 측정(L1 dense-only → L2 하이브리드/임베딩 → L3 리랭커)을 읽어 단계별 `Recall@{1,3,5,10}·MRR·nDCG@10`을 한 표로 출력.
+- **회귀 케이스 "연차 휴가 신청 절차" 전용 행**을 별도로: 단계별 정답 휴가규정의 순위·점수, 오답(출장경비) 대비 격차, `Recall@1` 0→1 전환 여부를 명시. (회귀 케이스 추출은 `per_query` 리스트에서 `query=="연차 휴가 신청 절차"` 항목을 필터링한다.)
+- 콘솔 표 + Markdown(`eval/results/L1_L3_trend.md`)로 동시 출력.
+
+### 산출물 (생성/수정 파일)
+- 생성: `scripts/rerank_serving_check.py` (서빙 실측 판정)
+- 수정: `config/settings.yaml` (`rerank:` 섹션 — enabled/model/serving/top_n/first_stage_k)
+- 수정: `src/retrieve/rerank.py` (`rerank()` 본구현)
+- 수정: `eval/evaluate.py` (`use_rerank` 분기 배선 — `per_query`에 `query` 필드 포함, nDCG@10 산출)
+- 생성: `scripts/trend_report.py` (또는 `eval/report.py`)
+- 생성: `eval/results/L1_L3_trend.md`, `eval/results/<ts>_rerank.json`
+
+### 완료 기준 (통과 못 하면 다음 페이즈 금지)
+1. **서빙 확정**: `python scripts/rerank_serving_check.py`가 `lmstudio` 또는 `flagembedding`/`sentence_transformers` 중 하나를 확정 출력하고, `settings.yaml`에 기록됨. (외부 호출 0건 — INV-3)
+2. **게이트 ① 회귀 케이스**: `use_rerank=True`에서 "연차 휴가 신청 절차"가 `Recall@1=1`(정답 휴가규정 1위). 0→1 전환이 리포트에 증명됨.
+3. **게이트 ② 비퇴행**: 전체 `nDCG@10`이 리랭커 off 베이스라인 대비 **저하 0**(같거나 향상). 어느 질의도 퇴행으로 합격선을 깨지 않음.
+4. **변수 격리**: 측정 로그에 임베딩 모델이 베이스라인과 동일함이 기록됨(리랭커와 임베딩 교체 동시 점등 아님 — INV-7).
+5. **추이 리포트**: `eval/results/L1_L3_trend.md`에 L1~L3 단계별 지표 표 + 회귀 케이스 전용 행이 존재.
+
+### 검증 명령 (복붙 실행)
+```bash
+# 1) 서빙 실측 (외부 호출 없는지 함께 확인)
+python scripts/rerank_serving_check.py
+grep -nE "^\s*(enabled|model|serving|top_n|first_stage_k):" config/settings.yaml
+
+# 2) 베이스라인(리랭커 off) vs 리랭커 on — 변수 1개만 변경
+#    주의: EvalResult는 TypedDict, per_query는 list[dict]. 딕셔너리 키 접근 + 리스트 필터링으로 게이트 판정.
+python -c "from eval.evaluate import evaluate; \
+b=evaluate(use_bm25=True, use_rerank=False); \
+r=evaluate(use_bm25=True, use_rerank=True); \
+print('OFF nDCG@10=%.4f R@1=%.4f'%(b['ndcg_at_10'],b['recall_at_1'])); \
+print('ON  nDCG@10=%.4f R@1=%.4f'%(r['ndcg_at_10'],r['recall_at_1'])); \
+assert r['ndcg_at_10'] >= b['ndcg_at_10'], 'GATE FAIL: nDCG@10 퇴행'; \
+hit=next(x for x in r['per_query'] if x.get('query')=='연차 휴가 신청 절차'); \
+assert hit['recall_at_1']==1.0, 'GATE FAIL: 회귀 케이스 Recall@1!=1'; \
+print('GATES PASS')"
+
+# 3) 추이 리포트 생성 및 회귀 케이스 행 확인
+python scripts/trend_report.py
+grep -n "연차 휴가\|휴가규정\|Recall@1" eval/results/L1_L3_trend.md
+
+# 4) INV-3 가드 — 외부 호출 흔적 정적 점검 (localhost 외 URL 0건이어야)
+grep -rnE "https?://" src/retrieve/rerank.py scripts/rerank_serving_check.py | grep -v "localhost:1234" || echo "외부 URL 없음 OK"
+```
+
+### 다음 페이즈 핸드오프
+리랭커 serving 모드·on 지표가 `settings.yaml`/`eval/results/`에 확정 기록된다. 다음 페이즈는 이 설정을 읽어 `answer()` 파이프라인(`search → rerank → chat`)에 리랭킹을 정식 배선하고 운영 자동화/런북으로 넘긴다.
+
+**설정 스키마 확장 주의**: `rerank.serving∈{lmstudio|flagembedding|sentence_transformers}`와 `rerank.first_stage_k`는 이 페이즈가 **새로 도입**하는 키로, 상류 문서의 `settings.yaml` 스키마(§B-11)에는 미정의 상태다. 계약 위반은 아니나 **정당한 스키마 확장**이므로, 핸드오프 시 상류 settings 스키마 문서에 이 두 키를 추가 반영하도록 명시한다.

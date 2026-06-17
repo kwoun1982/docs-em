@@ -118,6 +118,16 @@
 <a class="doc-link" href="#05_%EC%9A%B4%EC%98%81_%ED%8F%89%EA%B0%80%2F02_%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85.md" data-id="05_운영_평가/02_트러블슈팅.md">트러블슈팅</a></div>
 <div class="cat"><div class="cat-label">UI · UX</div><a class="doc-link" href="#06_UIUX%2F00_ClaudeDesign_%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8.md" data-id="06_UIUX/00_ClaudeDesign_프롬프트.md">docs-em — UI/UX 시안 생성 프롬프트 (Claude Design 입력용)</a>
 <a class="doc-link" href="#06_UIUX%2FREADME.md" data-id="06_UIUX/README.md">06_UIUX — UI/UX 설계</a></div>
+<div class="cat"><div class="cat-label">실행 프롬프트</div><a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-id="07_실행프롬프트/00_실행개요.md">docs-em 페이즈별 실행 프롬프트 — 사용법</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F01_%ED%8E%98%EC%9D%B4%EC%A6%880_setup.md" data-id="07_실행프롬프트/01_페이즈0_setup.md">페이즈 0: 환경 셋업 · 스캐폴딩 · Phase 0 실측</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F02_%ED%8E%98%EC%9D%B4%EC%A6%881_wrappers.md" data-id="07_실행프롬프트/02_페이즈1_wrappers.md">페이즈 1: LLM·임베딩 래퍼 (불변식 경계) ★핵심</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F03_%ED%8E%98%EC%9D%B4%EC%A6%882_ingest.md" data-id="07_실행프롬프트/03_페이즈2_ingest.md">페이즈 2: 문서 로딩 · 한국어 청킹</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F04_%ED%8E%98%EC%9D%B4%EC%A6%883_index.md" data-id="07_실행프롬프트/04_페이즈3_index.md">페이즈 3: 벡터스토어 · 인덱싱 (LanceDB)</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F05_%ED%8E%98%EC%9D%B4%EC%A6%884_search_eval.md" data-id="07_실행프롬프트/05_페이즈4_search_eval.md">페이즈 4: 검색(dense) · 평가 하네스 · 골든셋 → L1 게이트</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F06_%ED%8E%98%EC%9D%B4%EC%A6%885_hybrid.md" data-id="07_실행프롬프트/06_페이즈5_hybrid.md">페이즈 5: BM25 · RRF 하이브리드 검색 (L2)</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F07_%ED%8E%98%EC%9D%B4%EC%A6%886_bge.md" data-id="07_실행프롬프트/07_페이즈6_bge.md">페이즈 6: BGE-M3 임베딩 교체 실험 (측정 게이트)</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F08_%ED%8E%98%EC%9D%B4%EC%A6%887_answer.md" data-id="07_실행프롬프트/08_페이즈7_answer.md">페이즈 7: 답변 생성 · 출처 인용 · CLI</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F09_%ED%8E%98%EC%9D%B4%EC%A6%888_rerank.md" data-id="07_실행프롬프트/09_페이즈8_rerank.md">페이즈 8: 리랭킹 (L3) · 서빙 검증</a></div>
 <div class="cat"><div class="cat-label">AI 참조</div><a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F00_AI%EC%9E%91%EC%97%85%EA%B7%9C%EC%B9%99.md" data-id="99_AI참조/00_AI작업규칙.md">AI 작업 규칙 (00_AI작업규칙)</a>
 <a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-id="99_AI참조/01_실측제약_불변식.md">실측 제약 불변식 (변경금지)</a>
 <a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F02_%EC%BD%94%EB%94%A9%EC%BB%A8%EB%B2%A4%EC%85%98.md" data-id="99_AI참조/02_코딩컨벤션.md">02. 코딩 컨벤션</a></div>
@@ -7892,6 +7902,1726 @@ def make_client() -&gt; OpenAI:
 <li>모든 확정 수치(<code>768</code>/<code>1024</code>차원, <code>-0.018</code>, Recall@1 <code>0→1</code>, <code>0.687→0.695</code>, ctx <code>8192</code>/<code>65536</code>, <code>localhost:1234</code>)는 <a href="#" data-ext title="문서 외부: 시작프롬프트.md" class="ext-link">시작프롬프트.md</a> SSOT와 <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>99_AI참조/01_실측제약_불변식.md</a> INV-1~8을 정본으로 합니다.</li>
 <li>프롬프트 내 <code>chunk_id</code>(<code>hr-####</code>/<code>tr-####</code>)·페이지 위치·안정성 게이지 백분율은 <strong>화면을 채우기 위한 데모 전용 가짜값</strong>입니다. 실제 청크 ID 스키마는 <a href="#03_DATABASE%2F00_%EB%B2%A1%ED%84%B0%EC%8A%A4%ED%86%A0%EC%96%B4_%EC%8A%A4%ED%82%A4%EB%A7%88.md" data-nav>03_DATABASE</a> 정본을 따릅니다.</li>
 </ul>
+</article>
+<article class="doc" data-id="07_실행프롬프트/00_실행개요.md" hidden><h1>docs-em 페이즈별 실행 프롬프트 — 사용법</h1>
+<blockquote>
+<p>정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a> · <a href="#02_%EA%B8%B0%ED%9A%8D%EC%84%9C%2F02_%EB%B2%94%EC%9C%84_%EB%A7%88%EC%9D%BC%EC%8A%A4%ED%86%A4.md" data-nav>범위·마일스톤</a></p>
+</blockquote>
+<h2>0. 이게 뭔가</h2>
+<p>docs-em(100% 로컬 한국어 사내문서 RAG)을 <strong>페이즈 단위로 끊어</strong> 개발하기 위한 한방 프롬프트 묶음이다. 각 <code>NN_페이즈*.md</code>는 그 자체로 완결된 작업 지시서이며, 한 페이즈를 마칠 때마다 <strong>컨텍스트를 초기화</strong>하고 다음 페이즈를 새로 시작한다.</p>
+<ul>
+<li><strong>왜 끊는가</strong>: 컨텍스트 누적으로 인한 지시 희석·불변식 망각·환각을 차단한다. 페이즈마다 깨끗한 컨텍스트에 해당 프롬프트 전체를 다시 주입한다.</li>
+<li><strong>공통 전제</strong>: 모든 페이즈 프롬프트 상단에는 확정 사실(정체·불변식 INV-1~8·확정 스택·함수 계약)이 공통으로 박혀 있다. 이 범위 밖 수치/사실 발명은 금지다.</li>
+<li><strong>한방성</strong>: 한 페이즈 프롬프트를 붙여넣으면 그 페이즈의 코드·테스트·완료기준 확인까지 한 사이클에 끝난다.</li>
+</ul>
+<h2>1. 사용 절차</h2>
+<p>각 <code>NN_페이즈*.md</code>를 <strong>번호 순서대로</strong> 다음 사이클로 처리한다.</p>
+<ol>
+<li><strong>새 컨텍스트 열기</strong> — 직전 페이즈 대화를 닫고 빈 컨텍스트를 연다.</li>
+<li><strong>파일 전체 붙여넣기</strong> — 해당 페이즈 <code>.md</code>를 통째로 붙여넣는다(상단 공통 사실 포함).</li>
+<li><strong>완료기준 통과 확인</strong> — 페이즈 하단의 완료기준(테스트·게이트 수치)을 실제로 실행해 통과를 확인한다. 미통과 시 같은 컨텍스트에서 수정.</li>
+<li><strong>커밋</strong> — 통과한 산출물을 커밋한다(페이즈 단위 커밋).</li>
+<li><strong>컨텍스트 초기화</strong> — 대화를 닫는다.</li>
+<li><strong>다음 페이즈</strong> — 1번으로 돌아가 다음 번호를 연다.</li>
+</ol>
+<blockquote>
+<p>게이트 페이즈(4·6·8)는 3번에서 정량 수치를 만족하지 못하면 4번(커밋)·6번(다음 페이즈)으로 <strong>진행 금지</strong>.</p>
+</blockquote>
+<h2>2. 페이즈 지도</h2>
+<table>
+<thead>
+<tr>
+<th>번호</th>
+<th>제목 (파일)</th>
+<th>목표</th>
+<th>로드맵</th>
+<th>게이트</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F01_%ED%8E%98%EC%9D%B4%EC%A6%880_setup.md" data-nav>환경 셋업·스캐폴딩·실측</a></td>
+<td>디렉토리 구조·설정·<code>scripts/env_check.py</code>로 LMStudio 실측(임베딩 norm·차원, 생성모델 reasoning 폴백)</td>
+<td>L1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F02_%ED%8E%98%EC%9D%B4%EC%A6%881_wrappers.md" data-nav>LLM·임베딩 래퍼 ★핵심</a></td>
+<td><code>chat()</code>·<code>embed()</code>로 INV-1~6을 코드 경계 안에 가둠(norm 가드·reasoning 폴백·정제·length 재시도)</td>
+<td>L1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F03_%ED%8E%98%EC%9D%B4%EC%A6%882_ingest.md" data-nav>문서 로딩·한국어 청킹</a></td>
+<td>pymupdf/python-docx 로딩, kss 문장분리, langchain-text-splitters 문자 기준 청킹</td>
+<td>L1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F04_%ED%8E%98%EC%9D%B4%EC%A6%883_index.md" data-nav>벡터스토어·인덱싱(LanceDB)</a></td>
+<td>VectorStore Protocol, LanceDB cosine 인덱스, 사이드카 <code>_index_header.json</code> 원자 교체</td>
+<td>L1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F05_%ED%8E%98%EC%9D%B4%EC%A6%884_search_eval.md" data-nav>검색(dense)·평가·골든셋</a></td>
+<td><code>search()</code> dense-only, <code>evaluate()</code> Recall@k·MRR·nDCG, 회귀 케이스 골든셋</td>
+<td>L1</td>
+<td>✅ L1 게이트</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F06_%ED%8E%98%EC%9D%B4%EC%A6%885_hybrid.md" data-nav>BM25·RRF 하이브리드</a></td>
+<td>rank_bm25 + Kiwi 토큰화, RRF(k=60) 결합, dense 대비 기여도 측정</td>
+<td>L2</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F07_%ED%8E%98%EC%9D%B4%EC%A6%886_bge.md" data-nav>BGE-M3 임베딩 교체 실험</a></td>
+<td>768→1024 재인덱싱, 단독변수 Recall@1 개선 측정으로 채택/롤백 결정</td>
+<td>L2</td>
+<td>✅ 측정 게이트</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F08_%ED%8E%98%EC%9D%B4%EC%A6%887_answer.md" data-nav>답변 생성·출처 인용·CLI</a></td>
+<td><code>answer()</code> {text, citations}, 출처 인용, CLI 진입점</td>
+<td>L2</td>
+<td>—</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F09_%ED%8E%98%EC%9D%B4%EC%A6%888_rerank.md" data-nav>리랭킹(L3)·서빙 검증</a></td>
+<td>BGE-reranker-v2-m3 로컬 서빙 실측 후 <code>rerank()</code> top_n, 기여도 측정</td>
+<td>L3</td>
+<td>✅ L3 게이트</td>
+</tr>
+</tbody></table>
+<h2>3. 페이즈 간 의존성</h2>
+<pre><code>0 → 1 → 2 → 3 → 4 ──(L1 게이트)──→ 5 → 6 ──(측정 게이트)──→ 7 → 8 (L3 게이트)
+</code></pre>
+<ul>
+<li><strong>0</strong>: 모든 페이즈의 선행. Phase 0 실측 수치(norm·차원·reasoning 폴백)가 1·3·6의 가드/계약 근거.</li>
+<li><strong>1</strong>: 2·3·4·6·7·8 모두 <code>chat()</code>/<code>embed()</code> 래퍼에 의존. 불변식 경계가 여기서 확정되므로 우회 금지.</li>
+<li><strong>2 → 3</strong>: 청킹 산출(<code>Chunk</code>)이 인덱싱 입력.</li>
+<li><strong>3 → 4</strong>: 인덱스·헤더가 <code>search()</code>/<code>evaluate()</code>의 대상.</li>
+<li><strong>4 → 5</strong>: dense baseline Recall@k가 하이브리드 기여도 비교의 기준선. 골든셋·평가 하네스가 5·6·8 게이트의 측정 도구.</li>
+<li><strong>5 → 6</strong>: 하이브리드 파이프라인 위에서 임베딩만 단독 교체해 측정.</li>
+<li><strong>6 → 7</strong>: 채택된 임베딩(nomic 또는 BGE-M3) 위에서 답변 생성.</li>
+<li><strong>7 → 8</strong>: 검색 결과에 리랭커를 덧대 재정렬. 8은 진입 전 서빙 방식 실측 선행 필수.</li>
+</ul>
+<h2>4. 게이트</h2>
+<p>게이트는 정량 수치로만 통과 판정한다. 미통과 시 해당 페이즈에서 <strong>진행 금지</strong>(커밋·다음 페이즈 불가).</p>
+<ul>
+<li><strong>L1 게이트 (페이즈 4) — 회귀 재현</strong>: 회귀 케이스(&quot;연차 휴가 신청 절차&quot; → 휴가규정)가 골든셋에 포함되고, 평가 하네스가 현재 dense-only에서 이 케이스 <strong>Recall@1=0</strong>을 재현해야 한다. 0이 정상(아직 못 맞히는 상태를 측정으로 고정). 합격선 = 회귀 케이스가 측정에 잡힘.</li>
+<li><strong>측정 게이트 (페이즈 6) — BGE-M3 채택</strong>: BGE-M3를 <strong>단독 변수</strong>로 교체(다른 변수 고정)해 골든셋 Recall@1이 nomic 대비 <strong>개선</strong>되어야 채택. 미개선 시 nomic 롤백(768차원 전체 재인덱싱 원복 + norm 재측정). 회귀 케이스 0→1 전환이 1차 성패 척도.</li>
+<li><strong>L3 게이트 (페이즈 8) — 리랭커</strong>: BGE-reranker-v2-m3 <strong>로컬 서빙 방식 실측</strong>을 진입 전 선행(LMStudio 호환 불확실 → sentence-transformers/FlagEmbedding 별도 프로세스 가능). 리랭킹이 top_n 품질에 기여(Recall/MRR 비퇴행)함을 측정으로 증명해야 통과.</li>
+</ul>
+<blockquote>
+<p>공통: INV-7. 정량 증명은 Recall@k(1/3/5/10)·MRR·nDCG@10으로 한다. 변수는 한 번에 하나만 바꿔 측정한다.</p>
+</blockquote>
+<h2>5. 절대 규칙 요약</h2>
+<ul>
+<li><strong>외부 API 금지</strong>: 모든 추론/임베딩/생성은 로컬 LMStudio(<code>http://localhost:1234/v1</code>)만. OpenAI/Anthropic/Cohere 등 외부 클라우드 호출 0건(INV-3).</li>
+<li><strong>INV-1</strong>: 임베딩 재정규화 금지. nomic 출력은 이미 L2 정규화(norm=1.0). 가드 <code>abs(norm-1.0)&lt;1e-3</code>. 모델 교체 시 norm 재측정.</li>
+<li><strong>INV-2</strong>: <code>content</code> 빈값 → <code>reasoning_content</code> 폴백. 생성모델 3종 모두 답이 reasoning_content에 옴. <code>/no_think</code>·<code>enable_thinking=false</code>·<code>reasoning_effort=low</code>·<code>max_tokens=4000</code> 우회책 전부 무효(코드에 넣지 말 것).</li>
+<li><strong>INV-3</strong>: 외부 API 금지. base_url localhost:1234 외 호출 0건.</li>
+<li><strong>INV-4</strong>: <code>prompt_tokens=0</code> 불신. usage 오보고 → 길이 판단은 문자 수/로컬 토크나이저 가드로(fail-closed, 무음 통과 금지).</li>
+<li><strong>INV-5</strong>: <code>&lt;think&gt;…&lt;/think&gt;</code> 정제·최종답 추출. 구분자 불일치 시 원문+[경고] 반환(무음 빈답 금지).</li>
+<li><strong>INV-6</strong>: <code>finish_reason=length</code>면 max_tokens×3로 딱 1회 재시도, 2회째도 length면 경고 부착 반환(무한루프 금지).</li>
+<li><strong>INV-7</strong>: 정량 증명. 골든셋 Recall@k·MRR·nDCG로 증명. 회귀 케이스 합격선 Recall@1=1. 변수 1개씩만 변경 측정.</li>
+<li><strong>INV-8</strong>: prefix 효과 미미(nomic 0.687→0.695). 단 e5 계열 교체 시 <code>query:</code>/<code>passage:</code> prefix 필수.</li>
+</ul>
+</article>
+<article class="doc" data-id="07_실행프롬프트/01_페이즈0_setup.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 0: 환경 셋업 · 스캐폴딩 · Phase 0 실측</h1>
+<h3>이 페이즈의 목표</h3>
+<p>docs-em(100% 로컬 한국어 사내문서 RAG)의 빈 골격을 세운다: uv 가상환경·의존성, 설정 파일, §B-11 디렉토리 전체 스캐폴딩, 그리고 LMStudio 실측 스크립트(<code>scripts/env_check.py</code>)를 작성·실행해 임베딩 차원/norm·<code>prompt_tokens</code> 오보고·생성모델 content 빈값/reasoning_content·<code>finish_reason=length</code> 재현을 측정하고 그 실측값을 <code>config/settings.yaml</code>과 문서에 기록한 뒤 첫 커밋한다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 컨텍스트 초기화 후 파일에서 확인)</h3>
+<p>이 프로젝트의 <strong>첫 코드 페이즈</strong>다. 이전 코드 산출물 없음. 실행 전 아래로 현재 상태를 직접 확인하라.</p>
+<ul>
+<li>코드가 이미 있는지: <code>test -d src/llm &amp;&amp; echo &quot;이미 스캐폴딩됨 — 중복 생성 금지, 누락분만 채움&quot; || echo &quot;신규 스캐폴딩&quot;</code></li>
+<li>이 리포지토리에는 설계 문서 사이트(<code>index.html</code>, <code>build.mjs</code>, <code>docs/</code>, <code>node_modules/</code>, <code>package.json</code>)가 이미 존재할 수 있다. <strong>그것들을 절대 삭제·수정하지 마라.</strong> Python 프로젝트 파일을 그 옆에 추가하는 것이다.</li>
+<li>전제 사실: LMStudio가 <code>http://localhost:1234/v1</code>에서 OpenAI 호환 서버로 떠 있고, 임베딩 모델 <code>text-embedding-nomic-embed-text-v1.5</code>와 생성 모델 <code>google/gemma-4-e4b</code>(대안 qwen3.5-9b/qwen3.6-35b-a3b)가 로드되어 있어야 한다. api_key는 더미 <code>&quot;lm-studio&quot;</code>.</li>
+<li>런타임: Python 3.11+, 패키지 관리자 uv. (<code>uv --version</code>으로 존재 확인. 없으면 <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>.)</li>
+</ul>
+<h3>절대 규칙 (이 페이즈에서 위반 금지 — INV 발췌)</h3>
+<ul>
+<li><strong>INV-3 외부 API 금지</strong>: <code>base_url</code>은 오직 <code>http://localhost:1234/v1</code>. OpenAI/Anthropic/Cohere 등 외부 호출 0건. <code>.env.example</code>/코드 어디에도 외부 엔드포인트 금지.</li>
+<li><strong>INV-1 임베딩 재정규화 금지</strong>: nomic 출력은 이미 L2 정규화(norm≈1.0). 이 페이즈는 norm을 <strong>측정만</strong> 한다. 정규화 코드를 넣지 마라.</li>
+<li><strong>INV-4 prompt_tokens 불신</strong>: <code>usage.prompt_tokens</code>가 0으로 오보고될 수 있음을 측정으로 확인. 길이 판단을 token 수에 의존하는 코드 금지(이 페이즈는 측정만).</li>
+<li><strong>INV-2 content 폴백</strong>: 생성모델이 <code>message.content</code> 빈 문자열, 실제 답은 <code>message.reasoning_content</code>에 옴을 측정으로 확인. <code>/no_think</code>·<code>enable_thinking=false</code>·<code>reasoning_effort</code>·<code>max_tokens</code> 같은 우회책을 코드에 넣지 마라(전부 무효).</li>
+<li>이 페이즈에서는 RAG 본 로직(임베딩/검색/생성 래퍼)을 <strong>구현하지 않는다</strong>. 스켈레톤 빈 파일만 만들고 <code>env_check.py</code>만 동작시킨다.</li>
+</ul>
+<h3>작업 지시</h3>
+<p><strong>1. uv 프로젝트 초기화 (리포 루트에서, 기존 파일 보존)</strong>
+<code>pyproject.toml</code>을 직접 작성한다(아래 내용). 그 후 의존성을 잠금·설치한다.</p>
+<pre><code class="language-toml"># pyproject.toml
+[project]
+name = &quot;docs-em&quot;
+version = &quot;0.0.0&quot;
+description = &quot;100% 로컬 한국어 사내문서 RAG&quot;
+requires-python = &quot;&gt;=3.11&quot;
+dependencies = [
+  &quot;openai&gt;=1.30&quot;,          # LLM 클라이언트 (base_url만 localhost)
+  &quot;pyyaml&gt;=6.0&quot;,
+  &quot;python-dotenv&gt;=1.0&quot;,
+  &quot;lancedb&gt;=0.6&quot;,          # 벡터스토어 (확정)
+  &quot;pymupdf&gt;=1.24&quot;,         # PDF 파싱
+  &quot;python-docx&gt;=1.1&quot;,      # DOCX 파싱
+  &quot;kss&gt;=4.5&quot;,              # 한국어 문장분리
+  &quot;kiwipiepy&gt;=0.17&quot;,       # 형태소/BM25 토큰화
+  &quot;rank-bm25&gt;=0.2&quot;,        # BM25
+  &quot;langchain-text-splitters&gt;=0.2&quot;,  # 청킹 분할기 부품
+  &quot;numpy&gt;=1.26&quot;,
+]
+
+[project.optional-dependencies]
+dev = [&quot;pytest&gt;=8.0&quot;]
+
+[build-system]
+requires = [&quot;hatchling&quot;]
+build-backend = &quot;hatchling.build&quot;
+
+[tool.hatch.build.targets.wheel]
+packages = [&quot;src&quot;]
+</code></pre>
+<blockquote>
+<p><strong>import 경로 주의(페이즈1+ 핸드오프)</strong>: <code>packages = [&quot;src&quot;]</code>이므로 top-level 패키지명은 <code>src</code>다. 모든 코드·테스트는 <code>from src.embed.embedder import embed</code> 형태(<code>src.*</code> 접두)로 import한다. <code>scripts/</code>는 패키지가 아니다(<code>scripts/__init__.py</code> 없음) — <code>scripts/env_check.py</code>는 모듈 import가 아니라 <code>uv run python scripts/env_check.py</code>로 직접 실행하고, 테스트에서는 아래 6번처럼 <code>importlib.util</code>로 경로 로드한다.</p>
+</blockquote>
+<p>설치:</p>
+<pre><code class="language-bash">uv venv --python 3.11
+uv pip install -e &quot;.[dev]&quot;
+</code></pre>
+<p>설치 실패 패키지가 있으면(예: kss/kiwipiepy 빌드) <strong>중단하지 말고</strong> 해당 줄에 <code># TODO: 설치실패 &lt;사유&gt;</code> 주석을 달고 나머지를 설치한 뒤 완료 기준의 env_check만 통과시켜라. env_check는 openai/pyyaml/python-dotenv만 필요하다.</p>
+<p><strong>2. <code>.env.example</code>, <code>.env</code>, <code>.gitignore</code></strong>
+<code>.env.example</code> (커밋함):</p>
+<pre><code>LMSTUDIO_BASE_URL=http://localhost:1234/v1
+LMSTUDIO_API_KEY=lm-studio
+EMBED_MODEL=text-embedding-nomic-embed-text-v1.5
+GEN_MODEL=google/gemma-4-e4b
+</code></pre>
+<p><code>.env</code>는 <code>.env.example</code>을 복사해 만들되 <strong>커밋 금지</strong>(<code>.gitignore</code>에 추가).
+<code>.gitignore</code>에 <strong>추가</strong>(기존 줄 보존, 중복 추가 금지):</p>
+<pre><code>.venv/
+__pycache__/
+*.pyc
+.env
+data/*
+!data/.gitkeep
+.pytest_cache/
+</code></pre>
+<blockquote>
+<p><strong>주의(실버그 회피)</strong>: <code>data/</code>(슬래시로 끝나는 디렉토리 통째 무시)로 쓰면 <code>data/.gitkeep</code>까지 무시되어 <code>git add data/.gitkeep</code>이 거부되고(<code>check-ignore</code>로 확인됨) 빈 <code>data/</code>가 커밋에서 사라진다. 따라서 반드시 <code>data/*</code> + 예외 <code>!data/.gitkeep</code> 두 줄로 쓴다. 이렇게 하면 <code>data/</code> 실제 내용물은 무시되고 <code>.gitkeep</code>만 추적된다.</p>
+</blockquote>
+<p><strong>3. §B-11 디렉토리 전체 스캐폴딩 (빈 파일 touch)</strong>
+아래를 그대로 생성한다. 각 <code>__init__.py</code>는 빈 파일, 기능 모듈은 한 줄 docstring + <code># TODO: &lt;페이즈N&gt;에서 구현</code> 주석만 둔다(빈 import 에러 방지). <code>data/</code>는 <code>.gitkeep</code>만.</p>
+<pre><code>src/__init__.py
+src/llm/__init__.py
+src/llm/client.py                 # chat()·_clean_reasoning() — TODO 페이즈2/3
+src/ingest/__init__.py
+src/ingest/loaders.py             # TODO 페이즈1
+src/ingest/chunker.py             # chunk() — TODO 페이즈1
+src/embed/__init__.py
+src/embed/embedder.py             # embed()·assert_within_embed_limit() — TODO 페이즈1
+src/store/__init__.py
+src/store/vector_store.py         # VectorStore Protocol·LanceDB — TODO 페이즈1
+src/retrieve/__init__.py
+src/retrieve/search.py            # search() — TODO 페이즈1
+src/retrieve/fusion.py            # rrf() — TODO 페이즈2
+src/retrieve/rerank.py            # rerank() — TODO 페이즈3
+src/app/__init__.py
+src/app/answer.py                 # answer() — TODO 페이즈2
+src/app/cli.py                    # TODO 페이즈2
+scripts/env_check.py              # 이 페이즈에서 구현 (패키지 아님: __init__.py 없음)
+eval/queries.yaml                 # 골든셋 — TODO 페이즈1
+eval/evaluate.py                  # evaluate() — TODO 페이즈1
+tests/__init__.py
+tests/test_env_check.py           # 이 페이즈에서 구현
+config/settings.yaml              # 이 페이즈에서 초기값+실측 기록
+data/.gitkeep
+</code></pre>
+<p>기능 모듈 스텁의 함수 시그니처는 <strong>계약 고정</strong>(본문은 <code>raise NotImplementedError</code>). 예: <code>src/embed/embedder.py</code>에</p>
+<pre><code class="language-python">&quot;&quot;&quot;임베딩 래퍼 — 페이즈1에서 구현.&quot;&quot;&quot;
+DEFAULT_MAX_CHARS_FALLBACK = 1000
+def embed(texts: list[str], model: str = &quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[list[float]]:
+    raise NotImplementedError  # TODO 페이즈1
+def assert_within_embed_limit(text: str, max_chars: int = DEFAULT_MAX_CHARS_FALLBACK) -&gt; None:
+    raise NotImplementedError  # TODO 페이즈1
+</code></pre>
+<p>나머지 모듈도 동일 패턴으로 계약 시그니처만 박아둔다(client.chat / chunker.chunk / vector_store.VectorStore Protocol / search.search / fusion.rrf / rerank.rerank / answer.answer / evaluate.evaluate). 본문 구현 금지.</p>
+<p><strong>4. <code>config/settings.yaml</code> 초기값 (실측 전 플레이스홀더 포함)</strong></p>
+<pre><code class="language-yaml">llm:
+  base_url: http://localhost:1234/v1
+  api_key: lm-studio
+  gen_model: google/gemma-4-e4b
+  gen_alternatives: [qwen3.5-9b, qwen3.6-35b-a3b]  # NOTE: 모델 id prefix(qwen/) 표기 통일은 페이즈2 스위칭 전 확정. 이 페이즈 미사용이라 영향 없음 — 후속 페이즈로 미뤄도 무방.
+  max_tokens: 4000
+embed:
+  model: text-embedding-nomic-embed-text-v1.5
+  dim: 768          # 실측으로 확정 (env_check가 덮어씀)
+  norm: null        # 실측: 1.0 기대 (INV-1)
+  metric: cosine    # LanceDB create_index에서 명시 (기본 L2 금지)
+chunk:
+  max_chars: 500
+  overlap_chars: 80
+retrieve:
+  top_k: 30
+  top_n: 5
+  rrf_k: 60
+# === Phase 0 실측 (env_check.py가 기록) ===
+measured:
+  embed_dim: null
+  embed_norm: null
+  prompt_tokens_zero: null     # INV-4: usage.prompt_tokens 0 오보고 여부
+  content_empty: null          # INV-2: message.content 빈 문자열 여부
+  reasoning_content_present: null
+  length_retry_reproduced: null  # INV-6: finish_reason=length 재현 여부
+  measured_at: null
+</code></pre>
+<p><strong>5. <code>scripts/env_check.py</code> 작성 (이 페이즈의 핵심)</strong>
+<code>.env</code>를 로드해 <code>openai</code> SDK로 LMStudio에 붙어 아래를 측정하고, 콘솔에 표로 출력한 뒤 <code>config/settings.yaml</code>의 <code>measured</code> 블록을 <strong>실측값으로 덮어쓴다</strong>(파일 다시 읽어 yaml.safe_load → 갱신 → yaml.safe_dump). 측정 함수는 테스트에서 존재 확인 가능하도록 <strong>이름을 고정</strong>한다: <code>measure_embed()</code>, <code>measure_chat_content()</code>, <code>measure_length_retry()</code>, <code>write_measured(result: dict)</code>, <code>main()</code>. 측정 항목:</p>
+<ul>
+<li>(a) <strong>임베딩 차원·norm</strong> (<code>measure_embed</code>): <code>client.embeddings.create(model=EMBED_MODEL, input=[&quot;연차 휴가 신청 절차&quot;])</code> → <code>len(vec)</code> == 768 확인, <code>numpy</code>로 L2 norm 계산 후 <code>abs(norm-1.0)&lt;1e-3</code> 여부 출력. (재정규화하지 말 것 — 측정만.)</li>
+<li>(b) <strong>prompt_tokens 오보고</strong>: 위 임베딩 또는 chat 응답의 <code>resp.usage.prompt_tokens</code>를 출력. 0이면 <code>prompt_tokens_zero=true</code>.</li>
+<li>(c) <strong>content 빈값 / reasoning_content</strong> (<code>measure_chat_content</code>): <code>client.chat.completions.create(model=GEN_MODEL, messages=[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;연차 휴가는 며칠인가요?&quot;}], max_tokens=4000)</code> → <code>choices[0].message.content</code>가 빈 문자열인지, <code>getattr(message,&quot;reasoning_content&quot;,None)</code>에 값이 있는지 출력. (우회 파라미터 넣지 말 것.)</li>
+<li>(d) <strong>finish_reason=length 재현</strong> (<code>measure_length_retry</code>): 일부러 <code>max_tokens=16</code> 같은 작은 값으로 위 chat을 한 번 더 호출해 <code>choices[0].finish_reason == &quot;length&quot;</code>가 나오는지 출력. (이 페이즈는 재시도 로직 구현 X — 재현 확인만.)<blockquote>
+<p><strong>참고(차단 아님)</strong>: content가 빈 문자열이고 답이 reasoning_content로만 오므로 16토큰에서 length가 날 개연성은 높으나 <strong>보장은 아니다</strong>. 재현 안 되면 <code>length_retry_reproduced=false</code>로 기록만 하고 <strong>실패로 보지 않는다</strong>(완료 기준 2는 &quot;항목 출력&quot;만 요구). false여도 다음 페이즈 진행 차단 요소가 아니다.</p>
+</blockquote>
+</li>
+</ul>
+<p>연결 실패 시 명확한 한국어 에러로 즉시 종료(무음 통과 금지): &quot;LMStudio 연결 실패 — <a href="http://localhost:1234/v1">http://localhost:1234/v1</a> 서버·모델 로드 확인 필요&quot;. 모든 측정은 try/except로 감싸 항목별 결과를 기록하되, 한 항목 실패가 다른 측정을 막지 않게 한다.</p>
+<p><strong>6. <code>tests/test_env_check.py</code></strong>
+서버 없이도 통과하는 최소 테스트:</p>
+<ul>
+<li><code>scripts/env_check.py</code>를 <strong><code>importlib.util</code>로 경로 기반 로드</strong>한다(<code>scripts/</code>는 패키지가 아니므로 <code>import scripts.env_check</code>는 불가). 다음 패턴을 쓴다:<pre><code class="language-python">import importlib.util, pathlib
+_p = pathlib.Path(__file__).resolve().parents[1] / &quot;scripts&quot; / &quot;env_check.py&quot;
+_spec = importlib.util.spec_from_file_location(&quot;env_check&quot;, _p)
+env_check = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(env_check)
+</code></pre>
+</li>
+<li>로드 후 측정 함수가 존재하는지 검증: <code>assert hasattr(env_check, name)</code> for <code>name in (&quot;measure_embed&quot;,&quot;measure_chat_content&quot;,&quot;measure_length_retry&quot;,&quot;write_measured&quot;,&quot;main&quot;)</code>.</li>
+<li><code>config/settings.yaml</code>이 유효한 YAML로 파싱되고 필요한 키(<code>embed.dim</code>, <code>measured</code>)가 있는지 검증.</li>
+<li>LMStudio 의존 부분(실제 호출)은 환경변수/연결 가능 시에만 실행(없으면 <code>pytest.skip</code>).</li>
+</ul>
+<p><strong>7. git</strong>
+이미 git 리포지토리이면 <code>git init</code> 생략. 추가 파일을 스테이징해 커밋:</p>
+<pre><code class="language-bash">git add pyproject.toml .env.example .gitignore src scripts eval tests config
+git add data/.gitkeep   # data/* 무시 + !data/.gitkeep 예외로 정상 스테이징됨
+git commit -m &quot;페이즈0: 환경 셋업·스캐폴딩·LMStudio 실측(env_check)&quot;
+</code></pre>
+<blockquote>
+<p><code>.gitignore</code>를 <code>data/*</code>+<code>!data/.gitkeep</code>로 썼으면 <code>git add data/.gitkeep</code>은 강제 옵션 없이 스테이징된다. (만약 사정상 <code>data/</code>로 썼다면 <code>git add -f data/.gitkeep</code>로 강제 추가해야 하나, 위 2번 권장 형식을 따르면 <code>-f</code> 불필요.)
+<code>.env</code>와 <code>data/</code> 내용물(.gitkeep 제외)은 커밋되지 않아야 한다(<code>.gitignore</code> 확인).</p>
+</blockquote>
+<h3>산출물</h3>
+<ul>
+<li><code>pyproject.toml</code>, <code>.env.example</code>, <code>.env</code>(비커밋), <code>.gitignore</code>(갱신: <code>data/*</code>+<code>!data/.gitkeep</code>)</li>
+<li><code>src/</code> 전체 스켈레톤(계약 시그니처 + <code>NotImplementedError</code>), <code>eval/</code>, <code>tests/</code>, <code>config/settings.yaml</code>, <code>data/.gitkeep</code>(추적됨)</li>
+<li><code>scripts/env_check.py</code>(구현·실행됨, 고정 함수명 <code>measure_embed/measure_chat_content/measure_length_retry/write_measured/main</code>), <code>tests/test_env_check.py</code></li>
+<li><code>config/settings.yaml</code>의 <code>measured</code> 블록이 실측값으로 채워진 상태</li>
+<li>첫 커밋(설계 문서 사이트 파일은 변경 없음)</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>uv run python -c &quot;import openai, yaml, dotenv; print(&#39;deps ok&#39;)&quot;</code> → <code>deps ok</code>.</li>
+<li><code>uv run python scripts/env_check.py</code> 정상 종료(exit 0), 콘솔에 4개 측정 항목(차원·norm / prompt_tokens / content·reasoning / length 재현) 모두 출력. (<code>length_retry_reproduced=false</code>도 항목이 출력되면 충족 — false는 실패 아님.)</li>
+<li>실측 확인: 임베딩 차원이 <strong>768</strong>, <code>embed_norm</code>이 1.0±1e-3(INV-1 부합). 만약 768이 아니거나 norm이 1에서 벗어나면 <strong>중단하고 사람에게 보고</strong>(모델 교체 신호).</li>
+<li><code>config/settings.yaml</code>의 <code>measured.embed_dim/embed_norm/measured_at</code>이 null이 아님(실측 기록됨).</li>
+<li><code>uv run pytest -q</code> 통과(서버 없으면 skip 허용, 실패 0).</li>
+<li>추적 누수 없음: <code>.env</code>와 <code>data/</code>의 실제 내용물(.gitkeep 제외)이 추적되지 않고, 첫 커밋이 존재한다.</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash">uv run python -c &quot;import openai, yaml, dotenv; print(&#39;deps ok&#39;)&quot;
+uv run python scripts/env_check.py
+uv run python - &lt;&lt;&#39;PY&#39;
+import yaml
+m = yaml.safe_load(open(&quot;config/settings.yaml&quot;))[&quot;measured&quot;]
+assert m[&quot;embed_dim&quot;] == 768, f&quot;차원 불일치: {m[&#39;embed_dim&#39;]} (INV-1 모델 교체 신호)&quot;
+assert m[&quot;embed_norm&quot;] is not None and abs(m[&quot;embed_norm&quot;]-1.0) &lt; 1e-3, f&quot;norm 이탈: {m[&#39;embed_norm&#39;]}&quot;
+print(&quot;실측 기록 OK:&quot;, m)
+PY
+uv run pytest -q
+# 추적 누수 탐지: 추적 중(ls-files) 파일에서 .env 또는 data/ 내용물(.gitkeep 제외) 검출
+git ls-files | grep -E &#39;^\.env$|^data/&#39; | grep -v &#39;^data/.gitkeep$&#39; &amp;&amp; echo &quot;경고: .env/data 추적됨(누수)&quot; || echo &quot;추적 누수 없음&quot;
+# data/.gitkeep은 의도된 추적 — 확인
+git ls-files | grep -q &#39;^data/.gitkeep$&#39; &amp;&amp; echo &quot;data/.gitkeep 추적됨(정상)&quot; || echo &quot;경고: data/.gitkeep 누락&quot;
+git log --oneline -1
+</code></pre>
+<blockquote>
+<p><strong>검증 명령 설계 메모</strong>: 이전 버전의 <code>git status --porcelain | grep -E &#39;^\?\? \.env$|data/&#39;</code>는 (1) <code>.gitignore</code>로 무시된 파일은 porcelain에 안 나타나 누수를 못 잡고(거짓 음성), (2) <code>data/</code> 부분 매치라 무관 경로(<code>src/.../data/...</code>)나 수정 라인까지 매칭(거짓 양성)이라 폐기했다. 대신 <strong>추적 중 파일 목록</strong>(<code>git ls-files</code>)을 기준으로 <code>.env</code>·<code>data/</code>를 검사하되 의도적으로 추적하는 <code>data/.gitkeep</code>만 제외한다.</p>
+</blockquote>
+<h3>다음 페이즈 핸드오프</h3>
+<p>페이즈1은 이 스켈레톤(<code>src/embed/embedder.py</code>·<code>src/store/vector_store.py</code>·<code>src/retrieve/search.py</code>·<code>eval/evaluate.py</code>의 고정 시그니처)과 <code>config/settings.yaml</code>의 실측 <code>embed_dim=768</code>/<code>metric=cosine</code>을 그대로 이어받아 검색 MVP+평가 하네스를 구현한다. <strong>import 경로는 <code>src.*</code> top-level 패키지</strong>(<code>from src.embed.embedder import embed</code>)임을 전제한다(hatch <code>packages=[&quot;src&quot;]</code> 귀결). <code>scripts/</code>는 패키지가 아니므로 모듈 참조 시 경로 로드. 회귀 케이스(&quot;연차 휴가 신청 절차&quot; → 휴가규정 Recall@1=0→1)가 페이즈1 골든셋의 1급 시민이다.</p>
+<pre><code>
+</code></pre>
+</article>
+<article class="doc" data-id="07_실행프롬프트/02_페이즈1_wrappers.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 1: LLM·임베딩 래퍼 (불변식 경계) ★핵심</h1>
+<h3>이 페이즈의 목표</h3>
+<p>docs-em의 모든 LMStudio 특수처리(reasoning 폴백·<code>&lt;think&gt;</code> 정제·length 재시도·임베딩 norm 가드·입력 한계 가드)를 단 두 개의 래퍼(<code>src/llm/client.py</code>, <code>src/embed/embedder.py</code>)에 가두고, 각 불변식을 단위 테스트로 고정한다. 이 두 파일 바깥의 어떤 코드도 LMStudio의 별난 동작을 알 필요가 없어야 한다.</p>
+<blockquote>
+<p><strong>참조 코드 우선순위 (먼저 읽고 못 박을 것)</strong>: 시작프롬프트.md <code>§B-7</code>에 LLM/임베딩 래퍼의 참조 스니펫이 있다. <strong>이 참조는 골격일 뿐 정본이 아니다.</strong> 본 페이즈의 지시가 <code>§B-7</code>과 충돌하는 경우 <strong>본 페이즈 지시가 무조건 우선</strong>한다. 특히 아래 두 지점은 <code>§B-7</code> 스니펫이 약한/모호한 버전이므로 <strong>그대로 베끼지 말고 본 페이즈 지시로 덮어쓴다</strong>:</p>
+<ul>
+<li>(a) <code>§B-7</code>의 norm 가드는 <code>vecs[0]</code>(첫 원소)만 검사한다 → <strong>약한 버전. 본 페이즈는 배치 전체를 순회해 assert한다.</strong></li>
+<li>(b) <code>§B-7</code>의 <code>_clean_reasoning</code>은 여는 태그 없는 <code>&lt;/think&gt;</code>만 있어도 <code>split</code>으로 정상 추출한다 → <strong>본 페이즈의 close-only 정본 규칙(아래 1-③)으로 덮어쓴다.</strong></li>
+</ul>
+</blockquote>
+<h3>사전 조건 (이전 페이즈 산출물 — 컨텍스트 초기화 후 파일에서 상태 확인)</h3>
+<p>이 페이즈는 docs-em 프로젝트의 <strong>첫 코드 작성 페이즈</strong>이므로 이전 페이즈 코드 산출물은 없다. 다만 환경/설정 골격이 있을 수 있으니 실행 전 아래를 읽어 현재 상태를 확인하라.</p>
+<pre><code class="language-bash"># 프로젝트 루트에서
+cat pyproject.toml 2&gt;/dev/null            # 의존성·python 버전 확인 (없으면 신규 생성 대상)
+cat .env.example 2&gt;/dev/null              # LMSTUDIO_BASE_URL 키 존재 확인
+cat config/settings.yaml 2&gt;/dev/null      # 모델명·dim/norm/metric 플래그 확인
+ls src/ src/llm/ src/embed/ tests/ 2&gt;/dev/null # 이미 만든 파일 있는지 확인 (있으면 덮어쓰지 말고 병합)
+python -c &quot;import openai, numpy; print(&#39;deps ok&#39;)&quot; 2&gt;/dev/null
+</code></pre>
+<p>확정 환경 사실(발명 금지, 그대로 사용):</p>
+<ul>
+<li>LMStudio 엔드포인트: <code>http://localhost:1234/v1</code>, OpenAI 호환, <code>api_key=&quot;lm-studio&quot;</code>(더미).</li>
+<li>임베딩 모델: <code>text-embedding-nomic-embed-text-v1.5</code> (768차원, 출력 norm=1.0 — 이미 L2 정규화됨).</li>
+<li>생성 모델 기본값: <code>google/gemma-4-e4b</code>. (대안 <code>qwen3.5-9b</code>, <code>qwen3.6-35b-a3b</code> — 이 페이즈에선 기본값만으로 충분.)</li>
+<li>런타임 Python 3.11+. LLM 클라이언트는 <code>openai</code> SDK(<code>base_url</code>만 localhost로). 수치 계산은 <code>numpy</code>.</li>
+</ul>
+<p>설정 골격이 없으면 이 페이즈 안에서 최소 구성으로 만들되, 모델명·base_url·api_key는 환경변수/<code>config</code>에서 읽고 코드에 하드코딩한 fallback만 위 확정값으로 둔다.</p>
+<h3>절대 규칙 (이 페이즈에서 위반 금지인 불변식 — 관련 INV 발췌)</h3>
+<ul>
+<li><strong>INV-1 (임베딩 재정규화 금지)</strong>: nomic 출력은 이미 L2 정규화(norm=1.0)되어 있다. 코드에서 <strong>재정규화하지 마라</strong>. 대신 가드만 둔다: 빈 입력으로 생긴 0-벡터는 가드에서 제외하고, <strong>반환된 벡터 배치의 모든 원소를 순회</strong>하며 <code>abs(norm - 1.0) &lt; 1e-3</code> assert(<code>vecs[0]</code>만 검사하는 것은 금지). 모델 교체 시 norm 재측정이 필요하므로 이 가드는 무음 통과시키지 말 것.</li>
+<li><strong>INV-2 (content 빈값 → reasoning_content 폴백)</strong>: 생성모델 3종 모두 <code>message.content</code>가 빈 문자열이고 실제 답은 <code>message.reasoning_content</code>에 온다. <code>content</code>가 비면 <code>reasoning_content</code>로 폴백하라. <strong>무효 우회책 4종을 코드에 절대 넣지 마라</strong>: <code>/no_think</code>, <code>enable_thinking=false</code>, <code>reasoning_effort=low</code>, <code>max_tokens=4000</code>을 &quot;thinking 끄는 용도&quot;로 넣지 말 것(이들은 전부 무효로 실측됨). <code>max_tokens</code>는 일반 길이 제어 인자로만 쓴다.</li>
+<li><strong>INV-3 (외부 API 금지)</strong>: <code>base_url</code>은 <code>localhost:1234</code> 외 호출 0건. OpenAI/Anthropic/Cohere 등 외부 클라우드 절대 금지. <strong>이 가드는 모듈 로드 시점</strong>(아래 1-① 참조)<strong>에 발동해야 한다.</strong></li>
+<li><strong>INV-4 (prompt_tokens=0 불신 / 입력 가드 fail-closed)</strong>: <code>usage.prompt_tokens</code>는 0으로 오보고될 수 있어 신뢰 불가. 길이 판단은 <strong>문자 수</strong> 기준으로 하라. <code>assert_within_embed_limit</code>은 fail-closed(한계 초과 시 조용히 통과시키지 말고 예외).</li>
+<li><strong>INV-5 (<code>&lt;think&gt;</code> 정제)</strong>: <code>reasoning_content</code>에서 <code>&lt;think&gt;…&lt;/think&gt;</code>를 제거하고 최종답을 추출하라. 여는/닫는 구분자가 짝이 안 맞으면(아래 1-③의 정본 규칙) <strong>무음 빈답 금지</strong> — 원문 + <code>[경고]</code> 표식을 반환.</li>
+<li><strong>INV-6 (length 재시도)</strong>: <code>finish_reason == &quot;length&quot;</code>면 <code>max_tokens × 3</code>으로 <strong>딱 1회</strong> 재시도. 2회째에도 length면 경고를 부착해 반환(무한 루프 금지).</li>
+</ul>
+<h3>작업 지시 (파일 경로·시그니처 고정)</h3>
+<h4>0) 패키지 임포트 가능성 보장 (검증명령 4의 사전조건 — 먼저 처리)</h4>
+<p>검증명령 4는 <code>import src.llm.client</code>를 사용하므로, <strong>컨텍스트 초기화 후 단독 실행에서 <code>ModuleNotFoundError: src</code>가 나지 않도록</strong> 다음을 보장한다:</p>
+<ul>
+<li>빈 <code>src/__init__.py</code>, <code>src/llm/__init__.py</code>, <code>src/embed/__init__.py</code>, <code>tests/__init__.py</code>를 생성(없으면).</li>
+<li><code>pyproject.toml</code>에 패키지 인식 설정을 추가한다. setuptools 기준 예:<pre><code class="language-toml">[tool.setuptools.packages.find]
+where = [&quot;.&quot;]
+include = [&quot;src*&quot;]
+</code></pre>
+(이미 빌드 백엔드/패키지 설정이 있으면 덮어쓰지 말고 병합. uv/hatchling 환경이면 동등한 <code>[tool.hatch.build.targets.wheel] packages = [&quot;src&quot;]</code>로 대체 가능.)</li>
+<li>위 설정으로도 단독 실행이 불안하면, 검증·테스트는 <strong>프로젝트 루트를 cwd로</strong> 두고 <code>PYTHONPATH=.</code>를 전제로 돈다(검증명령 블록에 명시됨).</li>
+</ul>
+<h4>1) <code>src/llm/client.py</code></h4>
+<p>공개 함수 시그니처는 아래로 <strong>고정</strong>(변경 금지). 호출자는 content/reasoning 분기를 몰라도 항상 평문 <code>str</code>을 받는다.</p>
+<pre><code class="language-python">def chat(messages, model=&quot;google/gemma-4-e4b&quot;, max_tokens=4000, _retry=True, **kw) -&gt; str: ...
+def _clean_reasoning(raw: str) -&gt; str: ...
+</code></pre>
+<p>구현 요구:</p>
+<ul>
+<li><strong>① 모듈 로드 시 클라이언트 1회 생성 + 그 시점에 base_url 가드(INV-3 결합 명시)</strong>: <code>openai.OpenAI(base_url=..., api_key=...)</code> 클라이언트를 <strong>모듈 최상위에서 1회 생성</strong>한다. <code>base_url</code>은 env <code>LMSTUDIO_BASE_URL</code>(기본 <code>http://localhost:1234/v1</code>), <code>api_key</code>는 env <code>LMSTUDIO_API_KEY</code>(기본 <code>&quot;lm-studio&quot;</code>). <strong>클라이언트 생성 직전 또는 직후, 모듈 최상위 코드에서</strong> base_url을 검사해 <code>localhost</code>(또는 <code>127.0.0.1</code>)가 아니면 <strong>즉시 예외</strong>를 던진다.<ul>
+<li>이 가드는 반드시 <strong>모듈 import 시점</strong>에 돌아야 한다(클래스/모듈 레벨 실행). <strong><code>chat()</code> 함수 내부의 지연 가드는 금지</strong> — 함수 내부로 넣으면 <code>import src.llm.client</code>만으로는 예외가 나지 않아 <strong>검증명령 4가 FAIL을 못 잡고 무한 통과</strong>한다. 검증명령 4(<code>import</code> + <code>importlib.reload</code>로 예외 기대)는 이 모듈-레벨 가드와 1:1로 결합되어 있다.</li>
+</ul>
+</li>
+<li><strong>② <code>chat()</code></strong>: <code>client.chat.completions.create(model=, messages=, max_tokens=, **kw)</code> 호출.<ul>
+<li>응답 <code>msg = resp.choices[0].message</code>에서 <strong><code>msg.content</code>가 비어 있으면(<code>None</code> 또는 공백만) <code>msg.reasoning_content</code>로 폴백</strong>(INV-2). 둘 다 비면 <code>[경고] 빈 응답</code> 표식 문자열 반환(무음 빈답 금지).</li>
+<li>폴백으로 얻은 원문은 <code>_clean_reasoning()</code>을 통과시켜 <code>&lt;think&gt;</code> 제거(INV-5).</li>
+<li><code>finish_reason == &quot;length&quot;</code>이고 <code>_retry</code>가 True면 <code>max_tokens*3</code>, <code>_retry=False</code>로 <strong>딱 1회</strong> 재귀 재시도(INV-6). 재시도 결과도 length면 반환 문자열 앞/뒤에 <code>[경고] length 재시도 후에도 잘림</code> 표식을 붙여 반환.</li>
+<li><strong>금지</strong>: <code>/no_think</code> 주입, <code>enable_thinking</code>/<code>reasoning_effort</code> 같은 thinking-off kwargs 자동 주입(INV-2). <code>**kw</code>로 호출자가 명시적으로 넘긴 건 그대로 전달하되, 코드가 알아서 thinking-off 인자를 끼워넣지 말 것.</li>
+</ul>
+</li>
+<li><strong>③ <code>_clean_reasoning(raw)</code> — 구분자 정본 규칙(§B-7 split-동작 덮어쓰기)</strong>:<ul>
+<li>정상 케이스: <code>&lt;think&gt;...&lt;/think&gt;</code> 짝이 맞는(여는·닫는 태그 개수 동일) 블록은 정규식으로 제거하고 남은 텍스트를 strip해 반환.</li>
+<li><strong>close-only 정본 결정</strong>: 여는 태그가 없고 <code>&lt;/think&gt;</code>만 있는 경우(개수 0:1, 불균형)는 <strong><code>[경고] think 구분자 불일치</code>를 붙인 경고 케이스로 처리한다</strong>(원문 strip + 경고 표식 반환). 즉 <code>§B-7</code>의 &quot;마지막 <code>&lt;/think&gt;</code> 이후를 최종답으로 split 추출&quot;하는 동작은 <strong>채택하지 않는다</strong>. (정본: open-only·close-only·기타 불균형은 모두 경고. 균형 0:0 = think 없는 평문은 정상.)</li>
+<li>짝이 안 맞거나(여는/닫는 개수 불일치) 정제 후 결과가 비면 → <code>raw.strip()</code> 원문에 <code>[경고] think 구분자 불일치</code> 표식을 붙여 반환(무음 빈답 금지, INV-5).</li>
+<li>정상 케이스(짝 맞고 내용 있음)는 정제된 평문만 반환.</li>
+</ul>
+</li>
+</ul>
+<h4>2) <code>src/embed/embedder.py</code></h4>
+<p>공개 시그니처 <strong>고정</strong>:</p>
+<pre><code class="language-python">Vector = list[float]  # 타입 별칭 — 다음 페이즈 핸드오프 계약(list[Vector])과 일치시킬 것
+DEFAULT_MAX_CHARS_FALLBACK = 1000
+
+def embed(texts: list[str], model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]: ...
+def assert_within_embed_limit(text, max_chars=DEFAULT_MAX_CHARS_FALLBACK) -&gt; None: ...
+</code></pre>
+<blockquote>
+<p>반환 타입은 <code>list[Vector]</code>(= <code>list[list[float]]</code>)로 표기한다. <code>Vector = list[float]</code> 별칭을 <code>embedder.py</code> 상단에 정의해 다음 페이즈가 import해 쓸 수 있게 한다.</p>
+</blockquote>
+<p>구현 요구:</p>
+<ul>
+<li><code>embed([])</code> → <strong>즉시 <code>[]</code> 반환</strong>(빈 입력 가드, API 호출 안 함).</li>
+<li>입력 리스트의 각 원소에 대해 <code>assert_within_embed_limit(t)</code>를 먼저 호출(INV-4, fail-closed). 한계 초과면 여기서 예외.</li>
+<li><strong>③ 빈/공백 원소의 입력↔출력 인덱스 정렬 정본 규칙(핸드오프 계약)</strong>: 빈 문자열/공백-only 원소가 섞여 있어도 <strong>출력 길이는 입력 길이와 같아야 한다</strong>: <code>len(out) == len(texts)</code>. 빈/공백 원소 자리에는 <strong>0-벡터(<code>[0.0] * dim</code>)를 채워 인덱스를 보존</strong>한다(필터링으로 출력 길이를 줄여 <code>texts[i] ↔ vecs[i]</code> 정렬을 깨뜨리는 것 금지). 다음 페이즈가 <code>chunk[i] ↔ vec[i]</code>를 가정하므로 이 정렬 보존은 <strong>계약</strong>이다.<ul>
+<li>API에는 빈/공백 원소를 보내지 않거나(자리표시 후 재삽입), 보내더라도 norm 가드 대상에서 0-벡터는 제외한다. <strong>어떤 방식이든 최종 <code>out</code>의 인덱스는 입력과 1:1 정렬</strong>되어야 한다.</li>
+</ul>
+</li>
+<li><code>client.embeddings.create(model=, input=non_empty_texts)</code>로 임베딩 요청 → <code>list[list[float]]</code> 추출 → 위 정렬 규칙대로 0-벡터와 병합해 <code>out</code> 구성.</li>
+<li><strong>④ norm 가드(INV-1) — 배치 전체 순회(§B-7의 <code>vecs[0]</code>-only 덮어쓰기)</strong>: <code>out</code>의 <strong>모든 원소를 순회</strong>하며 <code>numpy</code>로 L2 norm 계산 후 각각 <code>assert abs(norm - 1.0) &lt; 1e-3</code>. <strong>첫 원소만 검사(<code>vecs[0]</code>)하는 약한 버전 금지.</strong> <strong>재정규화 금지</strong> — 위반 시 assert로 실패시켜라(무음 통과 금지). 빈/공백 입력으로 채운 0-벡터는 가드 대상에서 제외.</li>
+<li><code>assert_within_embed_limit(text, max_chars=1000)</code>: <code>len(text) &gt; max_chars</code>면 <code>ValueError</code>(문자 수 기준, fail-closed). <code>prompt_tokens</code> 등 usage 기반 판단 <strong>사용 금지</strong>(INV-4).</li>
+<li>LMStudio 클라이언트는 <code>client.py</code>와 동일 패턴으로 <strong>모듈 최상위 1회 생성 + 모듈 로드 시점 localhost 가드</strong> 적용(또는 공용 모듈에서 import). 가드 발동 시점 규칙은 1-①과 동일.</li>
+</ul>
+<h4>3) <code>tests/</code> 단위 테스트 (각 불변식 1:1 매핑)</h4>
+<p><code>tests/test_llm_client.py</code>, <code>tests/test_embedder.py</code>를 만들고 <strong>LMStudio를 호출하지 않는 mock 기반</strong>으로 작성(외부/네트워크 의존 0).</p>
+<p><strong>테스트 사전조건 (단독 실행 절차 — 빠지면 import 자체가 실패)</strong>:</p>
+<ul>
+<li>두 모듈은 import 시점에 localhost 가드를 돌리므로, <strong>테스트는 <code>LMSTUDIO_BASE_URL</code>이 localhost인 환경</strong>에서 import돼야 한다. 테스트 파일 상단(또는 <code>conftest.py</code>)에서 import 이전에 <code>os.environ.setdefault(&quot;LMSTUDIO_BASE_URL&quot;, &quot;http://localhost:1234/v1&quot;)</code>를 설정하거나, <code>monkeypatch.setenv</code> 후 import하라. 그래야 가드를 통과해 모듈-레벨 클라이언트 생성이 성공한다.</li>
+<li>mock 패치 대상은 <strong>모듈 1회 생성 클라이언트의 절대 경로</strong>로 명시한다(가드는 그대로 통과시키고 네트워크 호출 메서드만 patch):<ul>
+<li>LLM: <code>src.llm.client.client.chat.completions.create</code></li>
+<li>임베딩: <code>src.embed.embedder.client.embeddings.create</code></li>
+<li>(클라이언트를 공용 모듈에 두었다면 실제 생성 위치의 절대 경로로 맞춰 patch.)</li>
+</ul>
+</li>
+</ul>
+<p>최소 케이스:</p>
+<ul>
+<li><code>test_content_empty_falls_back_to_reasoning</code> — <code>content=&quot;&quot;</code>, <code>reasoning_content=&quot;답&quot;</code>인 mock 응답 → <code>chat()</code>이 <code>&quot;답&quot;</code> 반환(INV-2).</li>
+<li><code>test_clean_reasoning_strips_think</code> — <code>&quot;&lt;think&gt;속&lt;/think&gt;최종답&quot;</code> → <code>&quot;최종답&quot;</code>(INV-5).</li>
+<li><code>test_clean_reasoning_unbalanced_warns</code> — <code>&quot;&lt;think&gt;열기만&quot;</code>(open-only) → 원문 + <code>[경고]</code> 포함, 빈 문자열 아님(INV-5).</li>
+<li><code>test_clean_reasoning_close_only_warns</code> — <code>&quot;앞&lt;/think&gt;최종답&quot;</code>(close-only, 여는 태그 없음) → <strong>경고 케이스로 처리됨</strong>(원문 + <code>[경고]</code> 포함). split 추출로 <code>&quot;최종답&quot;</code>만 반환되지 <strong>않음</strong>을 단정(1-③ 정본 검증).</li>
+<li><code>test_length_retry_once</code> — 1차 <code>finish_reason=&quot;length&quot;</code>, 2차 정상 → <code>create</code>가 정확히 2회 호출, 2차 <code>max_tokens</code>가 1차의 3배(INV-6).</li>
+<li><code>test_length_retry_gives_up_with_warning</code> — 1·2차 모두 <code>finish_reason=&quot;length&quot;</code> → <code>create</code> 정확히 2회, 결과에 <code>[경고]</code> 포함(무한 루프 없음, INV-6).</li>
+<li><code>test_embed_empty_returns_empty</code> — <code>embed([])</code> → <code>[]</code>, API 미호출(INV-1).</li>
+<li><code>test_embed_norm_guard_trips</code> — <strong>배치의 비-첫번째 원소</strong>(예: index 1)의 norm이 1.0에서 충분히 벗어난(예: 1.5) mock 벡터 → <code>embed()</code>가 <code>AssertionError</code>. 첫 원소만 검사하는 약한 가드라면 통과해버리므로, <strong>이 케이스가 배치 전체 순회를 강제</strong>한다(INV-1, 무음 통과 안 함).</li>
+<li><code>test_embed_norm_guard_passes</code> — 모든 원소 norm≈1.0 mock 벡터 → 통과(정상 경로).</li>
+<li><code>test_embed_preserves_index_alignment</code> — 빈/공백 원소가 섞인 입력(예: <code>[&quot;a&quot;, &quot;&quot;, &quot;b&quot;]</code>)에 대해 <code>len(embed(input)) == len(input)</code>이고, 빈 자리는 0-벡터로 채워져 정렬이 보존됨을 검증(1-③ 핸드오프 계약).</li>
+<li><code>test_assert_within_embed_limit_raises</code> — <code>len &gt; max_chars</code> 입력 → <code>ValueError</code>(INV-4).</li>
+<li><code>test_no_thinking_off_kwargs_injected</code> — <code>chat()</code> 호출 시 <code>create</code>에 전달된 kwargs에 <code>enable_thinking</code>/<code>reasoning_effort</code>/<code>/no_think</code>가 <strong>자동 주입되지 않음</strong> 검증(INV-2).</li>
+</ul>
+<p>테스트는 <code>unittest.mock</code>(또는 pytest <code>monkeypatch</code>)으로 위 절대 경로의 <code>create</code>만 패치한다. <strong>실제 localhost:1234를 때리지 않는다</strong>(CI/오프라인에서 통과해야 함).</p>
+<h3>산출물 (생성/수정 파일)</h3>
+<ul>
+<li><code>src/llm/client.py</code> (신규) — <code>chat()</code>, <code>_clean_reasoning()</code>, 모듈-레벨 클라이언트 + <strong>모듈 로드 시점</strong> localhost 가드</li>
+<li><code>src/embed/embedder.py</code> (신규) — <code>Vector</code> 별칭, <code>embed()</code>, <code>assert_within_embed_limit()</code>, <strong>배치 전체 순회</strong> norm 가드, 인덱스 정렬 보존</li>
+<li><code>tests/test_llm_client.py</code> (신규)</li>
+<li><code>tests/test_embedder.py</code> (신규)</li>
+<li><code>src/__init__.py</code>, <code>src/llm/__init__.py</code>, <code>src/embed/__init__.py</code>, <code>tests/__init__.py</code> (없으면 빈 파일 생성 — <code>src.*</code> 임포트 가능성 보장, 작업지시 0 참조)</li>
+<li><code>pyproject.toml</code>에 <code>[tool.setuptools.packages.find]</code>(또는 동등 백엔드 설정) + <code>openai</code>·<code>numpy</code>·<code>pytest</code> 의존성 추가(기존 값 덮어쓰지 말고 병합)</li>
+<li>(필요 시) <code>config/settings.yaml</code> / <code>.env.example</code>에 <code>LMSTUDIO_BASE_URL</code>·모델명 키 추가(병합)</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li>프로젝트 루트에서 <code>PYTHONPATH=. pytest -q tests/test_llm_client.py tests/test_embedder.py</code>가 <strong>전부 통과</strong>(네트워크 없이, mock만으로). <code>ModuleNotFoundError: src</code> 없이 import 성공.</li>
+<li>위 테스트 목록의 각 불변식(INV-1/2/4/5/6) 케이스가 최소 1개씩 존재하고 통과. <strong>특히</strong> norm 가드 비-첫번째-원소 케이스·인덱스 정렬 보존 케이스·close-only 경고 케이스가 포함되고 통과.</li>
+<li>코드에서 <code>/no_think</code>, <code>enable_thinking</code>, <code>reasoning_effort</code>가 thinking-off 목적으로 <strong>자동 주입되는 경로가 0건</strong>(아래 검증명령 2의 정밀 패턴 또는 AST 확인으로 검증).</li>
+<li><code>base_url</code>이 localhost가 아니면 <strong>import/reload 시점에 예외</strong>가 나는지 검증명령 4로 확인(함수 내부 지연 가드면 FAIL).</li>
+<li>임베딩에 재정규화 코드(<code>v / norm</code>, <code>normalize(</code>)가 <strong>없음</strong>(검증명령 3으로 확인) — 가드만 존재.</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash"># (전제) 모든 명령은 프로젝트 루트를 cwd로 두고 실행. 단독 실행 시 PYTHONPATH=. 보장.
+
+# 1) 단위 테스트 (네트워크 불필요, mock 기반)
+PYTHONPATH=. pytest -q tests/test_llm_client.py tests/test_embedder.py
+
+# 2) 무효 우회책 자동 주입 0건 확인 — 코드 라인의 kwargs 키 주입만 정밀 매칭
+#    (a) 화이트리스트 grep의 오탐/누락을 피하려 &quot;키=값으로 호출에 전달&quot; 패턴으로 좁힘:
+grep -rnE &quot;(enable_thinking|reasoning_effort)\s*=&quot; src/ \
+  | grep -vE &quot;^\s*#&quot; \
+  || echo &quot;OK: thinking-off kwargs 주입 라인 없음&quot;
+grep -rn &quot;no_think&quot; src/ | grep -vE &quot;^\s*#&quot; \
+  || echo &quot;OK: /no_think 주입 없음&quot;
+#    (b) 권고: 더 신뢰할 판정이 필요하면 AST로 client.*.create(...) 호출의 키워드 인자에
+#        enable_thinking/reasoning_effort 키가 박혔는지만 검사하는 스크립트를 쓴다
+#        (변수명 우연 일치·한국어 주석 오탐을 모두 배제).
+
+# 3) 재정규화 코드 부재 확인 (출력 없어야 정상)
+grep -rnE &quot;normalize\(|/\s*norm|/\s*np\.linalg\.norm&quot; src/embed/ \
+  | grep -viE &quot;abs\(norm|assert|# &quot; || echo &quot;OK: 재정규화 없음&quot;
+
+# 4) localhost 외 base_url 가드가 &quot;모듈 로드 시점&quot;에 발동하는지 확인
+#    (가드가 chat() 내부에 있으면 import만으로 예외가 안 나 이 명령이 무한 통과=FAIL 미검출)
+PYTHONPATH=. python -c &quot;
+import os
+os.environ[&#39;LMSTUDIO_BASE_URL&#39;]=&#39;https://api.openai.com/v1&#39;
+try:
+    import importlib, src.llm.client as c; importlib.reload(c)
+    print(&#39;FAIL: 외부 base_url 가드 미작동(모듈 로드 시점 가드 아님)&#39;)
+except Exception as e:
+    print(&#39;OK: 외부 base_url 차단 -&gt;&#39;, type(e).__name__)
+&quot;
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<p>다음 페이즈(문서 파싱·청킹/인덱싱)는 여기서 만든 <code>embed()</code>(배치 전체 norm 가드 + 입력↔출력 인덱스 정렬 보존, 반환 <code>list[Vector]</code>)와 <code>assert_within_embed_limit()</code>를 그대로 import해 청크를 임베딩한다. <code>chunk[i] ↔ vec[i]</code> 정렬이 계약으로 보장되므로 호출자는 빈 청크 필터링으로 인한 어긋남을 걱정하지 않는다. 모든 LMStudio 별난 동작은 이 두 래퍼 뒤에 봉인되어 있으므로, 이후 페이즈 코드는 평문 <code>str</code>·정규화된 <code>Vector</code>만 다룬다.</p>
+</article>
+<article class="doc" data-id="07_실행프롬프트/03_페이즈2_ingest.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 2: 문서 로딩 · 한국어 청킹</h1>
+<h3>이 페이즈의 목표 (1~2문장)</h3>
+<p><code>.pdf</code>/<code>.docx</code> 원문을 <code>{text, doc_id, source_path, meta}</code> 표준 dict로 로딩하는 <code>loaders.py</code>(한국어 PDF 줄바꿈 정규화·노이즈 제거 포함)와, kss 문장분리 + langchain-text-splitters로 문자 기준(max_chars=500/overlap=80) 한국어 청킹을 수행하는 <code>chunker.py</code>의 <code>chunk()</code>를 구현한다. 이 페이즈 종료 시 &quot;디스크의 문서 디렉토리 → <code>Chunk</code> 리스트&quot;가 무손실·무음잘림 없이 흐른다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 컨텍스트 초기화 후 파일에서 상태 읽어 확인)</h3>
+<p>컨텍스트가 초기화되었으므로, 먼저 아래를 <strong>파일로 직접 확인</strong>한 뒤 시작하라.</p>
+<ol>
+<li>프로젝트 루트 확인: <code>pyproject.toml</code>, <code>config/settings.yaml</code> 존재 여부.</li>
+<li><strong>패키지 구조 확인 — <code>src/</code>·<code>src/ingest/</code>·<code>src/embed/</code>·<code>src/app/</code> 디렉토리와 각 <code>__init__.py</code>가 없으면</strong>, 먼저 §B-11 스캐폴딩(03_개발환경셋업.md §5의 <code>mkdir -p</code>/<code>touch</code>)을 실행해 뼈대를 만든다. 이게 없으면 아래 검증 명령의 <code>python -c &quot;from src.ingest.chunker import chunk&quot;</code> import가 깨진다.<pre><code class="language-bash">mkdir -p config src/llm src/ingest src/embed src/store src/retrieve src/app scripts eval tests data
+touch src/__init__.py src/llm/__init__.py src/ingest/__init__.py src/embed/__init__.py \
+      src/store/__init__.py src/retrieve/__init__.py src/app/__init__.py
+</code></pre>
+</li>
+<li><strong>타입 계약 위치 탐색</strong> — <code>Chunk</code> 데이터클래스와 <code>assert_within_embed_limit</code>의 <strong>정본 정의는 04_아키텍처_API/02_내부API §1·§3.2의 코드블록</strong>이다. <strong>단, 이들을 어느 <code>.py</code> 파일에 둘지는 §B-11에서 고정되지 않았다.</strong> <code>src/app/types.py</code>로 <strong>단정하지 마라</strong>. 먼저 grep으로 이미 정의된 위치를 탐색하라.<pre><code class="language-bash">grep -rn &quot;class Chunk\|def assert_within_embed_limit\|DEFAULT_MAX_CHARS_FALLBACK&quot; src/ 2&gt;/dev/null
+</code></pre>
+<ul>
+<li><code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code> 필드 6개와, <code>assert_within_embed_limit(text, max_chars=DEFAULT_MAX_CHARS_FALLBACK)</code> 및 <code>DEFAULT_MAX_CHARS_FALLBACK = 1000</code>이 어딘가에 정의돼 있어야 한다.</li>
+<li><strong>이미 있으면</strong>: 그 파일을 import 해서 재사용하고 <strong>재정의하지 마라</strong>.</li>
+<li><strong>없으면</strong>: 아래 작업 지시 0단계대로 최소 정의를 만든다.</li>
+</ul>
+</li>
+<li>패키지 설치 확인: <code>pymupdf</code>, <code>python-docx</code>, <code>kss</code>, <code>langchain-text-splitters</code>가 설치돼 있는지. 없으면 설치한다.<pre><code class="language-bash">uv pip install pymupdf python-docx kss langchain-text-splitters 2&gt;/dev/null \
+  || pip install pymupdf python-docx kss langchain-text-splitters
+</code></pre>
+</li>
+</ol>
+<h3>절대 규칙 (이 페이즈에서 위반 금지인 불변식 — 관련 INV만)</h3>
+<ul>
+<li><strong>INV-3 외부 API 금지</strong>: 이 페이즈는 순수 로컬 파일 처리만 한다. 네트워크 호출 0건. 임베딩/LLM 호출 없음(청킹은 임베딩 전 단계).</li>
+<li><strong>INV-4 토큰 미신뢰</strong>: 길이 제어·청크 분할 판단은 <strong>반드시 <code>len(str)</code> 문자 수 기준</strong>. 토크나이저 토큰 수로 청크 크기를 재지 마라. <code>tiktoken</code>/모델 토큰 카운트 금지.</li>
+<li><strong>임베딩 입력 가드(fail-closed)</strong>: 모든 청크는 반환 직전 <code>assert_within_embed_limit(chunk.text)</code>를 통과해야 한다. 한계 초과를 &quot;일단 통과&quot;시키는 무음 처리 금지 — 초과 청크는 더 잘게 재분할하거나 명시적 예외로 막는다.</li>
+<li><strong>빈/공백 청크 제외</strong>: <code>text.strip() == &quot;&quot;</code>인 청크는 절대 반환 리스트에 넣지 않는다(무음 빈 레코드 금지).</li>
+<li><strong>파싱 실패는 스킵·로그, 배치 중단 X</strong>: 한 파일 파싱이 실패해도 전체 로딩을 멈추지 않는다. 해당 파일만 건너뛰고 경고 로그를 남긴 뒤 다음 파일로 진행한다.</li>
+</ul>
+<h3>작업 지시 (구체적 단계 — 파일 경로·시그니처 고정)</h3>
+<p><strong>0단계 (사전조건 3에서 grep 미발견일 때만): 최소 타입 정의</strong></p>
+<ul>
+<li><strong><code>Chunk</code></strong>: §B-11(시작프롬프트.md §B-11)·스캐폴딩(03_개발환경셋업.md §5)에는 <code>src/app/types.py</code>가 <strong>존재하지 않는다</strong>. 정본 정의 위치가 고정돼 있지 않으므로, <strong>새 <code>types.py</code>를 임의로 만들지 말고</strong> <code>src/ingest/chunker.py</code> 상단(이 페이즈가 <code>chunk()</code>를 만드는 곳)에 둔다. 만약 부득이 별도 공용 모듈(<code>src/app/types.py</code> 등 §B-11에 없는 파일)을 만들어야 한다면, <strong>그것이 §B-11 디렉토리 구조 일탈임을 완료 보고에 명시</strong>하라(무단 발명 금지).<pre><code class="language-python">from dataclasses import dataclass, field
+
+@dataclass
+class Chunk:
+    chunk_id: str
+    doc_id: str
+    text: str
+    source_path: str
+    chunk_index: int
+    meta: dict = field(default_factory=dict)
+</code></pre>
+</li>
+<li><strong><code>assert_within_embed_limit</code></strong>: 정본 위치는 02_내부API §3.2대로 <code>src/embed/embedder.py</code>다. 없으면 거기에 추가한다.<pre><code class="language-python">DEFAULT_MAX_CHARS_FALLBACK = 1000  # [추정] Phase 0 측정 즉시 settings.yaml 실측값으로 교체
+
+def assert_within_embed_limit(text: str, max_chars: int = DEFAULT_MAX_CHARS_FALLBACK) -&gt; None:
+    &quot;&quot;&quot;임베딩 입력 한계 초과 시 예외. 무음 잘림 방지(fail-closed).&quot;&quot;&quot;
+    n = len(text)
+    if n &gt; max_chars:
+        raise ValueError(f&quot;chunk text {n} chars exceeds embed limit {max_chars}&quot;)
+</code></pre>
+</li>
+</ul>
+<p><strong>1단계: <code>src/ingest/loaders.py</code></strong></p>
+<ul>
+<li><code>.pdf</code> → <strong>pymupdf</strong>(<code>import pymupdf</code> 또는 <code>import fitz</code>)로 페이지별 텍스트 추출. <code>.docx</code> → <strong>python-docx</strong>(<code>from docx import Document</code>)로 문단 텍스트 추출. <strong><code>.pdf</code>/<code>.docx</code> 확장자만 허용</strong>, 그 외 확장자는 스킵·로그.</li>
+<li><strong>한국어 PDF 텍스트 정규화 (§B-2 ① 필수 동작 — 누락 금지)</strong>: pymupdf 페이지 텍스트를 <strong>그대로 추출하지 마라</strong>. 추출 직후 아래를 적용한다. 이걸 빠뜨리면 단어 중간 줄바꿈이 청크·임베딩·BM25 토큰화를 오염시켜 회귀케이스(&quot;연차 휴가 신청 절차&quot;) Recall에 직접 악영향을 준다.<ol>
+<li><strong>줄바꿈 정규화(최소 필수)</strong>: 한국어 PDF는 단어/문장 중간에 <code>\n</code>이 끼는 경우가 많다. 단어를 끊는 줄바꿈은 복원한다 — 한글 글자 사이의 단일 줄바꿈(예: <code>한글\n글자</code> → <code>한글글자</code>)은 제거하고, 문단 경계(빈 줄·이중 줄바꿈)는 보존한다. 하이픈으로 끊긴 영문/숫자 줄바꿈(<code>-\n</code>)도 이어붙인다.</li>
+<li><strong>노이즈 제거</strong>: 페이지마다 반복되는 <strong>머리말/꼬리말</strong>(페이지 번호·문서 제목 반복 등)과 <strong>표 잔여물</strong>을 가능한 범위에서 제거한다(완벽 제거가 어려우면 최소한 ①의 줄바꿈 정규화는 반드시 수행).</li>
+</ol>
+</li>
+<li>함수 시그니처(고정):<pre><code class="language-python">def load_file(path: str) -&gt; dict | None:
+    &quot;&quot;&quot;단일 파일 → {text, doc_id, source_path, meta}. 실패/미지원 확장자 시 None + 로그.&quot;&quot;&quot;
+
+def load_dir(root: str) -&gt; list[dict]:
+    &quot;&quot;&quot;디렉토리 재귀 순회 → load_file 결과 리스트(None 제외). 한 파일 실패해도 배치 중단 X.&quot;&quot;&quot;
+</code></pre>
+</li>
+<li>반환 dict 키 <strong>고정</strong>: <code>{&quot;text&quot;: str, &quot;doc_id&quot;: str, &quot;source_path&quot;: str, &quot;meta&quot;: dict}</code>.<ul>
+<li><code>doc_id</code>: <code>&quot;sha1:&quot; + hashlib.sha1(&lt;source_path 또는 정규화 원문 바이트&gt;).hexdigest()[:12]</code> 형태(접두 <code>sha1:</code> + <strong>12 hex</strong>). 같은 입력 → 같은 ID(결정적). <code>#</code>을 <code>doc_id</code>에 절대 넣지 마라(나중에 chunk_id 구분자와 충돌).</li>
+<li><code>meta</code>: PDF는 <code>{&quot;page_count&quot;: int}</code> 등 추출 가능한 정보. DOCX는 <code>{}</code> 또는 추출 가능 정보.</li>
+</ul>
+</li>
+<li>파싱 실패(손상 파일·암호화 PDF 등)는 <code>try/except</code>로 잡아 <code>logging.warning</code>으로 <code>source_path</code>와 예외를 남기고 <code>None</code> 반환. <strong>예외를 위로 전파해 배치를 죽이지 마라.</strong></li>
+<li>텍스트가 빈 문자열인 파일은(정규화 후 기준) 경고 로그 후 스킵.</li>
+</ul>
+<p><strong>2단계: <code>src/ingest/chunker.py</code>의 <code>chunk()</code></strong></p>
+<ul>
+<li>시그니처(계약 고정 — 변경 금지):<pre><code class="language-python">def chunk(doc: dict, *, max_chars: int = 500, overlap_chars: int = 80, doc_type: str = &quot;manual&quot;) -&gt; list[Chunk]:
+    &quot;&quot;&quot;{text,doc_id,source_path,meta}(로딩 산출물) → list[Chunk]. 문자 기준, 빈/공백 청크 제외.&quot;&quot;&quot;
+</code></pre>
+</li>
+<li>알고리즘:<ol>
+<li><strong>문장 분리</strong>: <code>kss.split_sentences(doc[&quot;text&quot;])</code>로 한국어 문장 리스트 생성. 단순 <code>.</code> 분할 금지(종결어미·소수점·약어 충돌). kss 실패/빈 입력 시 빈 리스트 반환.</li>
+<li><strong>구조 마커 경계 우선</strong>: <code>&quot;제N조&quot;</code>(정규식 <code>^제\d+조</code>), 번호목록 <code>&quot;1.&quot;</code>(<code>^\d+\.</code>) 같은 마커로 시작하는 문장은 <strong>새 청크의 강제 경계</strong>로 삼는다(이전 청크를 닫고 새로 시작). 가능하면 해당 마커를 <code>meta[&quot;section&quot;]</code>에 누적한다.</li>
+<li><strong>묶기(슬라이딩 윈도우, 문자 기준)</strong>: 문장을 이어붙이되 누적 문자 길이가 <code>max_chars</code>를 넘기 직전에 청크를 확정한다. 다음 청크는 직전 청크 끝에서 <strong><code>overlap_chars</code>만큼 문자 오버랩</strong>을 두고 시작한다(문장 단위 아님, 문자 수/비율 기준). 단일 문장이 <code>max_chars</code>보다 길면 <strong>langchain-text-splitters의 <code>RecursiveCharacterTextSplitter(chunk_size=max_chars, chunk_overlap=overlap_chars, length_function=len)</code></strong> 로 그 문장만 추가 분할한다.</li>
+<li><strong>빈/공백 청크 제외</strong>: <code>text.strip() == &quot;&quot;</code>이면 버린다.</li>
+<li><strong>임베딩 가드</strong>: 각 청크 확정 시 <code>assert_within_embed_limit(text)</code>를 호출한다. 만약 (구조 마커·오버랩 조합으로) <code>max_chars</code>보다 길어졌다면 위 RecursiveCharacterTextSplitter로 재분할해 모든 조각이 가드를 통과하게 만든다. <strong>통과 못 하는 청크를 반환하지 마라.</strong></li>
+</ol>
+</li>
+<li><code>Chunk</code> 생성:<ul>
+<li><code>chunk_index</code>: 0부터 연속(0,1,2,…). 같은 <code>doc_id</code> 내에서 유일.</li>
+<li><code>chunk_id</code>: <code>f&#39;{doc[&quot;doc_id&quot;]}#{chunk_index}&#39;</code> (구분자 <code>#</code> 고정).</li>
+<li><code>source_path</code>: <code>doc[&quot;source_path&quot;]</code> 그대로.</li>
+<li><code>meta</code>: <code>doc[&quot;meta&quot;]</code> 복사 + 추출한 <code>section</code>/<code>page</code> 병합(없으면 생략).</li>
+</ul>
+</li>
+</ul>
+<p><strong>3단계: 단위 테스트 <code>tests/test_ingest.py</code></strong></p>
+<ul>
+<li><code>chunk()</code> 테스트(임베딩/LMStudio 의존 없이 순수 함수 테스트):<ul>
+<li>빈 텍스트 → <code>[]</code> 반환.</li>
+<li>공백만 있는 텍스트 → <code>[]</code> 반환.</li>
+<li>모든 반환 청크가 <code>len(c.text) &lt;= max_chars</code> (또는 단일 초장문 문장 재분할 후 가드 통과).</li>
+<li>모든 청크 <code>c.text.strip() != &quot;&quot;</code>.</li>
+<li><code>chunk_index</code>가 0..K-1 연속.</li>
+<li>모든 <code>chunk_id == f&quot;{doc[&#39;doc_id&#39;]}#{c.chunk_index}&quot;</code>.</li>
+<li>구조 마커 테스트: <code>&quot;제1조 ...\n제2조 ...&quot;</code> 입력 시 <code>제1조</code>/<code>제2조</code>가 서로 다른 청크 경계로 분리되는지.</li>
+<li><code>assert_within_embed_limit</code>가 모든 반환 청크에서 통과(예외 없음).</li>
+</ul>
+</li>
+<li><code>loaders.py</code> 테스트:<ul>
+<li><code>load_file(&quot;nonexistent.txt&quot;)</code>(미지원 확장자) → <code>None</code>.</li>
+<li>임시 손상 파일/빈 파일 → <code>None</code> + 배치 중단 안 함(<code>load_dir</code>가 정상 파일은 계속 처리).</li>
+<li><strong>줄바꿈 정규화 테스트</strong>: 단어 중간 줄바꿈(<code>&quot;한글\n글자&quot;</code>)이 정규화 후 <code>&quot;한글글자&quot;</code>로 복원되고, 문단 경계 빈 줄은 보존되는지(가능하면 내부 정규화 함수 단위로).</li>
+<li>(가능하면) 임시 <code>.docx</code> 생성 후 <code>load_file</code> → dict 키 4종 검증.</li>
+</ul>
+</li>
+</ul>
+<h3>산출물 (생성/수정 파일 목록)</h3>
+<ul>
+<li><code>src/ingest/loaders.py</code> (신규)</li>
+<li><code>src/ingest/chunker.py</code> (신규)</li>
+<li><code>tests/test_ingest.py</code> (신규)</li>
+<li><code>Chunk</code>/<code>assert_within_embed_limit</code> 최소 정의 (사전조건 3에서 grep 미발견일 때만 — <code>Chunk</code>는 <code>src/ingest/chunker.py</code> 상단, <code>assert_within_embed_limit</code>는 <code>src/embed/embedder.py</code>. §B-11 밖 새 파일을 만들면 일탈 명시 보고)</li>
+<li><code>pyproject.toml</code> (의존성에 <code>pymupdf</code>, <code>python-docx</code>, <code>kss</code>, <code>langchain-text-splitters</code> 추가)</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>pytest tests/test_ingest.py -q</code>가 <strong>전부 통과</strong>.</li>
+<li><code>chunk()</code>가 반환한 <strong>모든 청크</strong>가 <code>assert_within_embed_limit</code> 통과(가드 위반 0건).</li>
+<li>빈/공백 텍스트 입력 시 <code>chunk()</code>가 <code>[]</code> 반환(빈 청크 0건).</li>
+<li><code>load_dir</code>가 한 파일 파싱 실패에도 <strong>중단되지 않고</strong> 나머지를 반환(스킵+로그 동작 확인).</li>
+<li>한국어 PDF 줄바꿈 정규화가 동작(단어 중간 줄바꿈 복원, 문단 경계 보존) — 테스트로 검증.</li>
+<li>외부 네트워크 호출 0건(이 페이즈는 로컬 파일 처리만).</li>
+<li><code>Chunk</code>/<code>assert_within_embed_limit</code>를 §B-11 밖 파일에 정의했다면, 그 일탈을 완료 보고에 명시.</li>
+</ol>
+<h3>검증 명령 (복붙 실행)</h3>
+<pre><code class="language-bash"># 1) 의존성·import 확인
+python -c &quot;import pymupdf, docx, kss; from langchain_text_splitters import RecursiveCharacterTextSplitter; print(&#39;deps OK&#39;)&quot;
+
+# 2) 단위 테스트
+pytest tests/test_ingest.py -q
+
+# 3) 청킹 스모크 — 모든 청크가 문자 한계·비빈값·연속 인덱스 만족하는지 즉석 검증
+python - &lt;&lt;&#39;PY&#39;
+from src.ingest.chunker import chunk
+text = (&quot;제1조 목적. 이 규정은 직원의 연차 휴가 신청 절차를 정한다. &quot;
+        &quot;직원은 1년간 80% 이상 출근한 경우 15일의 유급휴가를 받는다. &quot; * 6
+        + &quot;제2조 신청. 연차 휴가 신청은 사전 결재를 받아 인사팀에 제출한다. &quot; * 6)
+doc = {&quot;text&quot;: text, &quot;doc_id&quot;: &quot;sha1:a1b2c3d4e5f6&quot;, &quot;source_path&quot;: &quot;corpus/hr/휴가규정.docx&quot;, &quot;meta&quot;: {}}
+cs = chunk(doc, max_chars=500, overlap_chars=80, doc_type=&quot;manual&quot;)
+assert cs, &quot;청크가 비어있음&quot;
+assert all(c.text.strip() for c in cs), &quot;빈/공백 청크 존재&quot;
+assert [c.chunk_index for c in cs] == list(range(len(cs))), &quot;chunk_index 불연속&quot;
+assert all(c.chunk_id == f&quot;sha1:a1b2c3d4e5f6#{c.chunk_index}&quot; for c in cs), &quot;chunk_id 포맷 불일치&quot;
+assert all(len(c.text) &lt;= 500 for c in cs), &quot;max_chars 초과 청크 존재&quot;
+print(f&quot;OK: {len(cs)} chunks, max_len={max(len(c.text) for c in cs)}&quot;)
+PY
+
+# 4) 빈 입력 가드 — [] 반환 확인
+python -c &quot;from src.ingest.chunker import chunk; print(&#39;empty -&gt;&#39;, chunk({&#39;text&#39;:&#39;   &#39;,&#39;doc_id&#39;:&#39;sha1:000000000000&#39;,&#39;source_path&#39;:&#39;a&#39;,&#39;meta&#39;:{}}))&quot;
+</code></pre>
+<h3>다음 페이즈 핸드오프 (다음 페이즈가 의존하는 것)</h3>
+<p>다음 페이즈(임베딩·벡터스토어 적재)는 <code>load_dir()</code> → <code>chunk()</code>로 만들어진 <code>Chunk</code> 리스트를 입력으로 받는다. 각 <code>Chunk.text</code>는 한국어 PDF 줄바꿈 정규화를 거친 뒤 임베딩 입력 한계를 통과한 상태이며, <code>chunk_id</code>는 <code>{doc_id}#{index}</code> 결정적 ID(여기서 <code>doc_id</code> = <code>sha1:</code> + 12 hex)여서 재색인 시 upsert 키로 그대로 쓰인다.</p>
+<pre><code>
+</code></pre>
+</article>
+<article class="doc" data-id="07_실행프롬프트/04_페이즈3_index.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 3: 벡터스토어 · 인덱싱 (LanceDB)</h1>
+<h3>이 페이즈의 목표</h3>
+<p>얇은 <code>VectorStore</code> Protocol(add/search/delete) 뒤에 LanceDB 구현을 숨기고, 사이드카 <code>_index_header.json</code>을 커밋 마커로 쓰는 원자적·멱등 인덱싱 파이프라인(문서→chunk→embed→add)을 완성한다. 코사인/내적 metric을 명시(기본 L2 금지)하고, 정본 헤더 필드·fingerprint 기반 4상태 검사(<code>HeaderState</code>)·헤더 원자성·멱등(doc_id 단위 delete-then-insert)·재인덱싱 정합성을 단위 테스트로 증명한다.</p>
+<h3>사전 조건 (정본 문서 + 이전 페이즈 산출물 — 코드 짜기 전 반드시 읽기)</h3>
+<p>컨텍스트가 초기화된 상태이므로, <strong>코드를 한 줄이라도 짜기 전에 아래 정본 문서를 직접 읽고 그 시그니처·필드명·정책을 그대로 따른다.</strong> 정본과 충돌하는 자체 시그니처를 발명하지 마라(이 페이즈에서 가장 흔한 실패).</p>
+<p>읽어야 할 정본(우선순위 순):</p>
+<ul>
+<li><code>docs/03_DATABASE/01_인덱스_메타데이터_설계.md</code><ul>
+<li>§2 / §2.1 — 헤더 <strong>필드명</strong>(정본): <code>schema_version</code>, <code>embedding_model</code>, <code>dim</code>, <code>normalized</code>, <code>metric</code>, <code>embedding_endpoint</code>, <code>doc_prefix</code>, <code>query_prefix</code>, <code>chunker_version</code>, <code>built_at</code>, <code>doc_count</code>, <code>vector_count</code>, <code>fingerprint</code>.</li>
+<li>§2.2 — <code>index_fingerprint(embedding_model, dim, normalized, metric) -&gt; str</code> (핵심4필드 sha256 16자). <strong>이 함수를 그대로 재현/공유</strong>한다.</li>
+<li>§3.1 — <code>check_header(current: dict, stored: dict | None) -&gt; HeaderState</code>(Enum) <strong>정본 시그니처·상태전이</strong>. 그대로 구현.</li>
+</ul>
+</li>
+<li><code>docs/03_DATABASE/00_벡터스토어_스키마.md</code><ul>
+<li>§1 / §1.1 — 물리 컬럼·<code>meta</code> dict↔평면(<code>page</code>/<code>section</code>/<code>meta_json</code>) 매핑.</li>
+<li>§2 — metric 규약(정규화 벡터는 cosine=dot, 기본 L2 함정).</li>
+<li>§4.1 — LanceDB 스키마·<strong><code>create_index</code>/<code>_distance</code> 호출 형태는 &quot;버전 핀 후 [확인필요]&quot;</strong>(임의 가정 금지).</li>
+</ul>
+</li>
+<li><code>docs/03_DATABASE/02_데이터모델_청크.md</code><ul>
+<li>§5 / §5.3 — ID 포맷 <code>{doc_id}#{chunk_index}</code>, <strong>재색인 정책 = 같은 <code>doc_id</code> 청크를 먼저 삭제 후 재삽입</strong>(stale 꼬리 청크 제거).</li>
+</ul>
+</li>
+<li><code>docs/04_아키텍처_API/02_내부API_인터페이스.md</code><ul>
+<li>§1 — <code>Chunk</code>/<code>SearchHit</code>/<code>Vector</code> 타입. §2.2 — <code>embed()</code>/<code>_assert_normalized</code>(norm 가드는 embed() 내부에서 이미 수행). §4.1 — <code>SearchHit.score</code>는 단계별 스케일 의존.</li>
+</ul>
+</li>
+</ul>
+<p>그 다음 이전 페이즈 산출물을 파일에서 확인한다. 없으면 이 페이즈를 시작하지 말고 빠진 산출물을 먼저 보고한다.</p>
+<pre><code class="language-bash"># 프로젝트 루트에서 실행. 진입점/시그니처 확인용.
+ls -la config/settings.yaml pyproject.toml
+sed -n &#39;1,80p&#39; src/embed/embedder.py     # embed()·assert_within_embed_limit·_assert_normalized 존재 확인
+sed -n &#39;1,80p&#39; src/ingest/chunker.py      # chunk()·Chunk 타입 존재 확인
+python -c &quot;import lancedb; print(&#39;lancedb&#39;, lancedb.__version__)&quot;
+grep -nE &#39;dim|norm|metric|nomic|model&#39; config/settings.yaml
+</code></pre>
+<p>확인해야 할 계약(이전 페이즈에서 이미 고정됨 — 재정의 금지, import 해서 사용):</p>
+<ul>
+<li><code>from src.embed.embedder import embed, assert_within_embed_limit</code><ul>
+<li><code>embed(texts: list[str], model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]</code> (빈입력 → <code>[]</code> 즉시, <strong>norm 가드는 embed() 반환 직전 <code>_assert_normalized</code>가 이미 수행</strong> — 내부 API §2.2 불변식2, 768차원·norm=1.0)</li>
+</ul>
+</li>
+<li><code>from src.ingest.chunker import chunk, Chunk</code><ul>
+<li><code>chunk(doc, *, max_chars=500, overlap_chars=80, doc_type=&quot;manual&quot;) -&gt; list[Chunk]</code></li>
+<li><code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code></li>
+</ul>
+</li>
+<li><code>config/settings.yaml</code>에 <code>embedding.model</code>·<code>embedding.dim=768</code>·<code>embedding.normalized=true</code>·<code>store.metric</code> 플래그가 있어야 한다(없으면 추가). <strong>주의: settings 키는 <code>embedding.model</code>이지만 헤더 필드명은 <code>embedding_model</code>이다</strong> — indexer가 <code>settings.embedding.model</code>을 읽어 헤더 <code>embedding_model</code>로 <strong>매핑</strong>한다(키 이름이 다름을 코드에서 명시).</li>
+</ul>
+<p>만약 <code>src/embed/embedder.py</code> 또는 <code>src/ingest/chunker.py</code>가 없으면 <strong>중단</strong>하고 &quot;페이즈 1/2 산출물 누락&quot;으로 보고한다. 이 페이즈에서 그 모듈을 새로 구현하지 않는다.</p>
+<h3>절대 규칙 (이 페이즈에서 위반 금지)</h3>
+<ul>
+<li><strong>INV-1 (재정규화 금지)</strong>: 임베딩은 이미 L2 정규화(norm=1.0). vector_store 안에서 벡터를 다시 정규화하지 마라.<ul>
+<li><strong>가드 위치 — 단일 책임</strong>: 정본 가드(<code>_assert_normalized</code>)는 이미 <code>embed()</code> 반환 직전에 &quot;빈입력 스킵 + 배치 전체 assert&quot;로 수행된다(내부 API §2.2). 따라서 <strong>store/indexer에서 norm을 재가드하지 않는 것이 기본</strong>이다. add 안에서 방어적 가드를 둘 경우 <strong>중복임을 주석으로 명시</strong>하고(<code># INV-1 재확인 가드: embed() 내부 _assert_normalized와 중복. 회귀 시 어느 가드가 트립했는지 구분 위해 메시지에 &#39;store-side&#39; 표기</code>), 정본과 동일하게 &quot;빈입력 스킵 후 배치 전체 <code>assert abs(n - 1.0) &lt; 1e-3</code>&quot;로 둔다. 개별 루프 assert 자체는 INV-1 위반이 아니나, 트립 출처가 모호해지지 않게 메시지로 구분한다.</li>
+</ul>
+</li>
+<li><strong>INV-3 (외부 API 금지)</strong>: 이 페이즈는 임베딩을 <code>src.embed.embedder.embed()</code>로만 얻는다. 코드 어디에도 <code>localhost:1234</code> 외 네트워크 호출·OpenAI/Anthropic/Cohere SDK 직접 호출이 있어선 안 된다.</li>
+<li><strong>metric 명시 (기본 L2 금지)</strong>: LanceDB <code>create_index</code>/검색 시 metric을 반드시 <code>&quot;cosine&quot;</code> 또는 <code>&quot;dot&quot;</code>로 명시한다. 기본값(L2 유클리드)에 의존하면 안 된다. nomic은 정규화 벡터이므로 cosine을 기본으로 하되 settings에서 바꿀 수 있게 한다. <strong><code>create_index</code>/<code>_distance</code> 정확한 호출 형태는 설치 버전 문서로 확인</strong>(스키마.md §4.1 주의 — &quot;버전 핀 후 [확인필요]&quot;). 임의 가정 금지.</li>
+<li><strong>헤더 = 커밋 마커</strong>: <code>_index_header.json</code>은 <strong>벡터 적재가 모두 끝난 뒤 마지막에</strong> 기록한다. 헤더 쓰기는 <code>os.replace</code>로 원자 교체(임시파일 → replace). 적재 도중 죽으면 헤더가 없거나 옛것이라 MISSING/REBUILD로 잡혀야 한다(무음으로 반쪽 인덱스 통과 금지).</li>
+<li><strong>INV-7 정신 (정량/단일변수)</strong>: 이 페이즈는 검색 품질을 바꾸지 않는다. fingerprint(핵심4필드)·schema_version을 헤더에 박아 다음 페이즈가 단일변수로 측정 가능하게 하고, 모델 교체(768→1024)가 fingerprint 기반 게이트로 REBUILD를 강제하게만 한다.</li>
+</ul>
+<h3>작업 지시</h3>
+<p><strong>1) <code>src/store/vector_store.py</code> 생성</strong></p>
+<p>(a) 타입·Protocol·상수</p>
+<ul>
+<li><code>SearchHit</code>/<code>Chunk</code>/<code>Vector</code>는 <strong>공통 타입 모듈에서 import</strong>한다(내부 API §1 정본). 공통 모듈이 아직 없으면 내부 API §1 시그니처 그대로 <code>@dataclass</code>로 정의(필드: <code>SearchHit(chunk, score, rank, source)</code> / <code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code>). 이 페이즈는 dense만 생성하므로 <code>source=&quot;dense&quot;</code>.</li>
+<li><code>VectorStore</code> Protocol 정의: <code>add</code>, <code>search</code>, <code>delete</code> 3개 메서드. <code>typing.Protocol</code>로 얇게.<ul>
+<li><code>add(self, chunks: list[Chunk], vectors: list[Vector]) -&gt; int</code>  # 실제 삽입된 개수 반환</li>
+<li><code>search(self, query_vector: Vector, *, top_k: int = 30) -&gt; list[SearchHit]</code>  # score 내림차순, source=&quot;dense&quot;</li>
+<li><code>delete(self, *, doc_id: str | None = None, chunk_ids: list[str] | None = None) -&gt; int</code></li>
+</ul>
+</li>
+</ul>
+<p>(b) <code>LanceDBStore(VectorStore)</code> 구현</p>
+<ul>
+<li>생성자: <code>LanceDBStore(db_path: str, table_name: str = &quot;chunks&quot;, *, dim: int = 768, metric: str = &quot;cosine&quot;)</code>. metric 검증: <code>metric in {&quot;cosine&quot;, &quot;dot&quot;}</code> 아니면 <code>ValueError</code>(L2 차단).</li>
+<li>스키마(스키마.md §1·§4.1 정본): <code>chunk_id</code>(PK, str, 포맷 <code>{doc_id}#{chunk_index}</code>), <code>doc_id</code>(str), <code>source_path</code>(str), <code>chunk_index</code>(int), <code>text</code>(str), <code>vector</code>(FixedSizeList[float32, dim]). <code>meta</code>의 <code>page</code>/<code>section</code>은 평면 컬럼(<code>page</code> int?, <code>section</code> str?), 그 외 키는 <code>meta_json</code>(JSON 문자열)으로 직렬화.</li>
+<li><code>add</code>:<ol>
+<li><code>chunks</code>와 <code>vectors</code> 길이 일치 assert.</li>
+<li>빈 텍스트/공백 청크는 스킵(벡터도 함께 스킵). 빈입력이면 0 반환.</li>
+<li><strong>norm 재확인 가드(선택, INV-1 중복 주석 필수)</strong>: 위 &quot;절대 규칙&quot;대로 두려면 빈입력 스킵 후 배치 전체 <code>n = math.sqrt(sum(x*x)); assert abs(n - 1.0) &lt; 1e-3, &quot;store-side norm guard: {n}&quot;</code>. 메시지에 <code>store-side</code> 표기. 재정규화 금지.</li>
+<li><strong>멱등 = doc_id 단위 delete-then-insert(정본 §5.3·스키마.md §8)</strong>: 같은 <code>doc_id</code>의 기존 청크를 <strong>먼저 모두 삭제한 뒤</strong> 새 청크를 삽입한다. 이렇게 해야 청크 수가 줄어든 재색인에서 <strong>stale 꼬리 청크가 고아로 남지 않는다.</strong> content_hash 기반 &quot;존재 시 스킵&quot; 멱등은 <strong>도입하지 않는다</strong>(고아 레코드를 남겨 정본 재색인 정책과 충돌). 반환은 이번에 삽입된 개수.<ul>
+<li>입력 <code>chunks</code>가 여러 <code>doc_id</code>를 포함할 수 있으므로, doc_id별로 묶어 각 doc_id에 대해 delete-then-insert.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><code>search</code>: LanceDB 검색에 metric을 <code>self.metric</code>으로 명시, <code>limit(top_k)</code>. <strong>거리→score 변환은 설치 버전 문서로 <code>_distance</code> 의미를 확인한 뒤 일관 변환</strong>(스키마.md §4.1). cosine에서 <code>_distance</code>가 <code>0=동일 ~ 2=반대</code>인지, <code>score = 1 - _distance</code>가 맞는지 <strong>버전 확인 전 단정 금지</strong>. 확인 결과를 코드 주석에 핀(예: <code># lancedb x.y: cosine _distance∈[0,2], score=1-_distance</code>). dot이면 내적값을 그대로 score. score 내림차순 정렬, <code>rank</code> 0부터, <code>source=&quot;dense&quot;</code>. 각 행을 <code>Chunk</code>로 복원(<code>meta_json</code> 역직렬화·<code>page</code>/<code>section</code> 합류)해 <code>SearchHit.chunk</code>에 담는다.</li>
+<li><code>delete</code>: <code>doc_id</code> 또는 <code>chunk_ids</code> 중 하나로 삭제, 삭제 행 수 반환. 둘 다 None이면 <code>ValueError</code>. (멱등 add가 내부적으로 이 delete를 doc_id로 호출.)</li>
+</ul>
+<p>(c) 사이드카 헤더 — <strong>정본 필드·fingerprint·HeaderState로 같은 파일 안 구현</strong></p>
+<ul>
+<li>경로: <code>os.path.join(db_path, &quot;_index_header.json&quot;)</code>.</li>
+<li><code>index_fingerprint</code>는 <strong>정본(docs/03_DATABASE/01 §2.2)에서 import 하거나 동일 구현 재현</strong>: 핵심4필드(<code>embedding_model</code>,<code>dim</code>,<code>normalized</code>,<code>metric</code>)를 <code>json.dumps(sort_keys=True, separators=(&quot;,&quot;,&quot;:&quot;))</code> 후 sha256 16자.</li>
+<li><code>HeaderState</code>(Enum): <code>OK</code>/<code>REBUILD</code>/<code>WARN</code>/<code>MISSING</code>(정본 §3.1).</li>
+<li>헤더 기록 내용(<strong>정본 필드명</strong>, <code>model</code>/<code>count</code>/<code>written_at</code> 같은 자체 이름 금지):<pre><code class="language-json">{
+  &quot;schema_version&quot;: 1,
+  &quot;embedding_model&quot;: &quot;&lt;settings.embedding.model 매핑&gt;&quot;,
+  &quot;dim&quot;: 768,
+  &quot;normalized&quot;: true,
+  &quot;metric&quot;: &quot;&lt;cosine|dot&gt;&quot;,
+  &quot;embedding_endpoint&quot;: &quot;http://localhost:1234/v1&quot;,
+  &quot;doc_prefix&quot;: &quot;search_document&quot;,
+  &quot;query_prefix&quot;: &quot;search_query&quot;,
+  &quot;chunker_version&quot;: &quot;v1&quot;,
+  &quot;built_at&quot;: &quot;&lt;ISO8601 UTC&gt;&quot;,
+  &quot;doc_count&quot;: &quot;&lt;distinct doc 수&gt;&quot;,
+  &quot;vector_count&quot;: &quot;&lt;적재 row 수&gt;&quot;,
+  &quot;fingerprint&quot;: &quot;&lt;index_fingerprint(embedding_model,dim,normalized,metric)&gt;&quot;
+}
+</code></pre>
+</li>
+<li><code>write_header(db_path, header: dict) -&gt; None</code>: <code>fingerprint</code>가 비어 있으면 <code>index_fingerprint(...)</code>로 채운다(또는 호출 전 채워졌는지 assert). 임시파일 <code>_index_header.json.tmp</code>에 쓰고 <code>os.replace(tmp, final)</code>로 원자 교체. <strong>반드시 벡터 적재 완료 후 호출</strong>.</li>
+<li><code>read_header(db_path) -&gt; dict | None</code>: 사이드카 json을 읽어 <code>stored</code> dict 반환. 파일 없음/JSON 파싱 실패 → <code>None</code>.</li>
+<li><code>check_header(current: dict, stored: dict | None) -&gt; HeaderState</code>: <strong>정본 §3.1 시그니처·상태전이 그대로</strong>. db_path 기반 <code>expected_*</code> 인자 형태는 <strong>폐기</strong>한다.<ol>
+<li><code>stored is None</code> → <code>MISSING</code>.</li>
+<li><code>current[&quot;schema_version&quot;] != stored[&quot;schema_version&quot;]</code> → <code>REBUILD</code>(정본: 포맷 불일치).</li>
+<li><code>cur_fp = index_fingerprint(current...)</code>; <code>stored.get(&quot;fingerprint&quot;)</code> 가 <code>None</code>(레거시 헤더, fingerprint 키 없음) → <code>REBUILD</code>; <code>cur_fp != stored_fp</code> → <code>REBUILD</code>(모델/차원/정규화/메트릭 변경, 768→1024 포함).</li>
+<li><code>current.get(&quot;chunker_version&quot;) != stored.get(&quot;chunker_version&quot;)</code> → <code>WARN</code>.</li>
+<li>그 외 → <code>OK</code>.</li>
+</ol>
+<ul>
+<li><strong>무음 빈 문자열/None 반환 금지</strong> — 항상 <code>HeaderState</code> 4값 중 하나.</li>
+</ul>
+</li>
+<li>(선택) <code>count</code> 정합 경고를 추가하고 싶으면 정본에 없는 자체 설계이므로 <code># [추정] 자체 설계 — 정본 WARN(chunker_version)과 병행</code> 태그를 달고 <code>WARN</code>로만 둔다(정본 상태전이를 덮어쓰지 말 것). schema_version은 정본대로 <strong>REBUILD</strong>이지 WARN이 아니다.</li>
+</ul>
+<p><strong>2) 인덱싱 파이프라인 <code>src/store/indexer.py</code> 생성</strong></p>
+<ul>
+<li><code>index_documents(docs, *, db_path, table_name=&quot;chunks&quot;, embed_model=&lt;settings.embedding.model&gt;, metric=&lt;settings.store.metric&gt;, max_chars=500, overlap_chars=80, chunker_version=&quot;v1&quot;) -&gt; dict</code> 함수 1개.</li>
+<li>흐름: 각 doc → <code>chunk(doc, max_chars=..., overlap_chars=...)</code> → 각 청크 텍스트에 <code>assert_within_embed_limit(text)</code>(INV-4 정신: 문자 수 기준 fail-closed) → 텍스트만 모아 배치 <code>embed(texts, model=embed_model)</code>(norm 가드는 embed 내부에서 수행) → <code>LanceDBStore.add(chunks, vectors)</code>(doc_id 단위 delete-then-insert 멱등) → <strong>모든 add 성공 후 마지막에</strong> <code>write_header(db_path, header)</code>.</li>
+<li>헤더 구성 시 <strong>settings 키 → 헤더 필드 매핑</strong>을 명시: <code>settings.embedding.model</code> → <code>embedding_model</code>, <code>settings.embedding.dim</code> → <code>dim</code>, <code>settings.embedding.normalized</code> → <code>normalized</code>, <code>settings.store.metric</code> → <code>metric</code>. <code>fingerprint</code>는 <code>index_fingerprint</code>로 계산. <code>doc_count</code>=distinct doc 수, <code>vector_count</code>=적재 row 수, <code>built_at</code>=현재 UTC ISO8601, <code>schema_version=1</code>, <code>chunker_version</code>=인자값, <code>embedding_endpoint</code>/<code>doc_prefix</code>/<code>query_prefix</code>는 settings 또는 상수.</li>
+<li>반환: <code>{&quot;inserted&quot;: &lt;int&gt;, &quot;skipped&quot;: &lt;int&gt;, &quot;doc_count&quot;: &lt;int&gt;, &quot;vector_count&quot;: &lt;int&gt;, &quot;header&quot;: &lt;header dict&gt;}</code>.</li>
+<li>헤더는 add가 한 건이라도 실패하면 쓰지 않는다(반쪽 인덱스가 OK로 보이면 안 됨).</li>
+</ul>
+<p><strong>3) <code>config/settings.yaml</code> 보강(없는 키만 추가)</strong></p>
+<pre><code class="language-yaml">embedding:
+  model: text-embedding-nomic-embed-text-v1.5   # → 헤더 embedding_model 로 매핑
+  dim: 768                                        # → 헤더 dim
+  normalized: true                                # → 헤더 normalized
+  endpoint: http://localhost:1234/v1              # → 헤더 embedding_endpoint
+  doc_prefix: search_document                     # → 헤더 doc_prefix
+  query_prefix: search_query                      # → 헤더 query_prefix
+store:
+  backend: lancedb
+  db_path: data/index/lancedb
+  table: chunks
+  metric: cosine        # cosine | dot  (L2 금지) → 헤더 metric
+chunker:
+  version: v1                                     # → 헤더 chunker_version
+</code></pre>
+<blockquote>
+<p>settings 키 이름(<code>embedding.model</code>)과 헤더 필드명(<code>embedding_model</code>)이 다르다. indexer가 매핑한다(위 §2).</p>
+</blockquote>
+<p><strong>4) 단위 테스트 <code>tests/test_vector_store.py</code> 생성</strong> (네트워크·실모델 금지 — 임베딩은 고정 더미 단위벡터로 모킹)</p>
+<ul>
+<li><code>_unit_vec(seed)</code>: 임의 768차원 만들고 L2 정규화해 norm=1.0인 더미 벡터 생성(테스트 픽스처 한정).</li>
+<li><strong>재색인 멱등(정본 §5.3) 테스트</strong>:<ul>
+<li>같은 <code>doc_id</code>의 같은 <code>chunks</code>+<code>vectors</code>로 <code>add</code> 두 번 → 테이블 row 수 1배 유지(중복 없음).</li>
+<li><strong>꼬리 청크 제거 검증(핵심)</strong>: 같은 <code>doc_id</code>를 청크 5개로 add → 같은 <code>doc_id</code>를 청크 3개로 재 add → 테이블에 그 doc_id 청크가 <strong>정확히 3개</strong>만 남고 chunk_index 3,4(꼬리)가 <strong>고아로 남지 않음</strong>을 검증.</li>
+<li>다른 doc_id는 영향받지 않음.</li>
+</ul>
+</li>
+<li><strong>헤더 원자성 테스트</strong>: <code>write_header</code> 중간 실패를 흉내(tmp 쓴 뒤 replace 전 예외) → 최종 파일이 옛 상태 그대로(부분 기록된 final 없음). 정상 경로에선 <code>os.replace</code>로 한 번에 바뀜.</li>
+<li><strong>fingerprint·4상태(HeaderState) 테스트</strong>:<ul>
+<li><code>read_header</code> 없음(stored=None) → <code>check_header(current, None) == HeaderState.MISSING</code>.</li>
+<li>동일 current/stored → <code>OK</code>.</li>
+<li><code>embedding_model</code>/<code>dim</code>/<code>normalized</code>/<code>metric</code> 중 하나 변경(fingerprint 달라짐) → <code>REBUILD</code>. 특히 <code>dim</code> 768→1024 → <code>REBUILD</code>.</li>
+<li><code>schema_version</code> 불일치 → <code>REBUILD</code>.</li>
+<li>stored에 <code>fingerprint</code> 키 없음(레거시) → <code>REBUILD</code>.</li>
+<li><code>chunker_version</code>만 불일치 → <code>WARN</code>.</li>
+</ul>
+</li>
+<li><strong>norm 가드 테스트(store-side 두는 경우)</strong>: norm≠1인 벡터 add → <code>AssertionError</code>(메시지에 <code>store-side</code>). 정규화 벡터는 통과하고 store가 값을 다시 정규화하지 않음을 값 비교로 확인.</li>
+<li><strong>metric 차단 테스트</strong>: <code>LanceDBStore(..., metric=&quot;l2&quot;)</code> → <code>ValueError</code>.</li>
+<li>테스트는 <code>tmp_path</code>(pytest 픽스처)로 임시 db_path 사용.</li>
+</ul>
+<h3>산출물</h3>
+<ul>
+<li><code>src/store/vector_store.py</code> (신규) — VectorStore Protocol, LanceDBStore(doc_id 단위 멱등), <code>index_fingerprint</code>(정본 재현/import), <code>read_header</code>/<code>write_header</code>/<code>check_header</code>(HeaderState)</li>
+<li><code>src/store/indexer.py</code> (신규) — index_documents 파이프라인(settings→헤더 필드 매핑)</li>
+<li><code>config/settings.yaml</code> (수정) — embedding/store/chunker 키 보강</li>
+<li><code>tests/test_vector_store.py</code> (신규) — 재색인 멱등(꼬리 청크 제거)·헤더 원자성·fingerprint 4상태·norm 가드·metric 차단</li>
+<li>(필요 시) <code>src/store/__init__.py</code></li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>pytest tests/test_vector_store.py -q</code> 전부 통과.</li>
+<li>metric이 코드/헤더 어디에도 L2로 새지 않음(아래 검증 명령 2가 비어 있음).</li>
+<li><code>_index_header.json</code>이 <strong>벡터 적재 성공 후에만</strong> 생성되고, <code>os.replace</code> 경로로 쓰임(코드 검사).</li>
+<li><code>check_header(current, stored)</code>가 <code>HeaderState</code>(OK/MISSING/REBUILD/WARN) <strong>Enum</strong>만 반환(str/빈값 없음). 정본 §3.1 상태전이와 일치(schema_version 불일치=REBUILD, 레거시 fingerprint 없음=REBUILD, chunker_version 불일치=WARN).</li>
+<li>재색인 멱등: 같은 doc_id를 5청크→3청크로 재 add 시 row 수가 정확히 3, 꼬리(4,5번) 고아 없음.</li>
+<li>헤더 필드명이 정본(<code>embedding_model</code>/<code>built_at</code>/<code>doc_count</code>/<code>vector_count</code>/<code>fingerprint</code> 등)과 일치(자체 이름 <code>model</code>/<code>count</code>/<code>written_at</code> 사용 안 함).</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash"># 1) 단위 테스트
+pytest tests/test_vector_store.py -q
+
+# 2) metric L2 누수 검사 (비어 있어야 통과)
+grep -rniE &#39;\bl2\b|euclidean&#39; src/store/ | grep -viE &#39;금지|forbid|no.l2&#39;
+
+# 3) 헤더가 마지막에 os.replace로 쓰이는지 코드 검사 (둘 다 매치돼야 함)
+grep -n &#39;os.replace&#39; src/store/vector_store.py
+grep -n &#39;write_header&#39; src/store/indexer.py
+
+# 4) 정본 헤더 필드명·HeaderState 사용 확인 (모두 매치돼야 함, 자체 이름 미사용)
+grep -nE &#39;embedding_model|built_at|doc_count|vector_count|fingerprint|HeaderState&#39; src/store/vector_store.py
+grep -nE &#39;&quot;model&quot;|&quot;count&quot;|&quot;written_at&quot;&#39; src/store/vector_store.py   # 비어 있어야 함(자체 필드명 금지)
+
+# 5) lancedb _distance 변환식이 버전 확인 주석과 함께 박혔는지 (가정 금지 게이트)
+grep -nE &#39;_distance|create_index&#39; src/store/vector_store.py
+#   → cosine score 변환 위에 &quot;# lancedb &lt;버전&gt;: cosine _distance∈[...] , score=...&quot; 주석이 있어야 함.
+#     설치 버전 문서로 _distance 스케일을 확인하기 전에는 1-distance를 임의로 단정하지 말 것.
+
+# 6) HeaderState 스모크 (정본 시그니처 check_header(current, stored))
+python - &lt;&lt;&#39;PY&#39;
+import tempfile
+from src.store.vector_store import (
+    index_fingerprint, write_header, read_header, check_header, HeaderState,
+)
+d = tempfile.mkdtemp()
+cur = {
+    &quot;schema_version&quot;: 1, &quot;embedding_model&quot;: &quot;text-embedding-nomic-embed-text-v1.5&quot;,
+    &quot;dim&quot;: 768, &quot;normalized&quot;: True, &quot;metric&quot;: &quot;cosine&quot;, &quot;chunker_version&quot;: &quot;v1&quot;,
+}
+cur[&quot;fingerprint&quot;] = index_fingerprint(cur[&quot;embedding_model&quot;], cur[&quot;dim&quot;], cur[&quot;normalized&quot;], cur[&quot;metric&quot;])
+print(&quot;missing -&gt;&quot;, check_header(cur, None))                                   # MISSING
+write_header(d, {**cur, &quot;embedding_endpoint&quot;:&quot;http://localhost:1234/v1&quot;,
+                 &quot;doc_prefix&quot;:&quot;search_document&quot;,&quot;query_prefix&quot;:&quot;search_query&quot;,
+                 &quot;built_at&quot;:&quot;2026-06-17T00:00:00Z&quot;,&quot;doc_count&quot;:1,&quot;vector_count&quot;:3})
+stored = read_header(d)
+print(&quot;ok -&gt;&quot;, check_header(cur, stored))                                      # OK
+print(&quot;model/dim change -&gt;&quot;, check_header({**cur, &quot;embedding_model&quot;:&quot;bge-m3&quot;, &quot;dim&quot;:1024,
+    &quot;fingerprint&quot;: index_fingerprint(&quot;bge-m3&quot;,1024,True,&quot;cosine&quot;)}, stored))   # REBUILD
+print(&quot;schema change -&gt;&quot;, check_header({**cur, &quot;schema_version&quot;:2}, stored))   # REBUILD
+print(&quot;legacy(no fp) -&gt;&quot;, check_header(cur, {k:v for k,v in stored.items() if k!=&quot;fingerprint&quot;}))  # REBUILD
+print(&quot;chunker change -&gt;&quot;, check_header({**cur, &quot;chunker_version&quot;:&quot;v2&quot;}, stored))  # WARN
+PY
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<p>페이즈 4(검색·하이브리드)는 <code>LanceDBStore.search(query_vector, top_k=30)</code>가 돌려주는 <code>list[SearchHit]</code>(source=&quot;dense&quot;)와 <code>_index_header.json</code>의 <code>embedding_model</code>/<code>dim</code>/<code>normalized</code>/<code>metric</code>/<code>fingerprint</code>를 이어받아, 질의 임베딩을 <strong>인덱싱과 동일한 모델·prefix(<code>query_prefix</code>)</strong> 로 만들어 dense 검색을 수행하고 BM25(rank_bm25)+RRF(k=60)로 결합한다. 검색 진입점에서 <code>check_header(current, read_header(db_path))</code>를 호출해 <code>REBUILD</code>/<code>MISSING</code>이면 <strong>검색을 차단</strong>(정본 §3.2)하고 재인덱싱(런북 §2)을 선행시킨다. 모델 교체(768→1024)는 fingerprint 불일치로 자동 REBUILD가 잡힌다.</p>
+<pre><code>
+**수정 요약(검수 지적 → 반영)**: check_header를 정본 `check_header(current, stored) -&gt; HeaderState`로 교체(db_path/expected_* 폐기), `read_header` 얇은 로더 추가 / 헤더 필드를 정본명(`embedding_model`·`built_at`·`doc_count`/`vector_count`·`fingerprint` 등)으로 교체하고 `index_fingerprint` 재현 지시 / 상태전이를 정본에 정렬(schema_version·레거시 fingerprint 없음=REBUILD, chunker_version=WARN, count=[추정] 병행) / content_hash 멱등 폐기 후 doc_id 단위 delete-then-insert + 꼬리 청크 제거 테스트 / 사전조건에 정본 4문서 읽기 명시 / `_distance` 변환에 버전 확인 게이트 추가 / norm 가드 중복(embed() 내부와 겹침) store-side 표기 명시 / settings.`embedding.model`→헤더 `embedding_model` 매핑 명시.
+</code></pre>
+</article>
+<article class="doc" data-id="07_실행프롬프트/05_페이즈4_search_eval.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 4: 검색(dense) · 평가 하네스 · 골든셋 → L1 게이트</h1>
+<h3>이 페이즈의 목표</h3>
+<p>로컬 nomic 임베딩 기반 dense-only 검색(<code>search()</code>)과 정량 평가 하네스(<code>evaluate()</code>)·골든셋을 구축하고, 회귀 케이스 &quot;연차 휴가 신청 절차&quot;가 <strong>정답 3위 · 정답score − 1위오답score ≈ −0.018(정답이 더 낮음) · Recall@1=0</strong>으로 재현됨을 정확히 측정한다. 이 페이즈는 결함을 <strong>고치는</strong> 단계가 아니라 베이스라인을 <strong>측정·고정</strong>하는 단계다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 컨텍스트 초기화 후 파일에서 상태 확인)</h3>
+<p>이 프롬프트만으로 실행하되, 아래 산출물이 이미 존재한다고 가정한다. <strong>먼저 파일 존재와 시그니처를 읽어 확인하라.</strong></p>
+<p>확인 명령:</p>
+<pre><code class="language-bash">ls -la config/settings.yaml \
+      src/embed/embedder.py \
+      src/store/vector_store.py \
+      src/ingest/chunker.py \
+      data/  2&gt;/dev/null
+python -c &quot;import lancedb, yaml, numpy; print(&#39;deps ok&#39;)&quot;
+</code></pre>
+<p>각 파일에서 다음을 코드로 확인한다(없거나 시그니처가 다르면 작업 중단하고 보고):</p>
+<ul>
+<li><code>src/embed/embedder.py</code> — <code>embed(texts: list[str], model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]</code> 가 존재하고 빈입력에 <code>[]</code> 반환, norm 가드(<code>abs(norm-1.0)&lt;1e-3</code>) 포함.</li>
+<li><code>src/store/vector_store.py</code> — <code>VectorStore</code> Protocol(<code>add</code>/<code>search</code>/<code>delete</code>)과 LanceDB 구현. <code>create_index</code>가 <strong>metric=cosine 또는 dot 명시</strong>(기본 L2 금지). 사이드카 <code>_index_header.json</code> 존재.</li>
+<li><code>src/ingest/chunker.py</code> — <code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code> 타입. <strong><code>chunk_id</code> 형식은 정본 계약 <code>{doc_id}#{chunk_index}</code></strong>(02_데이터모델_청크.md §5.1·§5.2). <code>chunk_index</code>는 <strong>0-base 정수</strong>이며, 파싱은 <code>chunk_id.rsplit(&quot;#&quot;,1)</code> 후 <code>int(idx)</code>이므로 <strong><code>#cNN</code>처럼 <code>int()</code>로 파싱 불가능한 형태를 만들지 말 것</strong>.</li>
+<li><code>config/settings.yaml</code> — 임베딩 모델명·dim(768)·norm·metric 플래그·<code>top_k</code>.</li>
+<li><code>data/</code> 아래 <strong>인덱싱 완료된 LanceDB 테이블</strong>이 있어야 한다. 없으면 보고 후 중단한다.</li>
+</ul>
+<p><strong>인덱싱 스크립트 부재 시 중단 사유 식별(단독 실행자용)</strong>: <code>data/</code>를 채우는 <strong>인덱싱 스크립트는 페이즈 3 이전(L1 인제스트)의 산출물이며, 03_개발환경셋업.md §5 scaffold에는 포함되지 않는다</strong>(scaffold는 <code>src/ingest/{loaders,chunker}.py</code>·<code>src/store/vector_store.py</code>의 <strong>빈 파일만</strong> 생성). 즉 사내문서(휴가규정·출장경비 포함)를 <code>loaders → chunker → embedder → vector_store.add</code>로 적재하는 <strong>인덱싱 진입점(예: <code>scripts/index.py</code> 또는 <code>src/ingest</code>의 실행 함수)은 이전 페이즈에서 작성·실행되어 있어야 한다.</strong> 이 진입점과 <code>data/</code> 인덱스가 둘 다 없으면 <strong>이 페이즈를 시작할 수 없다 → &quot;페이즈 3 인덱싱 산출물 부재&quot;로 명시 보고 후 중단</strong>(이 페이즈에서 인덱싱을 새로 만들지 말 것).</p>
+<p>회귀 케이스 정답 청크 id는 골든셋에 명시한다. 인덱스의 실제 <code>chunk_id</code>와 골든셋 <code>relevant_ids</code>가 <strong>반드시 일치</strong>해야 하므로, 인덱스에서 휴가규정 문서의 실제 chunk_id(<code>{doc_id}#{정수}</code> 형식)를 조회해 골든셋 값을 맞춘다.</p>
+<h3>절대 규칙 (이 페이즈에서 위반 금지)</h3>
+<ul>
+<li><strong>INV-1 재정규화 금지</strong>: 질의 임베딩도 nomic 출력 그대로 사용. 코드에서 L2 재정규화 추가 금지. norm 가드는 embedder에 이미 있음 — search에서 중복 정규화하지 말 것.</li>
+<li><strong>INV-3 외부 API 금지</strong>: 임베딩/검색 전 구간 <code>localhost:1234</code> 외 호출 0건. OpenAI/Anthropic/Cohere SDK 사용 금지.</li>
+<li><strong>INV-7 정량 증명</strong>: Recall@1/3/5/10·MRR·nDCG@10로 증명. 변수는 한 번에 하나만. 이 페이즈 베이스라인은 <strong>nomic 768 · dense-only(use_bm25=False) · 고정 청크</strong> 단일 구성으로만 측정.</li>
+<li><strong>INV-8 prefix 일관성</strong>: 질의 임베딩의 prefix 규칙은 <strong>인덱싱과 동일</strong>해야 한다. nomic은 prefix 효과 미미하나(0.687→0.695), 인덱싱이 prefix를 썼으면 질의도 동일 prefix, 안 썼으면 질의도 무. 둘이 다르면 측정 무효.</li>
+<li><strong>메트릭 일관성</strong>: 검색 거리 metric은 인덱스 생성 시 metric(cosine/dot)과 동일. L2(유클리드) 사용 금지.</li>
+<li>이 페이즈에서 BM25·RRF·리랭커·BGE-M3는 <strong>만들지도 호출하지도 않는다</strong>(다음 페이즈). 게이트는 &quot;결함 재현&quot;이므로 점수를 끌어올리려 손대지 말 것.</li>
+</ul>
+<h3>작업 지시</h3>
+<p><strong>1) <code>src/retrieve/search.py</code> — dense-only 검색 (신규)</strong></p>
+<p>타입과 시그니처는 계약 고정:</p>
+<pre><code class="language-python"># SearchHit(chunk, score, rank, source ∈ {&quot;dense&quot;,&quot;bm25&quot;,&quot;rrf&quot;,&quot;rerank&quot;})
+# rank: int — 0부터(02_내부API_인터페이스.md §1 &quot;rank 0부터&quot;, §4.1 &quot;rank 0부터 연속&quot;)
+def search(query: str, *, top_k: int = 30, use_bm25: bool = True) -&gt; list[SearchHit]:
+    ...
+</code></pre>
+<p>이 페이즈 구현 범위:</p>
+<ul>
+<li><code>use_bm25</code> 인자는 <strong>시그니처에 두되</strong>, 이 페이즈에서는 <code>use_bm25=False</code> 경로만 구현한다. <code>use_bm25=True</code>로 호출되면 <code>NotImplementedError(&quot;BM25 path: phase 5&quot;)</code>를 발생시킨다(무음 폴백 금지).</li>
+<li>dense 경로: <code>embed([query])[0]</code>로 질의 벡터 1개 생성(빈 질의면 빈 결과 반환). <code>VectorStore.search(query_vector, top_k=top_k)</code>로 후보를 받아 <strong>score 내림차순</strong> 정렬, <strong><code>rank</code>를 0부터 부여(0..N-1 연속, SearchHit.rank 계약 0-base)</strong>, <code>source=&quot;dense&quot;</code>로 <code>SearchHit</code> 리스트 반환.</li>
+<li>score는 &quot;클수록 유사&quot;가 되도록 정규화한다: vector_store가 <strong>distance</strong>(작을수록 유사)를 주면 cosine은 <code>score = 1 - distance</code>, dot은 음수화 없이 유사도 그대로 — vector_store가 실제로 무엇을 반환하는지 코드로 확인 후 단조 변환만 적용(임의 재정규화 금지).</li>
+<li>질의 임베딩 모델·prefix는 인덱싱과 동일(<code>config/settings.yaml</code>에서 읽음). 하드코딩 모델명과 settings가 다르면 settings 우선.</li>
+</ul>
+<p><strong>2) <code>eval/queries.yaml</code> — 골든셋 (신규)</strong></p>
+<p>형식(계약·문서 일치). <code>relevant_ids</code>의 chunk_id는 <strong>정본 형식 <code>{doc_id}#{정수}</code></strong>(02_데이터모델_청크.md §5.1)이며, <strong>아래 값은 자리표시자다 — 반드시 인덱스에서 조회한 실제 chunk_id로 대체하라</strong>(<code>#c03</code> 같은 비정수 접미는 <code>int()</code> 파싱 계약을 깨므로 금지):</p>
+<pre><code class="language-yaml">version: 1
+queries:
+  - id: q001
+    query: &quot;연차 휴가 신청 절차&quot;
+    relevant_ids: [&quot;&lt;휴가규정 doc_id&gt;#&lt;정수 chunk_index&gt;&quot;, &quot;...&quot;]   # 자리표시자 — 인덱스 실제값으로 교체
+    note: &quot;회귀 케이스. 현재 정답 3위, 정답score가 1위 오답(출장경비)보다 약 0.018 낮음(정답-오답≈-0.018). 목표 Recall@1=1&quot;
+    tags: [regression, hr, korean]
+  - id: q002
+    query: &quot;출장 경비 정산 한도&quot;
+    relevant_ids: [&quot;&lt;travel_expense doc_id&gt;#&lt;정수 chunk_index&gt;&quot;]      # 자리표시자 — 인덱스 실제값으로 교체
+    tags: [hr, korean]
+  # ... 최소 20개(권장 50개). 도메인 분산(인사/총무/규정/절차)
+</code></pre>
+<ul>
+<li>최소 20개 질의. <code>q001</code> 연차휴가 회귀 케이스 <strong>필수 포함</strong>, <code>tags</code>에 <code>regression</code>.</li>
+<li><code>relevant_ids</code>는 <strong>인덱스에 실재하는 chunk_id</strong>여야 한다. 인덱스에서 조회해 채운다(아래 검증 명령으로 존재 확인). 위 예시의 <code>#&lt;정수&gt;</code>/<code>&lt;doc_id&gt;</code>는 형식만 보여주는 <strong>자리표시자</strong>이며, 실제 인덱스 값으로 교체하지 않으면 게이트가 실패한다.</li>
+</ul>
+<p><strong>3) <code>eval/evaluate.py</code> — 평가 하네스 (신규)</strong></p>
+<p>시그니처는 계약 고정:</p>
+<pre><code class="language-python"># EvalResult(recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query)
+def evaluate(
+    golden_path: str = &quot;eval/queries.yaml&quot;,
+    *,
+    k_list: tuple[int, ...] = (1, 3, 5, 10),
+    use_bm25: bool = False,
+    use_rerank: bool = False,
+) -&gt; EvalResult:
+    ...
+</code></pre>
+<ul>
+<li>골든셋 로드 → 각 질의에 <code>search(q.query, top_k=max(k_list+(10,)), use_bm25=use_bm25)</code> 호출 → 반환된 <code>SearchHit</code> 리스트에서 <code>chunk.chunk_id</code>를 순위대로 추출.</li>
+<li>지표 계산(아래 위치 인덱스 <code>i</code>는 <strong>수학식의 1-base 순위</strong>이며 <code>SearchHit.rank</code>(0-base) 필드와 <strong>별개</strong>다 — 혼동 금지):<ul>
+<li><code>Recall@k</code> = hit 기반: 상위 k에 <code>relevant_ids</code>가 하나라도 있으면 1.0, 평균.</li>
+<li><code>MRR</code> = 첫 정답 순위의 역수 평균(<code>enumerate(ids, start=1)</code>의 위치 i 기준, 없으면 0).</li>
+<li><code>nDCG@10</code> = <code>DCG@10 = Σ rel(i)/log2(i+1)</code>(i는 1-base 위치), <code>IDCG@10</code>은 정답을 1위부터 채운 값, 이진 relevance.</li>
+</ul>
+</li>
+<li><code>use_rerank=True</code>는 이 페이즈에서 <code>NotImplementedError(&quot;rerank: phase 7&quot;)</code>.</li>
+<li><code>per_query</code>에 질의별 지표를 보존(회귀가 평균에 묻히지 않게).</li>
+<li>결과를 <code>reports/baseline.json</code>에 저장한다. <strong>저장 직전 반드시 <code>import os; os.makedirs(&quot;reports&quot;, exist_ok=True)</code>로 디렉토리를 생성한다</strong>(03_개발환경셋업.md §5 scaffold는 <code>reports/</code>를 만들지 않으므로 명시 생성 없으면 첫 실행에서 <code>FileNotFoundError</code>). 저장 내용은 풍부하게: <code>recall_at_1/3/5/10</code>·<code>mrr</code>·<code>ndcg_at_10</code>·<code>per_query</code>(질의별 상세) + 측정 구성 메타(모델명·dim·metric·<code>use_bm25=False</code>).</li>
+<li><code>evaluate</code> 모듈에 CLI 진입점(<code>python -m eval.evaluate</code> 또는 <code>python eval/evaluate.py</code>)을 두어 summary 표와 <code>q001</code> 회귀 행을 출력.</li>
+</ul>
+<p><strong>4) 베이스라인 리포트 저장</strong></p>
+<ul>
+<li><code>reports/baseline.json</code>은 <strong><code>evaluate()</code>가 단독으로 생성·기록한다</strong>(위 3의 풍부한 내용). 회귀 케이스 <code>q001</code>의 정답 순위(0-base <code>rank</code> 및 1-base 위치)와 1위 오답과의 score 격차(<code>정답score − 1위오답score</code>, 부호 음수 기대)를 <code>per_query</code>에 함께 기록한다. <strong>별도 검증 스크립트가 이 파일을 다시 <code>json.dump</code>로 덮어쓰지 않는다</strong>(읽어서 확인만).</li>
+</ul>
+<h3>산출물 (생성/수정 파일)</h3>
+<ul>
+<li>신규 <code>src/retrieve/search.py</code></li>
+<li>신규 <code>src/retrieve/__init__.py</code>(없으면)</li>
+<li>신규 <code>eval/queries.yaml</code></li>
+<li>신규 <code>eval/evaluate.py</code></li>
+<li>신규 <code>eval/__init__.py</code>(없으면)</li>
+<li>신규 <code>reports/baseline.json</code>(실측 결과 — <code>evaluate()</code>가 생성, <code>reports/</code>도 <code>os.makedirs</code>로 생성)</li>
+<li>(선택) <code>tests/test_search.py</code>, <code>tests/test_evaluate.py</code></li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>search(&quot;연차 휴가 신청 절차&quot;, use_bm25=False)</code>가 score 내림차순 <code>SearchHit</code> 리스트를 반환하고, 각 hit <code>source==&quot;dense&quot;</code>, <strong><code>rank</code>가 0..N-1 연속(0-base, SearchHit.rank 계약)</strong>.</li>
+<li><code>search(..., use_bm25=True)</code> 호출 시 <code>NotImplementedError</code> 발생(무음 폴백 없음).</li>
+<li><code>evaluate()</code>가 <code>EvalResult</code>(recall_at_1/3/5/10·mrr·ndcg_at_10·per_query)를 반환하고 <code>reports/baseline.json</code> 저장(<code>reports/</code>는 <code>os.makedirs(exist_ok=True)</code>로 생성, per_query·메타 포함).</li>
+<li><strong>L1 게이트(핵심)</strong>: <code>q001</code>(연차휴가)에서 <strong>정답 청크가 3위(1-base 위치 3, 0-base rank 2)</strong>, <strong><code>정답score − 1위오답(출장경비)score ≈ −0.018</code>(정답이 더 낮음, 부호 음수·자릿수 일치)</strong>, 따라서 <strong><code>recall_at_1</code> 기여 0 / 이 질의 RR = 1/3 ≈ 0.333</strong>. 이 결함이 <strong>정확히 재현</strong>되어야 통과. 우연히 1위로 나오면(측정 환경·prefix·metric 불일치 의심) <strong>통과 아님 → 인덱스/prefix/metric 일치를 재점검</strong>.</li>
+<li>골든셋 질의 ≥ 20개, <code>q001</code>에 <code>regression</code> 태그, 모든 <code>relevant_ids</code>가 **정본 형식 <code>{doc_id}#{정수}</code>**이며 인덱스에 실재(<code>#cNN</code> 비정수 접미 금지).</li>
+<li>외부 네트워크 호출 0건(임베딩만 localhost:1234).</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash"># 의존성·산출물 존재
+python -c &quot;import yaml,math,lancedb; print(&#39;deps ok&#39;)&quot;
+test -f eval/queries.yaml &amp;&amp; test -f src/retrieve/search.py &amp;&amp; test -f eval/evaluate.py || echo &quot;MISSING FILE&quot;
+
+# 골든셋 규모·회귀 태그·chunk_id 정본 형식(int 파싱 가능)
+python - &lt;&lt;&#39;PY&#39;
+import yaml
+g = yaml.safe_load(open(&quot;eval/queries.yaml&quot;, encoding=&quot;utf-8&quot;))[&quot;queries&quot;]
+assert len(g) &gt;= 20, f&quot;골든셋 {len(g)}개 &lt; 20&quot;
+q1 = next(q for q in g if q[&quot;id&quot;] == &quot;q001&quot;)
+assert &quot;regression&quot; in q1[&quot;tags&quot;] and &quot;연차&quot; in q1[&quot;query&quot;]
+# 모든 relevant_ids가 정본 {doc_id}#{정수} 형식인지(02_데이터모델_청크.md §5.2 int(idx) 파싱 계약)
+for q in g:
+    for cid in q[&quot;relevant_ids&quot;]:
+        doc_id, idx = cid.rsplit(&quot;#&quot;, 1)
+        int(idx)  # &#39;#c03&#39; 등 비정수면 ValueError로 즉시 실패
+print(f&quot;골든셋 {len(g)}개, q001 회귀 케이스 OK, chunk_id 정본 형식 OK&quot;)
+PY
+
+# use_bm25=True 차단 확인
+python - &lt;&lt;&#39;PY&#39;
+from src.retrieve.search import search
+try:
+    search(&quot;x&quot;, use_bm25=True); print(&quot;FAIL: BM25 should raise&quot;)
+except NotImplementedError: print(&quot;BM25 path blocked OK&quot;)
+PY
+
+# L1 게이트: 회귀 재현 확인 + 베이스라인 측정(저장은 evaluate()가 수행, 여기선 읽어서 확인만)
+python - &lt;&lt;&#39;PY&#39;
+from src.retrieve.search import search
+from eval.evaluate import evaluate
+import json, os, yaml
+
+g = yaml.safe_load(open(&quot;eval/queries.yaml&quot;, encoding=&quot;utf-8&quot;))[&quot;queries&quot;]
+rel = set(next(q for q in g if q[&quot;id&quot;]==&quot;q001&quot;)[&quot;relevant_ids&quot;])
+
+hits  = search(&quot;연차 휴가 신청 절차&quot;, top_k=10, use_bm25=False)
+ids   = [h.chunk.chunk_id for h in hits]
+score = {h.chunk.chunk_id: h.score for h in hits}
+# 1-base 위치(수학식 순위). SearchHit.rank(0-base) 필드와 별개.
+pos   = next((i for i, c in enumerate(ids, 1) if c in rel), None)
+print(&quot;정답 순위(1-base):&quot;, pos, &quot;(기대 3)&quot;)
+# 정본 부호 규약: 정답score - 1위오답score ≈ -0.018 (정답이 더 낮음)
+gap = round(max(score[c] for c in rel if c in score) - score[ids[0]], 6)
+print(&quot;정답score - 1위오답score 격차:&quot;, gap, &quot;(기대 ≈ -0.018, 정답이 더 작음)&quot;)
+assert pos == 3, &quot;L1 게이트 실패: 회귀가 3위로 재현되지 않음&quot;
+
+res = evaluate(&quot;eval/queries.yaml&quot;, use_bm25=False)  # reports/baseline.json은 evaluate() 내부에서 os.makedirs 후 저장
+print(&quot;Recall@1:&quot;, res.recall_at_1, &quot;MRR:&quot;, res.mrr, &quot;nDCG@10:&quot;, res.ndcg_at_10)
+
+# 덮어쓰지 않고 읽어서 확인만(풍부한 per_query/메타 보존)
+assert os.path.exists(&quot;reports/baseline.json&quot;), &quot;baseline.json 미생성(evaluate가 os.makedirs+저장해야 함)&quot;
+saved = json.load(open(&quot;reports/baseline.json&quot;, encoding=&quot;utf-8&quot;))
+assert &quot;per_query&quot; in saved, &quot;baseline.json에 per_query 누락(스칼라만 저장됨 — 정보 손실)&quot;
+print(&quot;baseline.json 확인 완료(per_query·메타 보존)&quot;)
+PY
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<p><code>search()</code>/<code>evaluate()</code>/골든셋·<code>reports/baseline.json</code>이 고정 베이스라인으로 존재한다. 다음 페이즈(BM25·RRF 하이브리드)는 <code>search(use_bm25=True)</code> 경로를 구현하고 <strong>동일 골든셋·동일 evaluate로 변수 1개만 토글</strong>해 베이스라인과 비교한다. 회귀 케이스 <code>q001</code>의 Recall@1=0이 깨지지 않았는지(또는 의도적으로 0→1 개선됐는지)를 per_query로 확인한다.</p>
+</article>
+<article class="doc" data-id="07_실행프롬프트/06_페이즈5_hybrid.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 5: BM25 · RRF 하이브리드 검색 (L2)</h1>
+<h3>이 페이즈의 목표</h3>
+<p>Kiwi 형태소 토큰화 기반 BM25 검색 경로를 추가하고, dense 결과와 BM25 결과를 순위 기반 RRF(k=60)로 결합한다. 그 후 evaluate로 <code>dense만</code> vs <code>+bm25</code> vs <code>+rrf</code> 기여도를 변수 1개씩만 바꿔 정량 측정한다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 파일에서 상태 확인)</h3>
+<p>컨텍스트가 초기화된 상태에서 시작하므로, 코드를 쓰기 전에 아래를 <strong>파일로 직접 읽어</strong> 존재를 확인한다.</p>
+<pre><code class="language-bash"># 1) 임베딩/검색/평가가 이미 있는지 확인
+ls -1 src/embed/embedder.py src/store/vector_store.py src/retrieve/search.py eval/queries.yaml eval/evaluate.py config/settings.yaml 2&gt;&amp;1
+# 2) 인덱스 사이드카 헤더 존재 확인 (glob 비의존, find 기반). 0건이면 인덱스 부재이므로 즉시 중단(아래 차단 조건)
+find data -name _index_header.json 2&gt;/dev/null
+# 3) dense 전용 search()가 동작하고 회귀 케이스가 평가되는지 확인 (이 결과가 페이즈5 baseline)
+#    주의: 직전 페이즈 상태에 따라 evaluate가 아직 use_bm25를 search로 전달하지 않을 수 있다.
+#    그 경우 이 baseline은 dense-only와 동일하며, 본 페이즈에서 use_bm25 전달을 추가한다.
+python -c &quot;from eval.evaluate import evaluate; r=evaluate(use_bm25=False, use_rerank=False); print(&#39;dense recall@1=&#39;, r.recall_at_1, &#39;mrr=&#39;, r.mrr)&quot;
+</code></pre>
+<ul>
+<li><code>src/embed/embedder.py</code>: <code>embed(texts, model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]</code> 가 있어야 한다(norm 가드 포함).</li>
+<li><code>src/store/vector_store.py</code>: VectorStore Protocol(add/search/delete)과 LanceDB 구현, 사이드카 <code>_index_header.json</code>이 있어야 한다.</li>
+<li><code>src/retrieve/search.py</code>: dense 전용 <code>search(query, *, top_k=30, use_bm25=True) -&gt; list[SearchHit]</code>가 이미 있어야 한다(이번에 BM25 경로를 채운다).</li>
+<li><code>eval/queries.yaml</code>: 골든셋. 회귀 케이스 &quot;연차 휴가 신청 절차&quot; → 정답 휴가규정이 <strong>반드시</strong> 포함되어 있어야 한다.</li>
+<li><code>eval/evaluate.py</code>: <code>evaluate(...) -&gt; EvalResult</code>가 있어야 한다(이번에 <code>use_bm25</code> 스위치를 실제로 검색에 전달한다).</li>
+<li><strong>차단 조건 (선결, 미충족 시 즉시 중단)</strong>:<ul>
+<li>위 파일 중 하나라도 없으면 <strong>이 페이즈를 시작하지 말고</strong> 직전 페이즈로 돌아간다.</li>
+<li><code>find data -name _index_header.json</code>이 <strong>0건</strong>이거나, 인덱스에 골든셋 <strong>정답 청크(회귀 케이스 휴가규정 포함)가 적재돼 있지 않으면</strong> 이 페이즈를 시작하지 않는다. 인덱스/정답 청크 적재는 BM25 코퍼스 구성과 회귀 측정의 선결 조건이며, 부재 시 검증 명령(#2·#3 evaluate)이 빈 코퍼스로 전부 깨진다. 인덱싱은 이 페이즈 범위가 아니므로 직전 페이즈로 돌아간다.</li>
+</ul>
+</li>
+</ul>
+<p>타입 계약(고정):</p>
+<ul>
+<li><code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code></li>
+<li><code>SearchHit(chunk, score, rank, source ∈ {dense, bm25, rrf, rerank})</code> — <strong><code>rank</code>는 0-기반(첫 결과 rank=0). 계약 §1·§4.1.</strong></li>
+<li><code>EvalResult(recall_at_1/3/5/10, mrr, ndcg_at_10, per_query)</code> — <code>per_query</code>는 <code>list[dict]</code> 질의별 상세(스키마는 작업 지시 3에서 고정).</li>
+</ul>
+<h3>절대 규칙 (이 페이즈에서 위반 금지)</h3>
+<ul>
+<li><strong>INV-3</strong>: 외부 API 금지. BM25/RRF는 전부 로컬 인메모리 연산. 질의 임베딩도 <code>base_url=localhost:1234</code> 외 호출 0건.</li>
+<li><strong>INV-7</strong>: 정량 증명. 변수는 <strong>한 번에 1개만</strong> 바꾼다(<code>dense만</code> → <code>+bm25</code> → <code>+rrf</code> 순서). 회귀 케이스 합격선 <code>Recall@1=1</code>은 <strong>이 페이즈의 하드 게이트가 아니다</strong> — SSOT(§A-2④, 평가하네스_Recall 라인17-20·143, 회귀케이스 절)는 이 -0.018/3위 실패의 직접 교정 수단을 **L2 임베딩 교체(BGE-M3) 또는 L3 리랭커(BGE-reranker-v2-m3)**로 규정한다. RRF 하이브리드만으로 이 질의가 1위로 전환된다는 실측 근거는 없다. 이 페이즈에서는 RRF 결합 후 회귀 케이스 순위를 <strong>측정·관찰</strong>할 뿐이며, 1로 전환되지 않아도 INV-7 위반이 아니다(다음 레버=리랭커로 이월). 미측정 결과를 &quot;반드시 1로 전환&quot;이라 단정하는 것 자체가 발명 금지 위반이다.</li>
+<li><strong>INV-1</strong>: 임베딩 재정규화 금지. dense 경로에서 nomic 벡터(norm=1.0)를 다시 정규화하지 않는다. 이 페이즈는 임베딩 코드를 건드리지 않는다.</li>
+<li><strong>INV-8</strong>: prefix는 nomic에서 미미. dense 질의 임베딩은 <strong>인덱싱과 동일 모델·동일 prefix 규칙</strong>을 그대로 따른다(BM25 추가를 빌미로 prefix를 바꾸지 않는다).</li>
+<li>dense 검색 점수 체계는 그대로 둔다. <strong>RRF는 점수가 아니라 순위(rank) 기반</strong>이므로 dense·BM25의 점수 스케일을 섞지 않는다.</li>
+</ul>
+<h3>작업 지시</h3>
+<h4>1) <code>src/retrieve/fusion.py</code> — RRF (신규)</h4>
+<p>순위 기반 RRF. 점수는 절대 쓰지 않는다.</p>
+<pre><code class="language-python">def rrf(rank_lists: list[list[str]], k: int = 60) -&gt; dict[str, float]:
+    &quot;&quot;&quot;
+    rank_lists: 각 검색기의 결과를 &#39;순위 오름차순&#39;으로 정렬한 id 리스트들.
+                (rank_lists[0] = dense의 id들, rank_lists[1] = bm25의 id들 ...)
+    반환: {id: rrf_score} — rrf_score = Σ 1/(k + rank),  rank는 1부터 시작.
+    동일 id가 여러 리스트에 등장하면 점수 합산. 점수 내림차순이 최종 순위.
+
+    주: 여기 docstring의 &#39;rank 1부터&#39;는 fusion 내부 표기일 뿐이며,
+        SSOT §B-6의 enumerate(0-base)+1.0/(k+rank+1) 수식과 동치다
+        (내부 rank=0-base일 때 1/(k+rank+1) = 내부 rank=1-base일 때 1/(k+rank)).
+        이 rrf_score는 점수이며, SearchHit.rank(0-기반)와는 별개다.
+    &quot;&quot;&quot;
+</code></pre>
+<ul>
+<li><code>rank</code>는 fusion 내부에서 1-기반으로 표기(첫 결과 rank=1)하되 위 수식 동치를 docstring에 명기. 빈 리스트·중복 id 방어.</li>
+<li>정렬 동률 시 결정적(deterministic) 정렬을 위해 id 기준 2차 정렬키를 둔다.</li>
+</ul>
+<h4>2) <code>src/retrieve/search.py</code> — BM25 경로 + 하이브리드 결합 (수정)</h4>
+<p>시그니처 고정: <code>search(query, *, top_k=30, use_bm25=True) -&gt; list[SearchHit]</code></p>
+<ul>
+<li><strong>Kiwi 토큰화</strong>: <code>kiwipiepy</code>의 Kiwi로 형태소 분석 후 토큰(형태소 표층형) 리스트를 만든다. 동일 토크나이저를 인덱싱 시점과 질의 시점에 <strong>동일하게</strong> 적용한다.</li>
+<li><strong>BM25 인덱스</strong>: <code>rank_bm25</code>(BM25Okapi)로 전체 청크 코퍼스를 인덱싱. 코퍼스는 vector_store에서 전체 Chunk를 읽어 구성한다.</li>
+<li><strong>Kiwi 버전 = BM25 인덱스 무효화 키</strong>: BM25 인덱스를 디스크에 캐시할 경우, 사이드카 메타에 <code>kiwi_version</code>(<code>kiwipiepy.__version__</code> 또는 <code>Kiwi().version</code> 실측)과 코퍼스 청크 수·해시를 기록한다. 로드 시 현재 Kiwi 버전과 다르면 <strong>인덱스를 폐기하고 재빌드</strong>(무음 통과 금지, 재빌드 로그 남김). 캐시를 안 쓰면 매 호출 인메모리 재빌드라도 무방하나, 그 경우에도 사용한 <code>kiwi_version</code>을 SearchHit/로그로 노출한다.</li>
+<li><strong>dense 경로</strong>: 기존대로 질의 임베딩(<code>embed([query])[0]</code>) → vector_store.search로 상위 후보. 점수 내림차순.</li>
+<li><strong>결합</strong>:<ul>
+<li><code>use_bm25=False</code>: dense 결과만 반환. 각 hit의 <code>source=&quot;dense&quot;</code>, <code>score</code>=dense 점수, <code>rank</code>=<strong>0-기반(첫 결과 rank=0, SearchHit 계약 §1/§4.1)</strong>.</li>
+<li><code>use_bm25=True</code>: dense 상위 <code>top_k</code>개 id 순위 리스트와 BM25 상위 <code>top_k</code>개 id 순위 리스트를 만들어 <code>rrf([dense_ids, bm25_ids], k=60)</code>로 결합. 결과를 rrf_score 내림차순으로 정렬, 각 hit의 <code>source=&quot;rrf&quot;</code>, <code>score</code>=rrf_score, <code>rank</code>=<strong>0-기반(첫 결과 rank=0, SearchHit 계약 §1/§4.1)</strong>. 최종 <code>top_k</code>개 반환.</li>
+</ul>
+</li>
+<li>BM25/dense 각각은 내부적으로 최소 <code>top_k</code>개를 확보한 뒤 RRF에 넣는다(한쪽만 있는 id도 RRF 합산 대상).</li>
+<li>반환은 항상 <code>score</code> 내림차순, <code>rank</code>는 그 순서대로 <strong>0부터</strong> 연속(SearchHit 계약).</li>
+</ul>
+<h4>3) <code>eval/evaluate.py</code> — 스위치 전달 + per_query 스키마 고정 (수정)</h4>
+<p>시그니처 고정: <code>evaluate(golden_path=&quot;eval/queries.yaml&quot;, *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False) -&gt; EvalResult</code></p>
+<ul>
+<li><code>evaluate</code> 내부에서 <code>search(query, top_k=max(k_list), use_bm25=use_bm25)</code>로 호출하도록 <code>use_bm25</code>를 <strong>키워드 인자로 그대로 전달</strong>한다(<code>search</code>는 키워드 전용 시그니처). 이 페이즈에서 <code>use_rerank</code>는 전달만 받고 동작은 추가하지 않음 — 다음 페이즈.</li>
+<li><strong>per_query 스키마 고정 (검증 명령 #3이 읽는 키와 일치시킬 것)</strong>: <code>per_query</code>는 <code>list[dict]</code>이며, 각 항목은 최소 아래 키를 갖는다(키 표기는 <code>@</code> 구분자 — 평가하네스 문서 rows와 통일).<ul>
+<li><code>id</code>: 질의 식별자(회귀 케이스는 <code>q001</code>).</li>
+<li><code>query</code>: 질의 문자열.</li>
+<li><code>gold_rank</code>: 해당 질의에서 정답 청크가 검색 결과에서 차지한 순위. <strong>SearchHit.rank와 동일하게 0-기반</strong>(정답이 1위면 <code>gold_rank=0</code>). 정답이 결과에 없으면 <code>None</code>(또는 미발견 표식).</li>
+<li><code>recall@1</code>, <code>mrr</code>, <code>ndcg@5</code>: 질의별 지표(<code>@</code> 표기).</li>
+<li>회귀 케이스 추적이 가능하도록 <code>gold_rank</code>를 반드시 채운다.</li>
+</ul>
+</li>
+</ul>
+<h4>4) <code>config/settings.yaml</code> — 플래그 (수정)</h4>
+<ul>
+<li><code>retrieve.use_bm25</code>(기본 true), <code>retrieve.rrf_k</code>(기본 60), <code>retrieve.top_k</code>(기본 30) 항목 추가.</li>
+<li><strong>settings 기본값 적용 주체 고정</strong>: settings의 이 기본값은 <strong>호출자(예: <code>cli</code>/<code>answer</code>)가 읽어 <code>search</code>/<code>evaluate</code>에 키워드 인자로 주입</strong>한다. <code>search</code>의 고정 시그니처 기본값(<code>top_k=30</code>, <code>use_bm25=True</code>)은 <strong>인자가 명시되지 않았을 때의 함수 자체 폴백</strong>이며, 호출자가 settings 값을 명시 주입하면 그 값이 우선한다(인자 우선). 즉 <code>search</code> 내부에서 settings를 조회하지 않는다(우선순위 충돌 제거 — settings→호출자→인자 명시 순으로 좁혀지고, 최종은 항상 명시 인자가 이김).</li>
+</ul>
+<h4>5) <code>tests/test_fusion.py</code> — RRF 단위 테스트 (신규)</h4>
+<ul>
+<li>단일 리스트 입력 시 순위 보존.</li>
+<li>두 리스트에서 공통 id가 양쪽 상위면 단독 1위 id들보다 높게 합산되는 케이스.</li>
+<li>빈 리스트·중복 id 방어.</li>
+<li>동률 결정성(같은 입력 → 같은 순서).</li>
+</ul>
+<h3>산출물</h3>
+<ul>
+<li>신규: <code>src/retrieve/fusion.py</code></li>
+<li>수정: <code>src/retrieve/search.py</code> (BM25 경로 + RRF 결합)</li>
+<li>수정: <code>eval/evaluate.py</code> (<code>use_bm25</code> 전달 + per_query 스키마)</li>
+<li>수정: <code>config/settings.yaml</code> (use_bm25 / rrf_k / top_k)</li>
+<li>신규: <code>tests/test_fusion.py</code></li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>tests/test_fusion.py</code> 전부 통과.</li>
+<li>세 변수 측정이 <strong>각각 1개 변수만</strong> 바뀐 채로 돌아가고 수치가 출력된다: <code>dense만</code> / <code>+bm25(RRF off, bm25 단독)</code>는 옵션, <strong>필수는 <code>dense만</code> vs <code>+rrf(use_bm25=True)</code></strong>.</li>
+<li><strong>회귀 케이스 측정·관찰 (게이트 아님)</strong>: &quot;연차 휴가 신청 절차&quot;가 <code>dense만</code>에서 정답 휴가규정 3위(<code>gold_rank=2</code>, Recall@1=0)였던 상태를 baseline으로, <code>use_bm25=True</code>(RRF 결합) 후 정답 순위를 per_query의 <code>gold_rank</code>에서 <strong>측정·기록</strong>한다. <code>gold_rank=0</code>(=Recall@1=1)으로 전환되면 기록하고, 전환되지 않으면 다음 레버(L3 리랭커 BGE-reranker-v2-m3, §A-2④)로 <strong>이월</strong>한다 — 하이브리드만으로 1 전환이 보장된 실측은 없으며(미측정 결과 발명 금지), 미전환이 곧 INV-7 위반은 아니다.</li>
+<li><strong>비감소 게이트 (유지)</strong>: RRF 결합이 골든셋 <strong>전체 평균</strong> <code>recall@k</code>를 dense-only 대비 떨어뜨리지 않는다(비감소). 떨어지면 변수 점검. 이 게이트는 단일 회귀 질의의 1 전환 강제와 <strong>분리</strong>한다.</li>
+<li>dense 임베딩 코드·norm 가드는 변경 없음(INV-1). 외부 API 호출 0건(INV-3).</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash"># 1) RRF 단위 테스트
+pytest tests/test_fusion.py -q
+
+# 2) 변수 1개씩 측정 (dense만 vs +rrf) — 전체 평균 비감소 게이트(유지)
+python -c &quot;
+from eval.evaluate import evaluate
+d = evaluate(use_bm25=False, use_rerank=False)
+h = evaluate(use_bm25=True,  use_rerank=False)
+print(&#39;dense  recall@1/3/5/10:&#39;, d.recall_at_1, d.recall_at_3, d.recall_at_5, d.recall_at_10, &#39;mrr=&#39;, d.mrr)
+print(&#39;+rrf   recall@1/3/5/10:&#39;, h.recall_at_1, h.recall_at_3, h.recall_at_5, h.recall_at_10, &#39;mrr=&#39;, h.mrr)
+assert h.recall_at_1 &gt;= d.recall_at_1, &#39;RRF가 dense보다 전체 평균 recall@1을 떨어뜨림 — 변수 점검(비감소 게이트)&#39;
+&quot;
+
+# 3) 회귀 케이스 측정·관찰 (게이트 아님 — assert로 페이즈 진행 차단하지 않음)
+python -c &quot;
+from eval.evaluate import evaluate
+d = evaluate(use_bm25=False, use_rerank=False)
+h = evaluate(use_bm25=True,  use_rerank=False)
+def find(pq): return next(q for q in pq if &#39;연차 휴가 신청 절차&#39; in q[&#39;query&#39;])
+dq, hq = find(d.per_query), find(h.per_query)
+print(&#39;회귀케이스(dense) gold_rank=&#39;, dq.get(&#39;gold_rank&#39;), &#39;recall@1=&#39;, dq.get(&#39;recall@1&#39;))
+print(&#39;회귀케이스(+rrf)  gold_rank=&#39;, hq.get(&#39;gold_rank&#39;), &#39;recall@1=&#39;, hq.get(&#39;recall@1&#39;))
+if hq.get(&#39;gold_rank&#39;) == 0:
+    print(&#39;관찰: RRF 결합으로 회귀 케이스 0→1 전환됨 — 기록.&#39;)
+else:
+    print(&#39;관찰: 하이브리드만으로 1 전환 안 됨 — 정상 범위. 다음 레버=L3 리랭커(BGE-reranker-v2-m3, §A-2④)로 이월.&#39;)
+&quot;
+
+# 4) Kiwi 버전(BM25 무효화 키) 실측 출력
+python -c &quot;import kiwipiepy; print(&#39;kiwi_version=&#39;, getattr(kiwipiepy,&#39;__version__&#39;,&#39;unknown&#39;))&quot;
+
+# 5) 외부 API 호출 0건 가드 — localhost 외 base_url 흔적 검사
+grep -rEn &quot;api\.openai\.com|api\.anthropic\.com|api\.cohere|generativelanguage&quot; src/ &amp;&amp; echo &quot;VIOLATION INV-3&quot; || echo &quot;OK: 외부 API 흔적 없음&quot;
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<ul>
+<li>이 페이즈의 산출물인 <code>search(..., use_bm25=True)</code>의 RRF 상위 후보(<code>source=&quot;rrf&quot;</code>, <code>top_k</code>개)가 페이즈 6(BGE-reranker-v2-m3 리랭킹, L3)의 입력 <code>hits</code>가 된다 — <code>rerank(query, hits, *, top_n=5)</code>.</li>
+<li>회귀 케이스 &quot;연차 휴가 신청 절차&quot;의 1 전환이 이 페이즈(하이브리드)에서 관찰되지 않았다면, 그 0→1 전환은 **L3 리랭커 또는 L2 임베딩 교체(BGE-M3)**의 단독변수 측정 게이트로 이월된다(§A-2④, INV-7).</li>
+<li><code>evaluate(..., use_rerank=True)</code> 경로는 이 페이즈에서 인자만 받아둔 상태이며, 다음 페이즈에서 실제 리랭킹 동작을 연결한다.</li>
+</ul>
+</article>
+<article class="doc" data-id="07_실행프롬프트/07_페이즈6_bge.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 6: BGE-M3 임베딩 교체 실험 (측정 게이트)</h1>
+<h3>이 페이즈의 목표</h3>
+<p>현행 nomic 임베딩(768차원)을 BGE-M3(1024차원)로 교체하는 단독변수 실험을 수행하고, 동일 골든셋에서 Recall@1 개선이 숫자로 확인될 때만 채택한다(미개선 시 nomic 인덱스로 롤백). 차원 변경에 따른 전체 재인덱싱과 norm 재측정·metric 재확인을 동반한다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 파일에서 상태 확인)</h3>
+<p>컨텍스트가 초기화된 상태이므로, 코드를 짜기 전에 아래를 <strong>파일에서 직접 읽어</strong> 현재 상태를 확인한다.</p>
+<ol>
+<li><strong>임베딩 래퍼 존재 확인</strong>: <code>src/embed/embedder.py</code>에 <code>embed(texts, model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]</code>와 <code>assert_within_embed_limit(...)</code>, norm 가드(<code>abs(norm-1.0)&lt;1e-3</code>)가 있는지 확인.<pre><code class="language-bash">grep -n &quot;def embed\|def assert_within_embed_limit\|norm&quot; src/embed/embedder.py
+</code></pre>
+</li>
+<li><strong>벡터스토어·헤더 확인</strong>: <code>src/store/vector_store.py</code>에 LanceDB VectorStore Protocol(add/search/delete)과 사이드카 <code>_index_header.json</code>(os.replace 원자 교체) 로직이 있는지 확인. 헤더 정본 필드가 <code>embedding_model</code>/<code>dim</code>/<code>normalized</code>/<code>metric</code> 4필드인지 본다(필드명 <code>model</code> 아님).<pre><code class="language-bash">grep -n &quot;_index_header\|create_index\|metric\|dim\|embedding_model&quot; src/store/vector_store.py
+</code></pre>
+</li>
+<li><strong>평가 하네스 확인</strong>: <code>eval/evaluate.py</code>의 <code>evaluate(golden_path=&quot;eval/queries.yaml&quot;, *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False) -&gt; EvalResult</code>(정본 하네스는 <code>search_fn</code> 주입형 — 인덱스/모델 인자 없음)와 <code>eval/queries.yaml</code>(골든셋, 회귀 케이스 포함)이 있는지 확인.<pre><code class="language-bash">grep -n &quot;def evaluate\|search_fn\|recall_at_1&quot; eval/evaluate.py &amp;&amp; grep -n &quot;연차 휴가 신청 절차&quot; eval/queries.yaml
+</code></pre>
+</li>
+<li><strong>설정 확인</strong>: <code>config/settings.yaml</code>에 임베딩 모델명·<code>dim</code>·<code>norm</code>·<code>metric</code>·<code>prefix</code>·활성 <code>index_dir</code> 플래그가 있는지 확인.<pre><code class="language-bash">grep -n &quot;embed\|dim\|norm\|metric\|model\|index_dir\|prefix&quot; config/settings.yaml
+</code></pre>
+</li>
+<li><strong>search/evaluate의 설정 전파 경로 확인</strong>: <code>src/retrieve/search.py</code>의 <code>search(query, *, top_k=30, use_bm25=True)</code>가 활성 임베딩 모델·prefix·<code>index_dir</code>을 <code>config/settings.yaml</code>에서 읽어 일관 사용하는지(질의 임베딩 = 인덱싱과 동일 모델·prefix 규칙 강제), 그리고 헤더 <code>dim</code>과 질의 임베딩 <code>dim</code> 불일치를 조기 차단하는 가드가 있는지 확인. before/after 양쪽에서 이 동일 임베딩 규칙이 지켜지는 구조여야 한다.<pre><code class="language-bash">grep -n &quot;def search\|settings\|index_dir\|embed\|prefix\|dim&quot; src/retrieve/search.py
+</code></pre>
+</li>
+<li><strong>재인덱싱 진입점 확인 (의존성 명시)</strong>: 이 페이즈의 재인덱싱은 <strong>이전 페이즈(L1 인덱싱 모듈)의 산출물</strong>에 의존한다. <code>src/app/cli.py</code>에 <code>reindex</code> 서브커맨드와 <code>--embed-model</code>/<code>--index-dir</code>(또는 동등) 플래그가 실제로 존재하는지 확인한다. <strong>존재하지 않으면</strong> CLI 신설 대신 인덱싱 모듈(<code>src/ingest/*</code> + <code>src/store/vector_store.py</code>)을 직접 호출하는 폴백 절차(작업지시 4·검증명령 3에 병기)를 사용한다.<pre><code class="language-bash">grep -n &quot;reindex\|add_subparser\|--embed-model\|--index-dir\|index_dir&quot; src/app/cli.py
+</code></pre>
+</li>
+<li><strong>LMStudio 가동 + 실제 모델 id 확인</strong>: <code>http://localhost:1234/v1</code>에서 모델 목록을 조회해 BGE-M3 GGUF가 로드되어 있는지 확인하고, <strong>로드된 실제 id 문자열을 기록</strong>한다(없으면 LMStudio에서 먼저 로드). 이후 모든 명령에서 이 실제 id를 <code>&lt;bge_id&gt;</code> 자리에 사용한다. BGE-M3 LMStudio id는 환경마다 다를 수 있으므로 <strong>하드코딩 금지</strong>.<pre><code class="language-bash">curl -s http://localhost:1234/v1/models | python -c &quot;import sys,json; print([m[&#39;id&#39;] for m in json.load(sys.stdin)[&#39;data&#39;]])&quot;
+</code></pre>
+</li>
+</ol>
+<p>위 1~5 중 하나라도 없으면 이 페이즈를 진행하지 말고 누락 산출물을 보고한다(이전 페이즈 미완). 6의 <code>reindex</code> 서브커맨드가 없으면 폴백 절차로 진행하되, 인덱싱 모듈 자체(<code>src/ingest</code>/<code>src/store</code>)도 없으면 누락 보고한다.</p>
+<h3>절대 규칙 (이 페이즈에서 위반 금지)</h3>
+<ul>
+<li><strong>INV-3 외부 API 금지</strong>: 모든 임베딩 호출은 <code>base_url=http://localhost:1234/v1</code>(더미 <code>api_key=&quot;lm-studio&quot;</code>)로만. OpenAI/Cohere/HuggingFace Inference 등 외부 호출 0건. BGE-M3도 반드시 로컬 LMStudio GGUF로 서빙.</li>
+<li><strong>INV-1 재정규화 규칙 변경 주의</strong>: nomic은 이미 norm=1.0이라 재정규화 금지였다. <strong>BGE-M3는 norm=1.0이 보장되지 않으므로</strong> 반드시 <strong>재측정</strong>한다. 가드 <code>abs(norm-1.0)&lt;1e-3</code>가 트립하면, nomic 경로는 그대로 두고 <strong>BGE-M3에 한해서만</strong> 정규화 분기를 추가한다. 단 정규화 연산 자체에서 <strong><code>norm&gt;0</code>인 벡터만 <code>v/norm</code>을 적용하고, <code>norm==0</code>(빈/제로 벡터)이면 정규화를 건너뛰어(0벡터 유지) 0으로 나누기를 방지</strong>한다(빈입력 스킵 + 배치 전체 assert 원칙 유지). 측정 없이 정규화 분기를 넣거나 빼지 말 것.</li>
+<li><strong>INV-7 단독변수 + 정량 증명</strong>: 이번에 바꾸는 변수는 <strong>임베딩 모델 하나뿐</strong>이다. 청크 크기·top_k·BM25·리랭커·생성모델 등 다른 변수 동시 변경 금지. before(nomic)/after(BGE-M3)는 동일 골든셋·동일 <code>k_list</code>로 측정하고, 채택 판정은 숫자로만 한다. 합격선은 회귀 케이스 Recall@1=1 포함.</li>
+<li><strong>회귀 케이스 1급 시민</strong>: 질의 &quot;연차 휴가 신청 절차&quot; → 정답 휴가규정. nomic dense-only에서 현재 3위(Recall@1=0). 이 <strong>0→1 전환</strong>이 채택의 핵심 척도다. 골든셋에서 빼지 말 것.</li>
+<li><strong>INV-4 prompt_tokens 불신</strong>: 길이 판단은 문자 수/로컬 토크나이저 가드로(BGE-M3 ctx 8192 — nomic보다 길지만 여전히 <code>assert_within_embed_limit</code> 문자 가드 유지, fail-closed).</li>
+<li>임베딩 교체와 무관한 리팩토링·기능 추가 금지.</li>
+</ul>
+<h3>작업 지시</h3>
+<p><strong>0) 모델 카드 확인 (코드 전에)</strong>
+BGE-M3 prefix 규칙·정규화 여부·권장 metric은 <strong>[확인필요]</strong> 상태다. LMStudio 모델 카드/공식 문서로 다음을 확정하고 결과를 주석/리포트에 남긴다.</p>
+<ul>
+<li>prefix: <strong>BGE-M3의 prefix 규칙을 모델 카드로 확인한다(불필요할 수 있으나 단정 금지).</strong> e5 계열은 <code>query:</code>/<code>passage:</code> prefix가 필수(INV-8)이므로 BGE-M3와 혼동 금지 — 단, BGE-M3 자체의 prefix 필요 여부는 모델 카드 실측으로만 결정하고, 결과를 <code>config/settings.yaml</code>의 prefix 필드에 명시한다(실측이 &quot;필요&quot;로 나오면 그대로 반영).</li>
+<li>정규화: 출력 벡터가 L2 정규화되어 나오는지(아래 1에서 실측으로 최종 판정).</li>
+<li>metric: cosine 권장 여부 확인(LanceDB <code>create_index</code>에서 명시, 기본 L2 유클리드 금지).</li>
+</ul>
+<p><strong>1) norm 재측정 스크립트</strong> — <code>scripts/measure_bge_norm.py</code> (신규)
+BGE-M3로 대표 한국어 문장 N개(회귀 케이스 질의·정답 문장 포함)를 임베딩해 차원과 norm 분포를 실측한다. 모델 id는 사전조건 7에서 기록한 실제 <code>&lt;bge_id&gt;</code>를 인자/설정으로 주입한다(하드코딩 금지).</p>
+<pre><code class="language-python"># 핵심: localhost:1234만 사용, 모델 id는 &lt;bge_id&gt;(사전조건 7의 실측 id), 결과를 stdout + JSON으로
+# - dim 확인 (1024 기대)
+# - 각 벡터 L2 norm 계산 → min/max/mean, abs(norm-1.0)&lt;1e-3 통과 비율
+#   (norm==0 벡터는 정규화 대상에서 제외 — 0으로 나누기 방지, 별도 카운트)
+# - 판정: 통과율 100% → 정규화 분기 불필요 / 아니면 BGE-M3 정규화 분기 필요
+</code></pre>
+<p>출력: <code>dim=...</code>, <code>norm min/max/mean=...</code>, <code>needs_normalize=True|False</code>.</p>
+<p><strong>2) <code>embedder.py</code> 교체 경로</strong> — <code>src/embed/embedder.py</code> (수정)
+시그니처 고정, <strong>계약 변경 금지</strong>:</p>
+<ul>
+<li><code>embed(texts: list[str], model=&quot;text-embedding-nomic-embed-text-v1.5&quot;) -&gt; list[Vector]</code> — 기본값은 그대로 두고, BGE-M3는 호출 시 <code>model=&quot;&lt;bge_id&gt;&quot;</code>로 전달하거나 <code>config/settings.yaml</code>에서 모델명을 읽어 주입.</li>
+<li>빈입력 → <code>[]</code> 즉시 반환(기존 유지).</li>
+<li>norm 가드 유지하되, <strong>모델별 정규화 정책 분기</strong>를 추가: BGE-M3에서 1의 <code>needs_normalize=True</code>로 판정된 경우에만 임베딩 후 L2 정규화한 뒤 가드 통과시킨다. 정규화 시 <strong><code>norm&gt;0</code>인 벡터만 <code>v/norm</code>을 적용하고 <code>norm==0</code>이면 스킵(0벡터 유지)</strong> 하여 0으로 나누기를 방지한다. nomic 경로는 손대지 않는다(여전히 재정규화 금지).</li>
+<li><code>assert_within_embed_limit(text, max_chars=DEFAULT_MAX_CHARS_FALLBACK=1000)</code> 문자 가드 유지(fail-closed).</li>
+</ul>
+<p><strong>3) 설정 스위칭</strong> — <code>config/settings.yaml</code> (수정)
+임베딩 모델명·<code>dim</code>·<code>norm</code>·<code>metric</code>·<code>prefix</code>·활성 <code>index_dir</code> 플래그를 BGE-M3 값으로 바꾼 프로파일을 추가한다(nomic 프로파일은 보존해 롤백 가능하게). search/evaluate가 이 활성 설정을 읽어 질의 임베딩 모델·prefix·인덱스를 일관 전환하도록 한다. 예: 활성 임베딩을 <code>&lt;bge_id&gt;</code>(사전조건 7에서 기록한 LMStudio 실제 id — 하드코딩 금지), <code>dim: 1024</code>, <code>metric: cosine</code>, <code>norm: &lt;1에서 실측&gt;</code>, <code>prefix: &lt;0에서 확정&gt;</code>, <code>index_dir: data/index_bge</code>.</p>
+<p><strong>4) 전체 재인덱싱 (768→1024)</strong> — 기존 인덱싱 진입점 사용(없으면 폴백)
+차원이 바뀌므로 <strong>인덱스를 새 디렉토리에 새로 빌드</strong>한다(기존 nomic 인덱스 디렉토리는 보존해 롤백 경로 유지).</p>
+<ul>
+<li><code>data/index_nomic/</code>(기존, 보존) ↔ <code>data/index_bge/</code>(신규) 분리.</li>
+<li>진입점: 사전조건 6에서 <code>src/app/cli.py</code>에 <code>reindex</code>(+<code>--embed-model</code>/<code>--index-dir</code>)가 <strong>있으면 그것을 사용</strong>한다. <strong>없으면</strong> 인덱싱 모듈(<code>src/ingest/{loaders,chunker}</code> + <code>src/store/vector_store.py</code>)을 직접 호출하는 폴백 빌드 절차를 작성한다(임베딩 모델 = <code>&lt;bge_id&gt;</code>, 출력 디렉토리 = <code>data/index_bge</code>).</li>
+<li>LanceDB <code>create_index</code>에서 <code>metric</code>을 cosine(또는 0에서 확정한 dot)으로 <strong>명시</strong>. 기본 L2 금지.</li>
+<li>사이드카 <code>_index_header.json</code>을 <strong>벡터 적재 완료 후 마지막에</strong> 기록(os.replace 원자 교체). 헤더 정본 4필드 <code>embedding_model</code>(= <code>&lt;bge_id&gt;</code>), <code>dim</code>(=1024), <code>normalized</code>, <code>metric</code>을 기록한다(필드명 <code>model</code> 사용 금지 — 정본은 <code>embedding_model</code>).</li>
+</ul>
+<p><strong>5) before/after 평가</strong> — <code>eval/evaluate.py</code> 사용 + 비교 리포트 스크립트 <code>scripts/compare_embed.py</code> (신규)
+<code>evaluate</code> 시그니처는 <strong>불변</strong>이다(인덱스 디렉토리/모델 인자 추가 금지). 따라서 <code>compare_embed.py</code>는 아래 두 방식 <strong>중 하나</strong>로 nomic/BGE-M3를 각각 측정한다. &quot;인덱스 경로를 evaluate에 넘긴다&quot;는 식으로 기술하지 않는다.</p>
+<ul>
+<li><strong>(a) settings 전환 방식</strong>: <code>config/settings.yaml</code>의 활성 <code>embed_model</code>/<code>index_dir</code>/<code>prefix</code>를 <code>nomic</code>(→<code>data/index_nomic</code>)으로 설정해 <code>evaluate(...)</code>를 1회 호출(before), 이어 <code>bge</code>(→<code>data/index_bge</code>, <code>&lt;bge_id&gt;</code>)로 전환해 <code>evaluate(...)</code>를 1회 호출(after). 두 호출 모두 <code>use_bm25=False, use_rerank=False</code>(dense-only) 고정.</li>
+<li><strong>(b) search_fn 주입 방식</strong>(정본 하네스 형태): nomic용·BGE-M3용 <code>search_fn</code>을 각각 구성(각 search_fn은 해당 모델로 질의 임베딩 + 해당 인덱스 디렉토리 사용)해 정본 하네스에 주입하고 <code>evaluate</code>를 각각 호출.</li>
+<li>어느 방식이든 <strong>질의 임베딩 모델·prefix·dim이 해당 인덱스(헤더)와 일치</strong>해야 하며(불일치 시 조기 차단), before/after는 동일 골든셋·동일 옵션으로만 다르게 한다.</li>
+<li>두 <code>EvalResult</code>의 <code>recall_at_1/3/5/10</code>, <code>mrr</code>, <code>ndcg_at_10</code>, 그리고 <strong>회귀 케이스 per_query</strong>를 나란히 출력.</li>
+<li><strong>채택 게이트</strong>: <code>after.recall_at_1 &gt;= before.recall_at_1</code> <strong>그리고</strong> 회귀 케이스(&quot;연차 휴가 신청 절차&quot;) per_query에서 정답이 1위(Recall@1=0→1)일 때만 &quot;채택&quot;. 둘 중 하나라도 미달이면 &quot;롤백&quot;으로 판정.</li>
+</ul>
+<p><strong>6) 채택/롤백 반영</strong></p>
+<ul>
+<li>채택: <code>config/settings.yaml</code> 활성 임베딩을 BGE-M3(<code>&lt;bge_id&gt;</code>)로 확정, 활성 <code>index_dir</code>을 <code>data/index_bge/</code>로. 헤더 norm 재측정 결과(<code>normalized</code>) 반영. search/evaluate가 이 활성 설정을 따르는지 재확인.</li>
+<li>롤백: <code>config/settings.yaml</code>을 nomic 프로파일로 되돌리고 활성 <code>index_dir</code>을 <code>data/index_nomic/</code>로 복구. BGE-M3 인덱스는 삭제하거나 보관만 하고 비활성.</li>
+<li>어느 쪽이든 <code>before/after</code> 수치 리포트를 산출물로 남긴다.</li>
+</ul>
+<h3>산출물 (생성/수정 파일)</h3>
+<ul>
+<li>신규: <code>scripts/measure_bge_norm.py</code> (norm 재측정, <code>norm==0</code> 스킵 포함)</li>
+<li>신규: <code>scripts/compare_embed.py</code> (before/after 비교 + 채택 게이트 판정, settings 전환 또는 search_fn 주입 방식)</li>
+<li>수정: <code>src/embed/embedder.py</code> (모델별 정규화 분기 추가, <code>norm==0</code> 스킵, 시그니처 불변)</li>
+<li>수정: <code>config/settings.yaml</code> (BGE-M3 프로파일 추가, nomic 보존, 활성 <code>index_dir</code>/<code>prefix</code> 포함)</li>
+<li>수정: <code>src/store/vector_store.py</code> (필요 시 헤더에 <code>normalized</code> 필드 — 정본 4필드 <code>embedding_model</code>/<code>dim</code>/<code>normalized</code>/<code>metric</code> 기록 보강만, Protocol 불변)</li>
+<li>(폴백 시) 신규: 인덱싱 모듈 직접 호출 빌드 스크립트(<code>src/app/cli.py</code>에 <code>reindex</code>가 없을 때만)</li>
+<li>신규 데이터(.gitignore): <code>data/index_bge/</code>, 기존 <code>data/index_nomic/</code> 보존</li>
+<li>리포트(stdout 또는 <code>eval/</code> 산출): before/after 표 + 채택/롤백 판정 한 줄</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>scripts/measure_bge_norm.py</code> 실행 시 <code>dim=1024</code>가 나오고, norm 실측 결과로 <code>needs_normalize</code> 판정이 출력된다(<code>norm==0</code> 벡터는 정규화 제외로 별도 처리).</li>
+<li><code>embed([&quot;연차 휴가 신청 절차&quot;], model=&quot;&lt;bge_id&gt;&quot;)</code>가 1024차원 벡터를 반환하고, 정규화 정책 적용 후 norm 가드(<code>abs(norm-1.0)&lt;1e-3</code>)를 통과한다(또는 정규화 분기로 통과).</li>
+<li><code>data/index_bge/</code>가 빌드되고 <code>_index_header.json</code>에 <code>embedding_model</code>(=<code>&lt;bge_id&gt;</code>), <code>dim=1024</code>, <code>metric</code>(cosine/dot 명시), <code>normalized</code>가 기록되어 있다(필드명 <code>model</code> 아님).</li>
+<li><code>scripts/compare_embed.py</code>가 before/after Recall@1·MRR·nDCG와 회귀 케이스 per_query를 출력하고, <strong>&quot;채택&quot; 또는 &quot;롤백&quot; 중 하나의 판정</strong>을 명확히 낸다. before/after 모두 질의 임베딩 모델·prefix·dim이 해당 인덱스와 일치한다.</li>
+<li>판정에 따라 <code>config/settings.yaml</code> 활성 프로파일과 활성 <code>index_dir</code>이 일관되게 설정되고(채택→bge, 롤백→nomic), search/evaluate가 이 활성 설정을 따른다. 다른 변수는 그대로다.</li>
+</ol>
+<h3>검증 명령</h3>
+<pre><code class="language-bash"># 0) LMStudio에 BGE-M3 로드 확인 + 실제 id 기록 (이후 &lt;bge_id&gt; 자리에 이 값을 사용)
+curl -s http://localhost:1234/v1/models | python -c &quot;import sys,json; print([m[&#39;id&#39;] for m in json.load(sys.stdin)[&#39;data&#39;]])&quot;
+# → 출력된 BGE-M3 id 문자열을 &lt;bge_id&gt;로 고정해 아래 모든 명령에 대입(하드코딩 금지)
+
+# 1) norm 재측정 (dim=1024 / needs_normalize 판정 / norm==0 스킵)
+python scripts/measure_bge_norm.py   # 내부에서 &lt;bge_id&gt; 사용
+
+# 2) embedder 차원·norm 가드 확인 (회귀 케이스 질의로) — &lt;bge_id&gt;를 실제 id로 치환
+python -c &quot;from src.embed.embedder import embed; v=embed([&#39;연차 휴가 신청 절차&#39;], model=&#39;&lt;bge_id&gt;&#39;); import math; n=math.sqrt(sum(x*x for x in v[0])); print(&#39;dim=&#39;,len(v[0]),&#39;norm=&#39;,round(n,6))&quot;
+
+# 3) BGE-M3 전체 재인덱싱 (새 디렉토리)
+#  3a) cli에 reindex가 있으면(사전조건 6 확인 결과) — 플래그명은 실제 cli.py에 맞게:
+python -m src.app.cli reindex --embed-model &#39;&lt;bge_id&gt;&#39; --index-dir data/index_bge
+#  3b) reindex 서브커맨드가 없으면 폴백: 인덱싱 모듈 직접 호출 빌드 스크립트 실행
+#      (예) python scripts/build_index_bge.py --embed-model &#39;&lt;bge_id&gt;&#39; --index-dir data/index_bge
+#  → 헤더 확인 (정본 필드명 embedding_model 사용, &#39;model&#39; 아님)
+python -c &quot;import json; h=json.load(open(&#39;data/index_bge/_index_header.json&#39;)); print(h.get(&#39;dim&#39;), h.get(&#39;metric&#39;), h.get(&#39;embedding_model&#39;), h.get(&#39;normalized&#39;))&quot;
+
+# 4) before/after 비교 + 채택 게이트 (settings 전환 또는 search_fn 주입 — evaluate에 인덱스 경로 인자 안 넘김)
+python scripts/compare_embed.py
+# 기대 출력 예:
+#   nomic   : R@1=0.xx R@3=.. R@5=.. R@10=.. MRR=.. nDCG@10=..  [연차휴가: rank=3]
+#   bge-m3  : R@1=0.xx R@3=.. R@5=.. R@10=.. MRR=.. nDCG@10=..  [연차휴가: rank=1]
+#   VERDICT : 채택 (Recall@1 개선 + 회귀케이스 0→1)   또는   롤백 (미개선)
+
+# 5) 판정 반영 후 활성 설정 일관성 확인 (활성 embed_model·index_dir·prefix·metric)
+grep -nE &quot;embed|dim|metric|index_dir|prefix&quot; config/settings.yaml
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<p>다음 페이즈(L3 리랭킹/하이브리드)는 이 페이즈에서 <strong>확정된 임베딩(채택 시 BGE-M3 1024차원·해당 metric·정규화 정책, 롤백 시 nomic 768차원)과 그 활성 인덱스 디렉토리</strong>를 고정 입력으로 받는다. BGE-M3 채택 시 Sparse/ColBERT 출력은 이 페이즈 범위 밖이며 다음 페이즈에서 하이브리드 변수로 단독 측정한다.</p>
+</article>
+<article class="doc" data-id="07_실행프롬프트/08_페이즈7_answer.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 7: 답변 생성 · 출처 인용 · CLI</h1>
+<h3>이 페이즈의 목표 (1~2문장)</h3>
+<p>검색(+선택 리랭킹)으로 모은 상위 청크를 컨텍스트로 로컬 LLM에 질의해 <strong>출처가 달린 답변</strong>을 생성하는 <code>answer()</code>와, 이를 호출하는 CLI 진입점을 구현한다. 근거가 부족하면 추측하지 않고 &quot;확실하지 않습니다&quot;로 닫고, 모든 LLM 호출은 reasoning 폴백 게이트(<code>chat()</code> 래퍼)를 경유해 content 빈값/length를 흡수한다.</p>
+<h3>사전 조건 (이전 페이즈 산출물 — 파일에서 상태 확인)</h3>
+<p>이 페이즈는 컨텍스트 초기화 후 단독 실행된다. 시작 전 아래를 <strong>파일 존재·시그니처로 직접 확인</strong>하라(없으면 이 페이즈 진행 금지, 누락 파일 보고 후 중단).</p>
+<pre><code class="language-bash"># 필수 선행 산출물 존재 확인
+ls -1 src/llm/client.py src/retrieve/search.py src/store/vector_store.py config/settings.yaml
+# chat() 래퍼 시그니처·폴백 로직 확인 (content 빈값→reasoning_content, length 재시도, _clean_reasoning 존재)
+grep -n &quot;def chat&quot; src/llm/client.py
+grep -n &quot;reasoning_content\|_clean_reasoning\|finish_reason&quot; src/llm/client.py
+# search() 시그니처·SearchHit/Chunk 타입 확인 (citation 매핑에 doc_id/source_path/meta 필드 필요)
+grep -n &quot;def search\|class SearchHit\|class Chunk&quot; src/retrieve/search.py src/**/types*.py 2&gt;/dev/null
+# rerank()는 선택 의존성 — 있으면 경유, 없으면 우회
+grep -n &quot;def rerank&quot; src/retrieve/rerank.py 2&gt;/dev/null || echo &quot;RERANK_ABSENT&quot;
+</code></pre>
+<p>확인 계약(이전 페이즈에서 고정된 것, 그대로 사용):</p>
+<ul>
+<li><code>chat(messages, model=&quot;google/gemma-4-e4b&quot;, max_tokens=4000, _retry=True, **kw) -&gt; str</code> — content/reasoning 분기를 호출자가 몰라도 되고 <strong>항상 평문 str</strong> 반환. length 재시도·<code>&lt;think&gt;</code> 정제는 래퍼 내부 책임.</li>
+<li><code>search(query, *, top_k=30, use_bm25=True) -&gt; list[SearchHit]</code> — score 내림차순.</li>
+<li><code>rerank(query, hits, *, top_n=5) -&gt; list[SearchHit]</code> — 존재 시에만 사용.</li>
+<li>타입: <code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code>, <code>SearchHit(chunk, score, rank, source∈dense|bm25|rrf|rerank)</code>.<ul>
+<li><strong>주의</strong>: <code>SearchHit.source</code>는 검색 단계 표식(dense|bm25|rrf|rerank)이며 <strong>citation의 출처 경로와 무관</strong>하다. citation 출처는 <code>Chunk.source_path</code>에서 유도한다. 위치 정보(page/section)는 <code>Chunk.meta</code>에 있으면 쓰고, 없으면 키를 생략한다(<code>chunk_index</code>는 meta 보조 위치로만).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><code>chat()</code> / <code>search()</code> 시그니처가 위와 다르면 <strong>answer()를 그쪽에 맞춰 호출하지 말고</strong>, 먼저 불일치를 보고하라. 이 페이즈에서 선행 래퍼의 시그니처를 바꾸지 않는다.</p>
+</blockquote>
+<h3>절대 규칙 (이 페이즈에서 위반 금지 — 관련 INV 발췌)</h3>
+<ul>
+<li><strong>INV-3 외부 API 금지</strong>: <code>answer()</code>/<code>cli</code>는 LLM에 직접 <code>openai</code> 클라이언트를 새로 만들지 말고 <strong>반드시 <code>src/llm/client.py</code>의 <code>chat()</code>만</strong> 호출한다. base_url은 localhost:1234 외 0건.</li>
+<li><strong>INV-2 content 빈값 → reasoning 폴백</strong>: 빈 답 흡수는 <code>chat()</code> 래퍼 책임. <code>answer()</code>에서 <code>/no_think</code>, <code>enable_thinking=false</code>, <code>reasoning_effort=low</code> 같은 우회책을 <strong>추가하지 말 것</strong>. <code>answer()</code>는 <code>chat()</code>이 돌려준 평문 str만 신뢰한다.</li>
+<li><strong>INV-5 <code>&lt;think&gt;</code> 정제</strong>: <code>answer()</code>는 <code>&lt;think&gt;</code> 처리를 <strong>직접 하지 않는다</strong>(정제는 <code>_clean_reasoning</code>/<code>chat()</code> 책임). <code>chat()</code> 결과를 그대로 답변 본문으로 쓴다.</li>
+<li><strong>INV-6 length 재시도</strong>: max_tokens 재시도 루프를 <code>answer()</code>에 중복 구현 금지. 컨텍스트 예산 초과 방지는 입력 측(컨텍스트 청크 절삭)에서 처리하고, 출력 length 흡수는 <code>chat()</code>에 위임한다.</li>
+<li><strong>INV-4 prompt_tokens=0 불신</strong>: 컨텍스트 예산 계산은 <code>usage.prompt_tokens</code>가 아니라 <strong>문자 수 기반</strong>으로 한다(로컬 토크나이저 가드가 있으면 사용, 없으면 문자 수). fail-closed: 예산 초과 시 무음 통과 금지, 청크를 잘라내고 그 사실을 메타에 남긴다.</li>
+<li><strong>인용 무결성(내부 키 = chunk_id)</strong>: 컨텍스트 직렬화 라벨과 부분집합 검증에는 <code>chunk_id</code>를 <strong>내부 키</strong>로 쓴다. 단 <strong>외부로 내보내는 citation 객체는 정본 스키마</strong>(<code>doc_id</code>/<code>source_path</code>/<code>page</code>|<code>section</code>)로 변환해 채운다. 부분집합 무결성은 &quot;각 citation이 가리키는 청크의 <code>doc_id</code>·<code>source_path</code>가 <code>chat()</code>에 실제 전달한 컨텍스트 청크들의 <code>doc_id</code>·<code>source_path</code> 집합의 부분집합&quot;으로 검증한다(컨텍스트에 없는 출처 발명 금지).</li>
+<li><strong>추측 금지</strong>: 근거 청크가 비었거나 점수가 임계 미달이면 LLM에 생성시키지 말고 <code>&quot;확실하지 않습니다. ...&quot;</code>로 닫는다.</li>
+</ul>
+<h3>작업 지시 (구체적 단계)</h3>
+<p><strong>1. <code>src/app/answer.py</code> 생성</strong> — 시그니처 고정:</p>
+<pre><code class="language-python">def answer(query, *, model=&quot;google/gemma-4-e4b&quot;, top_n=5) -&gt; dict:
+    # 반환: {&quot;text&quot;: str, &quot;citations&quot;: list[dict]}
+    # citation 객체 = {&quot;doc_id&quot;: str, &quot;source_path&quot;: str, &quot;page&quot;: int}  또는
+    #                 {&quot;doc_id&quot;: str, &quot;source_path&quot;: str, &quot;section&quot;: str}
+    #                 (page/section은 Chunk.meta에서 유도, 없으면 위치 키 생략)
+</code></pre>
+<p>구현 단계:</p>
+<ol>
+<li><code>search(query, top_k=30, use_bm25=True)</code>로 후보 수집(score 내림차순).</li>
+<li><code>src/retrieve/rerank.py</code>에 <code>rerank</code>가 있으면 <code>rerank(query, hits, top_n=top_n)</code>로 상위 <code>top_n</code> 추림. 없으면 hits 상위 <code>top_n</code> 슬라이스. (둘 중 무엇을 썼는지 결과 메타에 <code>&quot;reranked&quot;: bool</code>로 기록.)</li>
+<li><strong>근거 부족 가드(추측 금지)</strong>: 추린 hits가 비었으면 즉시
+<code>{&quot;text&quot;: &quot;확실하지 않습니다. 관련 문서를 찾지 못했습니다.&quot;, &quot;citations&quot;: []}</code> 반환.</li>
+<li><strong>컨텍스트 예산 절삭(INV-4, 문자 기준)</strong>: 모델별 ctx 한계를 <code>config/settings.yaml</code>에서 읽되, 없으면 모델명으로 폴백한다. 폴백 매핑은 fully-qualified id 기준으로도 동작해야 한다 — <code>model</code>에서 <code>&quot;/&quot;</code> 앞 공급자 접두(<code>google/</code>, <code>qwen/</code>)를 제거(또는 <code>endswith</code> 매칭)해 <strong>정규화한 뒤</strong> 조회한다(<code>google/gemma-4-e4b</code>/<code>gemma-4-e4b</code>→65536, <code>qwen/qwen3.5-9b</code>/<code>qwen3.5-9b</code>→8192, <code>qwen/qwen3.6-35b-a3b</code>/<code>qwen3.6-35b-a3b</code>→8192; ctx는 실측, 파라미터수는 [추정]). 정규화 후에도 미스면 보수적 최소 폴백(8192)으로 fail-closed. <strong>출력 여유분과 프롬프트 골격을 뺀 문자 예산</strong>을 잡고, 컨텍스트 청크를 순서대로 누적하다 예산 초과 직전에서 멈춘다. 절삭이 일어나면 그 사실을 결과 메타에 남긴다(무음 통과 금지). <code>usage.prompt_tokens</code> 사용 금지.</li>
+<li><strong>프롬프트 구성</strong>: 시스템 메시지에 규칙(제공 컨텍스트만 근거로, 모르면 &quot;확실하지 않습니다&quot;, 답변 끝에 사용한 출처를 청크 라벨로 표기)을 넣고, 각 컨텍스트 청크를 <strong>고유 라벨(예 <code>[1] (chunk_id=...)</code>)</strong> 과 함께 user 메시지에 직렬화한다. <strong>라벨↔Chunk 매핑</strong>(라벨 → 해당 Chunk 객체 전체)을 보관한다 — 인용 변환 시 <code>doc_id</code>/<code>source_path</code>/<code>meta</code>를 꺼내야 하므로 chunk_id만이 아니라 Chunk 참조를 잡아둔다.</li>
+<li><strong>생성</strong>: <code>chat(messages, model=model, max_tokens=4000)</code> 호출(평문 str 수신). 빈값/length는 <code>chat()</code>가 이미 흡수했다고 신뢰 — <code>answer()</code>에서 재처리 금지.</li>
+<li><strong>인용 추출·변환(무결성)</strong>: 생성 텍스트에서 사용된 라벨/chunk_id를 파싱해 매핑으로 해당 Chunk를 복원한다. <strong>전달한 컨텍스트 청크 집합과 교집합만</strong> 채택(부분집합 강제, 컨텍스트 밖 식별자 폐기). 모델이 출처를 안 달았으면 컨텍스트 상위 청크를 보수적으로 채우되, 발명은 금지. 채택된 각 Chunk를 <strong>정본 citation 객체로 변환</strong>한다:<ul>
+<li><code>doc_id</code> ← <code>Chunk.doc_id</code></li>
+<li><code>source_path</code> ← <code>Chunk.source_path</code> (이름 충돌 회피: <code>SearchHit.source</code>(단계 표식)와 무관, 절대 <code>source</code> 키로 내보내지 말 것)</li>
+<li>위치 ← <code>Chunk.meta</code>에 <code>page</code>가 있으면 <code>{&quot;page&quot;: ...}</code>, <code>section</code>이 있으면 <code>{&quot;section&quot;: ...}</code>; 둘 다 없으면 위치 키 생략(보조로 <code>chunk_index</code>만 meta에 보존, citation 최상위 위치 필드로는 쓰지 않음).</li>
+<li><code>chunk_id</code>는 <strong>citation 출력 필드로 노출하지 않는다</strong>(내부 부분집합 검증 전용). 디버깅용으로 남기려면 메타(<code>result[&quot;meta&quot;]</code>) 쪽에만 둔다.</li>
+</ul>
+</li>
+<li><strong>공백/거부 응답 처리</strong>: <code>chat()</code>가 빈 문자열을 돌려준 극단 케이스(폴백까지 빈값)면 <code>&quot;확실하지 않습니다. 답변을 생성하지 못했습니다.&quot;</code>로 닫는다(무음 빈답 금지, citations는 그대로 둘 수 있음).</li>
+</ol>
+<p><strong>2. <code>src/app/cli.py</code> 생성</strong> — 진입점:</p>
+<ul>
+<li><code>argparse</code>(또는 표준 라이브러리만)로 <code>ask</code> 서브커맨드: <code>query</code>(위치 인자), <code>--model</code>(기본 <code>google/gemma-4-e4b</code>), <code>--top-n</code>(기본 5).</li>
+<li><code>answer(query, model=..., top_n=...)</code> 호출 후 사람이 읽을 형식으로 출력: 본문 → 빈 줄 → <code>출처:</code> 목록. 각 줄은 정본 citation 필드에서 구성(<code>[n] {source_path} (page={page})</code> 또는 <code>(section={section})</code>, 위치 키가 없으면 경로만).</li>
+<li><code>python -m src.app.cli ask &quot;...&quot;</code>로 실행되도록 <code>if __name__ == &quot;__main__&quot;:</code> 가드 + 패키지 <code>__init__.py</code> 보장.</li>
+</ul>
+<p><strong>3. 설정 키 보강(신규 도입 — 선행 페이즈에 없음)</strong>: <code>config/settings.yaml</code>에 모델별 ctx 예산 힌트 키(<code>ctx_chars</code> 또는 <code>ctx_tokens</code>)를 추가한다. <strong>이 키들은 이전 페이즈의 settings 문서화 키(모델명·청크크기·top_k·dim/norm/metric)에 존재하지 않는 신규 키</strong>이므로, 실행자는 &quot;이미 있어야 할 키&quot;로 오인하지 말 것 — 없는 게 정상이며 이 페이즈에서 처음 추가한다. 폴백 상수(65536/8192/8192)와 정규화 키 이름(<code>gemma-4-e4b</code>/<code>qwen3.5-9b</code>/<code>qwen3.6-35b-a3b</code>)을 주석으로 함께 기록해 코드 폴백과 일치시킨다.</p>
+<h3>산출물 (생성/수정되는 파일)</h3>
+<ul>
+<li>생성: <code>src/app/answer.py</code></li>
+<li>생성: <code>src/app/cli.py</code></li>
+<li>생성(없으면): <code>src/app/__init__.py</code></li>
+<li>수정(필요 시): <code>config/settings.yaml</code> (모델별 ctx 예산 힌트 — 신규 키)</li>
+<li>생성: <code>tests/test_answer.py</code> (아래 완료 기준 검증용)</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><strong>폴백 게이트 경유 검증(최우선)</strong>: <code>answer()</code>가 LLM을 직접 호출하지 않고 <code>src/llm/client.py:chat()</code>만 경유함을 증명한다. <code>grep -n &quot;import openai\|OpenAI(&quot; src/app/answer.py</code>가 <strong>0건</strong>, <code>grep -n &quot;from .*llm.*client import chat\|client.chat\|chat(&quot; src/app/answer.py</code>가 chat() 호출을 보여야 한다. <strong>이 검증 전에는 &quot;완성&quot; 보고 금지.</strong></li>
+<li><strong>인용 스키마·부분집합 불변식</strong>: 각 citation 객체가 정본 스키마 <code>{&quot;doc_id&quot;, &quot;source_path&quot;, &quot;page&quot;|&quot;section&quot;(선택)}</code>를 따르고 <code>source</code>·<code>location</code>·<code>chunk_id</code> 키를 최상위에 노출하지 않음을 단위 테스트로 단언. 더하여 <strong>모든 citation의 <code>doc_id</code>·<code>source_path</code>가 컨텍스트로 전달된 청크들의 <code>doc_id</code>·<code>source_path</code> 집합의 부분집합</strong>임을 단언(<code>chat</code>을 가짜 응답으로 monkeypatch).</li>
+<li><strong>추측 금지</strong>: 검색 결과 0건일 때 <code>text</code>가 <code>&quot;확실하지 않습니다&quot;</code>로 시작하고 <code>citations == []</code>.</li>
+<li><strong>빈 content 흡수</strong>: <code>chat</code>을 빈 문자열 반환으로 monkeypatch했을 때 <code>answer()</code>가 무음 빈답을 내지 않고 &quot;확실하지 않습니다...&quot; 또는 비빈 폴백 메시지를 반환.</li>
+<li><strong>컨텍스트 예산(INV-4)</strong>: 과도하게 긴 청크 다수를 주입했을 때 <code>chat</code>에 전달된 메시지 총 문자 수가 모델 ctx 예산 이하이고, 절삭 사실이 메타에 기록됨(테스트로 <code>chat</code> 인자 캡처해 단언). fully-qualified 모델 id(<code>google/gemma-4-e4b</code>)로 호출해도 폴백 매핑이 정규화로 적중함을 단언. <code>usage.prompt_tokens</code>에 의존하지 않음.</li>
+<li><strong>CLI 스모크</strong>: <code>python -m src.app.cli ask &quot;테스트 질의&quot;</code>가 예외 없이 본문+출처를 출력(검색/LLM은 가짜로 대체 가능).</li>
+</ol>
+<h3>검증 명령 (복붙 실행)</h3>
+<pre><code class="language-bash"># 1) 폴백 게이트 경유 (외부 API 직호출 0건 + chat() 경유)
+grep -nE &quot;import openai|OpenAI\(&quot; src/app/answer.py &amp;&amp; echo &quot;FAIL: 외부 API 직호출&quot; || echo &quot;OK: 외부 API 직호출 없음&quot;
+grep -nE &quot;from .*llm.*client import|chat\(&quot; src/app/answer.py | head
+
+# 2) citation 스키마 위반 키가 최상위로 새지 않는지 (source/location 키, chunk_id 노출 금지)
+grep -nE &quot;\&quot;source\&quot;|&#39;source&#39;|\&quot;location\&quot;|&#39;location&#39;&quot; src/app/answer.py | head
+
+# 3) 단위 테스트 (chat/search monkeypatch — 외부 호출 없이 결정적)
+python -m pytest tests/test_answer.py -q
+
+# 4) 인용 스키마·부분집합·추측금지·예산·정규화 단언이 테스트에 존재하는지 확인
+grep -nE &quot;doc_id|source_path|subset|부분집합|확실하지 않습니다|ctx|budget|예산|normaliz|정규화&quot; tests/test_answer.py | head
+
+# 5) CLI 스모크 (search/chat를 가짜로 대체한 경로로 1회)
+python -m src.app.cli ask &quot;연차 휴가 신청 절차&quot; --top-n 5
+</code></pre>
+<p>테스트 골격(참고 — <code>tests/test_answer.py</code>에 포함):</p>
+<pre><code class="language-python">def test_citation_schema_and_subset(monkeypatch):
+    # search → 알려진 (doc_id, source_path, meta={&quot;page&quot;:..}) 청크 반환
+    # chat → 일부 라벨/chunk_id 인용한 가짜 답
+    # 단언 1: 각 citation 키 == {&quot;doc_id&quot;,&quot;source_path&quot;}(+선택 &quot;page&quot;|&quot;section&quot;), &quot;source&quot;/&quot;location&quot;/&quot;chunk_id&quot; 키 없음
+    # 단언 2: 모든 (citation[&quot;doc_id&quot;], citation[&quot;source_path&quot;]) in 전달된 컨텍스트 청크 (doc_id, source_path) 집합
+    ...
+def test_no_hits_no_guess(monkeypatch):
+    # search → [] ; 단언: text.startswith(&quot;확실하지 않습니다&quot;) and citations == []
+    ...
+def test_empty_content_absorbed(monkeypatch):
+    # chat → &quot;&quot; ; 단언: text 비어있지 않음, 무음 빈답 아님
+    ...
+def test_context_budget_chars(monkeypatch):
+    # 거대한 청크 다수 주입, model=&quot;google/gemma-4-e4b&quot;로 호출, chat 인자 캡처
+    # 단언: 총 문자수 &lt;= 정규화된 모델 예산, 메타에 절삭 기록, fully-qualified id가 폴백 매핑에 적중
+    ...
+</code></pre>
+<h3>다음 페이즈 핸드오프 (다음 페이즈가 의존하는 것)</h3>
+<p><code>answer(query, *, model, top_n) -&gt; {&quot;text&quot;, &quot;citations&quot;}</code>가 폴백 게이트 경유로 동작하고, citation이 정본 스키마(<code>doc_id</code>/<code>source_path</code>/<code>page</code>|<code>section</code>)를 따르며 <code>doc_id</code>·<code>source_path</code> 부분집합 무결성이 보장됨 → L3(리랭킹 정식 도입·로컬 서빙·자동화)는 <code>src/retrieve/rerank.py</code>의 <code>rerank()</code>를 실제 BGE-reranker-v2-m3로 채워 <code>answer()</code>의 rerank 분기를 활성화하고, 골든셋 평가에 답변 품질 회귀를 연결한다.</p>
+</article>
+<article class="doc" data-id="07_실행프롬프트/09_페이즈8_rerank.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#00_%EA%B2%B0%EC%A0%95%2F00_%EA%B2%B0%EC%A0%95%ED%95%B4%EC%95%BC%ED%95%A0%EA%B2%83_%ED%86%B5%ED%95%A9.md" data-nav>00_결정 통합</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a></p>
+</blockquote>
+<h1>페이즈 8: 리랭킹 (L3) · 서빙 검증</h1>
+<h3>이 페이즈의 목표</h3>
+<p>1차 검색 결과(20~50개)를 cross-encoder 리랭커(<code>BGE-reranker-v2-m3</code>)로 재정렬해 <code>top_n=5</code>를 산출하는 <code>rerank()</code>를 구현하고, <strong>리랭커 서빙 방식을 실측 검증</strong>한 뒤 골든셋으로 비퇴행을 증명한다(회귀 케이스 <code>Recall@1=1</code> 유지, 전체 <code>nDCG@10</code> 저하 0).</p>
+<h3>사전 조건 — <strong>하드 게이트 (이전 페이즈 0~7 산출물 필수, 미충족 시 즉시 중단)</strong></h3>
+<p>이 페이즈는 <strong>상류 검색·평가 스택(페이즈 0~7)이 이미 구현·검증된 상태</strong>를 하드 선행조건으로 한다. 컨텍스트가 초기화된 상태로 실행되므로, 시작 전 아래를 <strong>파일에서 직접 읽어</strong> 존재·정상을 확인하라.</p>
+<blockquote>
+<p><strong>주의</strong>: 현 리포지터리는 docs 사이트(<code>docs/</code>, <code>index.html</code>)만 존재하는 <strong>docs-only 상태</strong>다(<code>src/</code>, <code>eval/</code>, <code>config/</code>, <code>scripts/</code> 디렉토리 자체가 부재 — <code>git ls-files</code>로 확인됨). 따라서 단독 실행 시 이 페이즈는 <strong>사전조건 게이트에서 즉시 중단·보고만</strong> 가능하며, 완료 기준(서빙 확정/게이트①②/추이 리포트) 중 어느 것도 달성 불가하다. 아래 게이트 중 <strong>하나라도 부재·파손이면 멈추고 &quot;이전 페이즈(0~7) 미완료&quot;로 보고하라. 새 스택을 만들지 말 것</strong>(상위 계약 위반, 변수 격리 붕괴).</p>
+</blockquote>
+<pre><code class="language-bash"># 0) 디렉토리 자체가 있는지 (없으면 docs-only → 즉시 중단)
+ls -d src eval config scripts 2&gt;&amp;1
+# 1) 검색·결합·평가 스택이 이미 존재하는지
+ls -1 src/retrieve/search.py src/retrieve/fusion.py src/retrieve/rerank.py eval/evaluate.py eval/queries.yaml config/settings.yaml 2&gt;&amp;1
+# 2) search()가 SearchHit 리스트를 반환하는지(시그니처 확인)
+grep -n &quot;def search&quot; src/retrieve/search.py
+grep -n &quot;class SearchHit\|class EvalResult\|source&quot; src/retrieve/*.py eval/*.py | grep -i &quot;dense\|bm25\|rrf\|rerank\|class&quot;
+# 3) evaluate()가 use_rerank 플래그를 받는지(없으면 이 페이즈에서 배선)
+grep -n &quot;def evaluate\|use_rerank\|use_bm25&quot; eval/evaluate.py
+# 4) 베이스라인 지표·인덱스·골든셋이 실제 존재하는지(L1~L2 추이 리포트의 입력)
+ls -1 eval/results/ 2&gt;&amp;1
+ls -1 data/ 2&gt;&amp;1   # 인덱스(벡터/사이드카 헤더) 존재 확인
+</code></pre>
+<p><strong>하드 게이트 판정</strong>:</p>
+<ul>
+<li>위 0)에서 <code>src</code>/<code>eval</code>/<code>config</code>/<code>scripts</code> 중 하나라도 &quot;No such file or directory&quot;면 → <strong>docs-only 상태</strong>. 즉시 중단, &quot;이전 페이즈(0~7) 미완료&quot;로 보고하고 이 페이즈를 진행하지 마라.</li>
+<li>1)~3)의 파일·시그니처가 부재하면 → 중단·보고. <strong>새로 만들지 마라</strong>(상위 계약 위반).</li>
+<li>4)에서 <code>eval/results/</code>(베이스라인 지표)가 없고 <strong>동시에</strong> <code>data/</code>의 인덱스·<code>eval/queries.yaml</code> 골든셋도 없으면 → 베이스라인 재생성 자체가 불가능(연쇄 결손)하므로 <strong>중단·보고</strong>. (인덱스·골든셋이 있으면 4단계에서 <code>evaluate()</code>로 베이스라인을 재생성해 입력으로 쓴다. 그 외엔 재생성 시도 금지.)</li>
+</ul>
+<p>확인되어야 할 상류 계약(<code>docs/04_아키텍처_API/02_내부API_인터페이스.md</code> 정본):</p>
+<ul>
+<li><code>search(query, *, top_k=30, use_bm25=True) -&gt; list[SearchHit]</code>가 score 내림차순으로 반환(리랭커의 입력).</li>
+<li><code>SearchHit(chunk, score, rank, source∈{dense|bm25|rrf|rerank})</code>, <code>Chunk(chunk_id, doc_id, text, source_path, chunk_index, meta)</code>.</li>
+<li><strong><code>EvalResult</code>는 <code>TypedDict</code></strong>: 키 <code>recall_at_1/3/5/10</code>, <code>mrr</code>, <code>ndcg_at_10</code>, <strong><code>per_query: list[dict]</code></strong>. (딕셔너리 키 접근으로만 다룬다. 속성 접근 금지.)</li>
+<li>골든셋 <code>eval/queries.yaml</code>에 회귀 케이스 &quot;연차 휴가 신청 절차&quot;(정답=휴가규정 chunk_id)가 포함돼 있어야 한다. 없으면 멈추고 보고하라.</li>
+</ul>
+<h3>절대 규칙 (이 페이즈에서 위반 금지 — 관련 INV만 발췌)</h3>
+<ul>
+<li><strong>INV-3 외부 API 금지</strong>: 리랭커도 100% 로컬. <code>base_url=localhost:1234</code> 외 어떤 HTTP 호출도 0건. cross-encoder를 LMStudio가 못 서빙하면 <code>sentence-transformers</code>/<code>FlagEmbedding</code>로 <strong>별도 로컬 프로세스/in-process</strong> 로드 — 모델 가중치는 로컬 디스크에서만 읽는다. 클라우드(OpenAI/Anthropic/Cohere rerank) 절대 금지.</li>
+<li><strong>INV-7 정량 증명 / 변수 1개 원칙</strong>: 이 페이즈에서 바꾸는 변수는 <strong>리랭커 on/off 단 하나</strong>. 임베딩 모델 교체(nomic↔BGE-M3)를 <strong>동시에 점등하지 마라</strong>. 임베딩은 직전 페이즈에서 확정된 모델 그대로 고정하고 리랭커만 토글한다. 회귀 케이스 합격선 <code>Recall@1=1</code>.</li>
+<li><strong>INV-1 임베딩 재정규화 금지</strong>: 리랭킹은 cross-encoder 점수이지 임베딩이 아니다. 임베딩 경로(<code>embed()</code>)·norm 가드를 건드리지 마라.</li>
+<li><strong>INV-2/5/6 reasoning 폴백·정제·length 재시도</strong>: <code>rerank()</code>는 생성 모델을 쓰지 않는다(<code>chat()</code> 경유 금지). <code>answer()</code>가 reasoning을 흡수하는 경로는 그대로 둔다.</li>
+<li>상위 함수 계약(시그니처) 고정. <code>search</code>/<code>evaluate</code>/<code>SearchHit</code>/<code>EvalResult</code> 시그니처·타입을 임의 변경하지 마라.</li>
+</ul>
+<h3>작업 지시</h3>
+<p><strong>1단계 — 서빙 방식 실측 검증 ([확인필요] 해소). 작성: <code>scripts/rerank_serving_check.py</code></strong>
+LMStudio가 cross-encoder rerank를 OpenAI 호환으로 서빙하는지 먼저 찍어 본다. 아래 순서로 fail-closed 판정:</p>
+<ol>
+<li><code>GET http://localhost:1234/v1/models</code>에 reranker 모델이 떠 있는지 확인. 없으면 LMStudio 서빙 불가로 즉시 판정.</li>
+<li>(있으면) rerank 전용 엔드포인트(<code>/v1/rerank</code> 등) 또는 cross-encoder 점수 산출 가능 여부를 한 쌍(query, passage)으로 시험 호출. 정상 점수가 나오면 <code>serving=&quot;lmstudio&quot;</code>.</li>
+<li>둘 다 실패하면 <strong>로컬 라이브러리 폴백</strong>: <code>FlagEmbedding</code>(<code>FlagReranker(&quot;BAAI/bge-reranker-v2-m3&quot;, use_fp16=True)</code>) 또는 <code>sentence-transformers</code>(<code>CrossEncoder</code>)로 in-process 로드. 모델은 로컬 캐시/디스크에서만 로드(네트워크 다운로드가 필요하면 사전 다운로드 안내 후 중단 — 자동 외부 다운로드를 무음으로 수행하지 마라).</li>
+<li>판정 결과를 <code>config/settings.yaml</code>의 <code>rerank:</code> 섹션에 기록: <code>enabled</code>, <code>model</code>, <code>serving∈{lmstudio|flagembedding|sentence_transformers}</code>, <code>top_n</code>, <code>first_stage_k</code>(20~50). 스크립트는 마지막에 선택된 serving 모드를 stdout으로 출력.</li>
+</ol>
+<p><strong>2단계 — <code>rerank()</code> 구현. 수정: <code>src/retrieve/rerank.py</code></strong> (시그니처 고정)</p>
+<pre><code class="language-python">def rerank(query: str, hits: list[SearchHit], *, top_n: int = 5) -&gt; list[SearchHit]: ...
+</code></pre>
+<ul>
+<li>입력: <code>search()</code>의 1차 결과 20~50개. cross-encoder로 (query, hit.chunk.text) 쌍을 재점수.</li>
+<li>반환: <code>list[SearchHit]</code>, <code>source=&quot;rerank&quot;</code>, <code>score</code>=리랭커 점수, <code>rank</code>=재점수 내림차순 1..N, 길이 <code>≤ top_n</code>.</li>
+<li>serving 모드는 <code>config/settings.yaml</code>의 <code>rerank.serving</code>에서 읽어 분기(1단계 산출물 사용). 모델은 모듈 로드 시 1회만 초기화(요청마다 재로딩 금지).</li>
+<li>빈 <code>hits</code> → <code>[]</code> 즉시. <code>top_n ≤ 0</code> → 빈 리스트. fail-closed(서빙 미설정인데 호출되면 명시적 예외, 무음 통과 금지).</li>
+</ul>
+<p><strong>3단계 — <code>evaluate()</code>에 리랭커 배선. 수정: <code>eval/evaluate.py</code></strong> (시그니처 고정)</p>
+<pre><code class="language-python">def evaluate(golden_path=&quot;eval/queries.yaml&quot;, *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False) -&gt; EvalResult: ...
+</code></pre>
+<ul>
+<li><code>use_rerank=True</code>면 질의별로 <code>search(query, top_k=first_stage_k, use_bm25=...)</code> → <code>rerank(query, hits, top_n=...)</code>를 거친 순위로 Recall@k·MRR·<strong>nDCG@10</strong> 산출. 1차 단계 k는 <code>settings.yaml</code>의 <code>rerank.first_stage_k</code>(20~50). top_n은 5.</li>
+<li><strong>nDCG는 반드시 <code>k=10</code>으로 산출해 <code>EvalResult.ndcg_at_10</code> 키를 채운다.</strong> 참조 문서 <code>docs/05_운영_평가/00_평가하네스_Recall.md</code>의 예시 코드는 <code>ndcg_k=5</code>(nDCG@5)로 되어 있으나, 계약 키는 <code>ndcg_at_10</code>이므로 <strong>그 예시를 그대로 쓰지 말고 k=10으로 산출하라</strong>(비퇴행 게이트가 <code>ndcg_at_10</code> 키를 측정한다 — k=5로 산출하면 게이트가 잘못 측정됨).</li>
+<li><strong><code>per_query</code>는 <code>list[dict]</code>로 채운다(계약 고정).</strong> 각 항목에 최소한 <code>query</code>(질의 문자열)와 질의별 지표(<code>recall_at_1</code> 등)를 포함시켜, 회귀 케이스를 <code>query</code> 필드로 필터링해 추출할 수 있게 한다. (계약 자체를 dict-of-query로 바꾸지 마라 — <code>list[dict]</code> 유지.)</li>
+<li><code>use_rerank=False</code>는 기존 경로 그대로(베이스라인). <strong>변수 1개 원칙</strong>: 리랭커 측정 시 임베딩·청크·BM25 설정은 베이스라인과 동일하게 고정.</li>
+<li>결과를 <code>eval/results/</code>에 타임스탬프·플래그(<code>use_bm25</code>,<code>use_rerank</code>,임베딩모델)와 함께 JSON으로 저장(L1~L3 추이 리포트 입력).</li>
+</ul>
+<p><strong>4단계 — L1~L3 지표 추이 종합 리포트 생성. 작성: <code>eval/report.py</code> 또는 <code>scripts/trend_report.py</code></strong></p>
+<ul>
+<li><code>eval/results/</code>의 과거 측정(L1 dense-only → L2 하이브리드/임베딩 → L3 리랭커)을 읽어 단계별 <code>Recall@{1,3,5,10}·MRR·nDCG@10</code>을 한 표로 출력.</li>
+<li><strong>회귀 케이스 &quot;연차 휴가 신청 절차&quot; 전용 행</strong>을 별도로: 단계별 정답 휴가규정의 순위·점수, 오답(출장경비) 대비 격차, <code>Recall@1</code> 0→1 전환 여부를 명시. (회귀 케이스 추출은 <code>per_query</code> 리스트에서 <code>query==&quot;연차 휴가 신청 절차&quot;</code> 항목을 필터링한다.)</li>
+<li>콘솔 표 + Markdown(<code>eval/results/L1_L3_trend.md</code>)로 동시 출력.</li>
+</ul>
+<h3>산출물 (생성/수정 파일)</h3>
+<ul>
+<li>생성: <code>scripts/rerank_serving_check.py</code> (서빙 실측 판정)</li>
+<li>수정: <code>config/settings.yaml</code> (<code>rerank:</code> 섹션 — enabled/model/serving/top_n/first_stage_k)</li>
+<li>수정: <code>src/retrieve/rerank.py</code> (<code>rerank()</code> 본구현)</li>
+<li>수정: <code>eval/evaluate.py</code> (<code>use_rerank</code> 분기 배선 — <code>per_query</code>에 <code>query</code> 필드 포함, nDCG@10 산출)</li>
+<li>생성: <code>scripts/trend_report.py</code> (또는 <code>eval/report.py</code>)</li>
+<li>생성: <code>eval/results/L1_L3_trend.md</code>, <code>eval/results/&lt;ts&gt;_rerank.json</code></li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><strong>서빙 확정</strong>: <code>python scripts/rerank_serving_check.py</code>가 <code>lmstudio</code> 또는 <code>flagembedding</code>/<code>sentence_transformers</code> 중 하나를 확정 출력하고, <code>settings.yaml</code>에 기록됨. (외부 호출 0건 — INV-3)</li>
+<li><strong>게이트 ① 회귀 케이스</strong>: <code>use_rerank=True</code>에서 &quot;연차 휴가 신청 절차&quot;가 <code>Recall@1=1</code>(정답 휴가규정 1위). 0→1 전환이 리포트에 증명됨.</li>
+<li><strong>게이트 ② 비퇴행</strong>: 전체 <code>nDCG@10</code>이 리랭커 off 베이스라인 대비 <strong>저하 0</strong>(같거나 향상). 어느 질의도 퇴행으로 합격선을 깨지 않음.</li>
+<li><strong>변수 격리</strong>: 측정 로그에 임베딩 모델이 베이스라인과 동일함이 기록됨(리랭커와 임베딩 교체 동시 점등 아님 — INV-7).</li>
+<li><strong>추이 리포트</strong>: <code>eval/results/L1_L3_trend.md</code>에 L1~L3 단계별 지표 표 + 회귀 케이스 전용 행이 존재.</li>
+</ol>
+<h3>검증 명령 (복붙 실행)</h3>
+<pre><code class="language-bash"># 1) 서빙 실측 (외부 호출 없는지 함께 확인)
+python scripts/rerank_serving_check.py
+grep -nE &quot;^\s*(enabled|model|serving|top_n|first_stage_k):&quot; config/settings.yaml
+
+# 2) 베이스라인(리랭커 off) vs 리랭커 on — 변수 1개만 변경
+#    주의: EvalResult는 TypedDict, per_query는 list[dict]. 딕셔너리 키 접근 + 리스트 필터링으로 게이트 판정.
+python -c &quot;from eval.evaluate import evaluate; \
+b=evaluate(use_bm25=True, use_rerank=False); \
+r=evaluate(use_bm25=True, use_rerank=True); \
+print(&#39;OFF nDCG@10=%.4f R@1=%.4f&#39;%(b[&#39;ndcg_at_10&#39;],b[&#39;recall_at_1&#39;])); \
+print(&#39;ON  nDCG@10=%.4f R@1=%.4f&#39;%(r[&#39;ndcg_at_10&#39;],r[&#39;recall_at_1&#39;])); \
+assert r[&#39;ndcg_at_10&#39;] &gt;= b[&#39;ndcg_at_10&#39;], &#39;GATE FAIL: nDCG@10 퇴행&#39;; \
+hit=next(x for x in r[&#39;per_query&#39;] if x.get(&#39;query&#39;)==&#39;연차 휴가 신청 절차&#39;); \
+assert hit[&#39;recall_at_1&#39;]==1.0, &#39;GATE FAIL: 회귀 케이스 Recall@1!=1&#39;; \
+print(&#39;GATES PASS&#39;)&quot;
+
+# 3) 추이 리포트 생성 및 회귀 케이스 행 확인
+python scripts/trend_report.py
+grep -n &quot;연차 휴가\|휴가규정\|Recall@1&quot; eval/results/L1_L3_trend.md
+
+# 4) INV-3 가드 — 외부 호출 흔적 정적 점검 (localhost 외 URL 0건이어야)
+grep -rnE &quot;https?://&quot; src/retrieve/rerank.py scripts/rerank_serving_check.py | grep -v &quot;localhost:1234&quot; || echo &quot;외부 URL 없음 OK&quot;
+</code></pre>
+<h3>다음 페이즈 핸드오프</h3>
+<p>리랭커 serving 모드·on 지표가 <code>settings.yaml</code>/<code>eval/results/</code>에 확정 기록된다. 다음 페이즈는 이 설정을 읽어 <code>answer()</code> 파이프라인(<code>search → rerank → chat</code>)에 리랭킹을 정식 배선하고 운영 자동화/런북으로 넘긴다.</p>
+<p><strong>설정 스키마 확장 주의</strong>: <code>rerank.serving∈{lmstudio|flagembedding|sentence_transformers}</code>와 <code>rerank.first_stage_k</code>는 이 페이즈가 <strong>새로 도입</strong>하는 키로, 상류 문서의 <code>settings.yaml</code> 스키마(§B-11)에는 미정의 상태다. 계약 위반은 아니나 <strong>정당한 스키마 확장</strong>이므로, 핸드오프 시 상류 settings 스키마 문서에 이 두 키를 추가 반영하도록 명시한다.</p>
 </article>
 <article class="doc" data-id="99_AI참조/00_AI작업규칙.md" hidden><h1>AI 작업 규칙 (00_AI작업규칙)</h1>
 <blockquote>
