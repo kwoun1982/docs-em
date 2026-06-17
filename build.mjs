@@ -48,11 +48,12 @@ function collect() {
 
 // 문서 내부 상대링크(../, ./, *.md)를 사이트 내 해시 링크로 치환
 function rewriteLinks(html, currentId) {
-  return html.replace(/href="([^"]+\.md)(#[^"]*)?"/g, (_m, path, hash) => {
+  return html.replace(/href="([^"]+\.md)(#[^"]*)?"/g, (_m, rawPath, hash) => {
     // 절대/외부는 그대로
-    if (/^https?:\/\//.test(path)) return `href="${path}${hash || ''}"`;
-    // 시작프롬프트.md 등 docs 밖 → 비활성(앵커만 표시)
-    const norm = path.replace(/^\.\//, '').replace(/^\.\.\//, '');
+    if (/^https?:\/\//.test(rawPath)) return `href="${rawPath}${hash || ''}"`;
+    // marked가 한글 경로를 이미 URL 인코딩해 넘기므로 1회 디코딩 → 아래에서 1회만 재인코딩(이중 인코딩 방지)
+    let path;
+    try { path = decodeURIComponent(rawPath); } catch { path = rawPath; }
     // currentId의 카테고리 기준으로 해석
     const cat = currentId.split('/')[0];
     let target;
@@ -66,6 +67,8 @@ function rewriteLinks(html, currentId) {
       const f = path.replace(/^\.\//, '');
       target = `${cat}/${f}`;
     }
+    // target은 디코딩된 원본 경로(예: 01_시스템구성/01_기술스택결정서.md) → article의 data-id와 동일.
+    // encodeURIComponent는 여기서 단 1회만 적용된다(decodeURIComponent로 정규화했으므로).
     return `href="#${encodeURIComponent(target)}" data-nav`;
   });
 }
