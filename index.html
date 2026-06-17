@@ -128,7 +128,10 @@
 <a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F06_%ED%8E%98%EC%9D%B4%EC%A6%885_hybrid.md" data-id="07_실행프롬프트/06_페이즈5_hybrid.md">페이즈 5: BM25 · RRF 하이브리드 검색 (L2)</a>
 <a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F07_%ED%8E%98%EC%9D%B4%EC%A6%886_bge.md" data-id="07_실행프롬프트/07_페이즈6_bge.md">페이즈 6: BGE-M3 임베딩 교체 실험 (측정 게이트)</a>
 <a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F08_%ED%8E%98%EC%9D%B4%EC%A6%887_answer.md" data-id="07_실행프롬프트/08_페이즈7_answer.md">페이즈 7: 답변 생성 · 출처 인용 · CLI</a>
-<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F09_%ED%8E%98%EC%9D%B4%EC%A6%888_rerank.md" data-id="07_실행프롬프트/09_페이즈8_rerank.md">페이즈 8: 리랭킹 (L3) · 서빙 검증</a></div>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F09_%ED%8E%98%EC%9D%B4%EC%A6%888_rerank.md" data-id="07_실행프롬프트/09_페이즈8_rerank.md">페이즈 8: 리랭킹 (L3) · 서빙 검증</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F10_%ED%8E%98%EC%9D%B4%EC%A6%889_ui_server_shell.md" data-id="07_실행프롬프트/10_페이즈9_ui_server_shell.md">페이즈 9: API 서버 · React/Vite 셋업 · AppShell</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F11_%ED%8E%98%EC%9D%B4%EC%A6%8810_ui_query.md" data-id="07_실행프롬프트/11_페이즈10_ui_query.md">페이즈 10: 화면 A 질의응답 + 출처 인용 (실제 검색·답변 배선)</a>
+<a class="doc-link" href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F12_%ED%8E%98%EC%9D%B4%EC%A6%8811_ui_index_eval.md" data-id="07_실행프롬프트/12_페이즈11_ui_index_eval.md">페이즈 11: 화면 B 인덱싱 + 화면 C 평가 대시보드 (실제 배선)</a></div>
 <div class="cat"><div class="cat-label">AI 참조</div><a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F00_AI%EC%9E%91%EC%97%85%EA%B7%9C%EC%B9%99.md" data-id="99_AI참조/00_AI작업규칙.md">AI 작업 규칙 (00_AI작업규칙)</a>
 <a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-id="99_AI참조/01_실측제약_불변식.md">실측 제약 불변식 (변경금지)</a>
 <a class="doc-link" href="#99_AI%EC%B0%B8%EC%A1%B0%2F02_%EC%BD%94%EB%94%A9%EC%BB%A8%EB%B2%A4%EC%85%98.md" data-id="99_AI참조/02_코딩컨벤션.md">02. 코딩 컨벤션</a></div>
@@ -8307,7 +8310,12 @@ def make_client() -&gt; OpenAI:
 </blockquote>
 <hr>
 <h2>6. 개발 시 적용 (실행 프롬프트 연계)</h2>
-<p><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>07_실행프롬프트</a>로 docs-em 백엔드를 구현한 뒤, <strong>UI를 붙이는 단계</strong>에서 이 디자인 시스템을 씁니다.</p>
+<p><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>07_실행프롬프트</a>의 <strong>페이즈 0~8(백엔드)</strong> 로 docs-em 엔진을 구현한 뒤, <strong>페이즈 9~11(웹 UI)</strong> 에서 이 디자인 시스템으로 기획 3화면을 구현해 백엔드 API에 배선합니다. 아래 절차는 그 UI 페이즈들이 따르는 내용입니다.</p>
+<ul>
+<li><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F10_%ED%8E%98%EC%9D%B4%EC%A6%889_ui_server_shell.md" data-nav>페이즈 9</a>: FastAPI 서버 + Vite 셋업 + 폰트/번들 vendoring + AppShell·신뢰 클러스터</li>
+<li><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F11_%ED%8E%98%EC%9D%B4%EC%A6%8810_ui_query.md" data-nav>페이즈 10</a>: 화면 A 질의응답 ← QueryScreen 배선</li>
+<li><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F12_%ED%8E%98%EC%9D%B4%EC%A6%8811_ui_index_eval.md" data-nav>페이즈 11</a>: 화면 B 인덱싱 + 화면 C 평가 ← IndexScreen·EvalScreen 배선</li>
+</ul>
 <ol>
 <li><strong>CSS 토큰 vendoring</strong>: <code>디자인/docs-em Design System/tokens/</code>와 <code>styles.css</code>를 프론트엔드 프로젝트로 복사하고 <code>styles.css</code> 한 파일을 link.</li>
 <li><strong>폰트 오프라인화 (폐쇄망 필수)</strong>: <code>tokens/fonts.css</code>의 <code>src</code>가 CDN(jsdelivr·Google Fonts)을 가리킴 → <strong>폐쇄망에서는 <code>.woff2</code>를 로컬(<code>assets/fonts/</code>)로 받아 src 재지정 필수.</strong> (Pretendard, JetBrains Mono)</li>
@@ -8384,6 +8392,7 @@ def make_client() -&gt; OpenAI:
 </blockquote>
 <h2>0. 이게 뭔가</h2>
 <p>docs-em(100% 로컬 한국어 사내문서 RAG)을 <strong>페이즈 단위로 끊어</strong> 개발하기 위한 한방 프롬프트 묶음이다. 각 <code>NN_페이즈*.md</code>는 그 자체로 완결된 작업 지시서이며, 한 페이즈를 마칠 때마다 <strong>컨텍스트를 초기화</strong>하고 다음 페이즈를 새로 시작한다.</p>
+<p>두 트랙으로 구성된다: <strong>페이즈 0<del>8 = 백엔드(Python, L1</del>L3 검색·평가·답변 엔진 + CLI)</strong>, <strong>페이즈 9~11 = 웹 UI(React+Vite, 기획 3화면을 디자인 시스템으로 구현해 백엔드 API에 배선)</strong>. 웹 UI는 백엔드(0~8) 완료를 하드 선행으로 한다.</p>
 <ul>
 <li><strong>왜 끊는가</strong>: 컨텍스트 누적으로 인한 지시 희석·불변식 망각·환각을 차단한다. 페이즈마다 깨끗한 컨텍스트에 해당 프롬프트 전체를 다시 주입한다.</li>
 <li><strong>공통 전제</strong>: 모든 페이즈 프롬프트 상단에는 확정 사실(정체·불변식 INV-1~8·확정 스택·함수 계약)이 공통으로 박혀 있다. 이 범위 밖 수치/사실 발명은 금지다.</li>
@@ -8476,9 +8485,32 @@ def make_client() -&gt; OpenAI:
 <td>L3</td>
 <td>✅ L3 게이트</td>
 </tr>
+<tr>
+<td>9</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F10_%ED%8E%98%EC%9D%B4%EC%A6%889_ui_server_shell.md" data-nav>API 서버·React/Vite·AppShell</a></td>
+<td>FastAPI로 answer/search/eval/인덱싱 HTTP 노출 + Vite 프론트 셋업·폰트 vendoring + AppShell·신뢰 클러스터 헬스 배선</td>
+<td>UI(웹)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F11_%ED%8E%98%EC%9D%B4%EC%A6%8810_ui_query.md" data-nav>화면 A 질의응답 배선</a></td>
+<td>디자인 키트 QueryScreen을 실제 검색·답변 API에 배선(인용⊆Top-k, 근거부족·재시도 상태)</td>
+<td>UI(웹)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F12_%ED%8E%98%EC%9D%B4%EC%A6%8811_ui_index_eval.md" data-nav>화면 B 인덱싱 + C 평가</a></td>
+<td>IndexScreen·EvalScreen 실배선(드롭존·파이프라인·색인테이블 / Recall@1 KPI·골든셋·통제실험)</td>
+<td>UI(웹)</td>
+<td>✅ 데모배지 게이트</td>
+</tr>
 </tbody></table>
 <h2>3. 페이즈 간 의존성</h2>
-<pre><code>0 → 1 → 2 → 3 → 4 ──(L1 게이트)──→ 5 → 6 ──(측정 게이트)──→ 7 → 8 (L3 게이트)
+<pre><code>백엔드:  0 → 1 → 2 → 3 → 4 ──(L1 게이트)──→ 5 → 6 ──(측정 게이트)──→ 7 → 8 (L3 게이트)
+                                                              │
+웹 UI:                          (백엔드 7·4 산출물 필요) ──────┴──→ 9 → 10 → 11
 </code></pre>
 <ul>
 <li><strong>0</strong>: 모든 페이즈의 선행. Phase 0 실측 수치(norm·차원·reasoning 폴백)가 1·3·6의 가드/계약 근거.</li>
@@ -8489,6 +8521,9 @@ def make_client() -&gt; OpenAI:
 <li><strong>5 → 6</strong>: 하이브리드 파이프라인 위에서 임베딩만 단독 교체해 측정.</li>
 <li><strong>6 → 7</strong>: 채택된 임베딩(nomic 또는 BGE-M3) 위에서 답변 생성.</li>
 <li><strong>7 → 8</strong>: 검색 결과에 리랭커를 덧대 재정렬. 8은 진입 전 서빙 방식 실측 선행 필수.</li>
+<li><strong>9 (웹 UI 시작)</strong>: <code>answer()</code>(페이즈 7)·<code>evaluate()</code>(페이즈 4)·인덱싱(페이즈 3) 산출물을 FastAPI로 HTTP 노출. 디자인 키트(<code>디자인/docs-em Design System/</code>)를 Vite 프로젝트로 vendoring. <strong>백엔드 미완 시 중단.</strong></li>
+<li><strong>9 → 10</strong>: AppShell·API 클라이언트 위에서 화면 A 질의응답을 실제 검색·답변에 배선.</li>
+<li><strong>10 → 11</strong>: 같은 패턴으로 화면 B 인덱싱·화면 C 평가 배선. <strong>변수 1개씩(INV-7)·BGE-M3 화면B 한정·<code>+rrf</code> 회귀성공은 데모 배지</strong> 규칙 UI에서도 강제.</li>
 </ul>
 <h2>4. 게이트</h2>
 <p>게이트는 정량 수치로만 통과 판정한다. 미통과 시 해당 페이즈에서 <strong>진행 금지</strong>(커밋·다음 페이즈 불가).</p>
@@ -8496,6 +8531,8 @@ def make_client() -&gt; OpenAI:
 <li><strong>L1 게이트 (페이즈 4) — 회귀 재현</strong>: 회귀 케이스(&quot;연차 휴가 신청 절차&quot; → 휴가규정)가 골든셋에 포함되고, 평가 하네스가 현재 dense-only에서 이 케이스 <strong>Recall@1=0</strong>을 재현해야 한다. 0이 정상(아직 못 맞히는 상태를 측정으로 고정). 합격선 = 회귀 케이스가 측정에 잡힘.</li>
 <li><strong>측정 게이트 (페이즈 6) — BGE-M3 채택</strong>: BGE-M3를 <strong>단독 변수</strong>로 교체(다른 변수 고정)해 골든셋 Recall@1이 nomic 대비 <strong>개선</strong>되어야 채택. 미개선 시 nomic 롤백(768차원 전체 재인덱싱 원복 + norm 재측정). 회귀 케이스 0→1 전환이 1차 성패 척도.</li>
 <li><strong>L3 게이트 (페이즈 8) — 리랭커</strong>: BGE-reranker-v2-m3 <strong>로컬 서빙 방식 실측</strong>을 진입 전 선행(LMStudio 호환 불확실 → sentence-transformers/FlagEmbedding 별도 프로세스 가능). 리랭킹이 top_n 품질에 기여(Recall/MRR 비퇴행)함을 측정으로 증명해야 통과.</li>
+<li><strong>외부 호출 0건 게이트 (페이즈 9~11) — 폐쇄망</strong>: 웹 UI 빌드 산출물에 외부 URL(unpkg·jsdelivr·googleapis·gstatic·CDN) <strong>0건</strong>, 프론트가 <code>localhost:1234</code>(LMStudio)를 직접 호출하지 않음(우리 백엔드만). 폰트·React·번들 전부 로컬 vendoring(INV-3). 신뢰 클러스터 <code>EXTERNAL CALLS: 0</code> 고정.</li>
+<li><strong>데모 배지 게이트 (페이즈 11) — 발명 금지</strong>: <code>+rrf</code>만으로 회귀 케이스 Recall@1 0→1 전환은 <strong>SSOT상 실측 근거가 없다</strong>(직접 교정 레버는 L2 BGE-M3·L3 리랭커, 둘 다 evaluate가 수행 안 함). 따라서 화면 C의 <code>+rrf</code> 성공 시각화(0▸1·+0.012·순위 3▸1·게이트 PASS)와 안정성 게이지 데모값은 <strong>모두 <code>(데모)</code> 배지</strong>를 달아야 하며, 실 <code>evaluate</code> 결과(recall/mrr/ndcg/per_query)만 실값으로 표기. (<code>+bm25</code>와 <code>+rrf</code>는 백엔드상 같은 <code>use_bm25=True</code> 호출이라 같은 실값을 내는 게 정상.)</li>
 </ul>
 <blockquote>
 <p>공통: INV-7. 정량 증명은 Recall@k(1/3/5/10)·MRR·nDCG@10으로 한다. 변수는 한 번에 하나만 바꿔 측정한다.</p>
@@ -8541,6 +8578,11 @@ def make_client() -&gt; OpenAI:
 <tr>
 <td>uv</td>
 <td>0.8.4</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Node / npm (페이즈 9~11 Vite)</td>
+<td><strong>v24.11.1 / 11.10.1</strong> (pnpm·bun도 있음)</td>
 <td>✅</td>
 </tr>
 <tr>
@@ -10179,6 +10221,631 @@ grep -rnE &quot;https?://&quot; src/retrieve/rerank.py scripts/rerank_serving_ch
 <h3>다음 페이즈 핸드오프</h3>
 <p>리랭커 serving 모드·on 지표가 <code>settings.yaml</code>/<code>eval/results/</code>에 확정 기록된다. 다음 페이즈는 이 설정을 읽어 <code>answer()</code> 파이프라인(<code>search → rerank → chat</code>)에 리랭킹을 정식 배선하고 운영 자동화/런북으로 넘긴다.</p>
 <p><strong>설정 스키마 확장 주의</strong>: <code>rerank.serving∈{lmstudio|flagembedding|sentence_transformers}</code>와 <code>rerank.first_stage_k</code>는 이 페이즈가 <strong>새로 도입</strong>하는 키로, 상류 문서의 <code>settings.yaml</code> 스키마(§B-11)에는 미정의 상태다. 계약 위반은 아니나 <strong>정당한 스키마 확장</strong>이므로, 핸드오프 시 상류 settings 스키마 문서에 이 두 키를 추가 반영하도록 명시한다.</p>
+</article>
+<article class="doc" data-id="07_실행프롬프트/10_페이즈9_ui_server_shell.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#06_UIUX%2F01_%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C_%EC%B0%B8%EC%A1%B0.md" data-nav>디자인 시스템 참조</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a> · 디자인 원본 <code>디자인/docs-em Design System/</code></p>
+</blockquote>
+<h1>페이즈 9: API 서버 · React/Vite 셋업 · AppShell</h1>
+<h3>이 페이즈의 목표 (1~2문장)</h3>
+<p>백엔드(<code>answer</code>/<code>search</code>/<code>evaluate</code>/인덱싱)를 <strong>로컬 전용 FastAPI</strong>로 HTTP 노출하고, 디자인 키트(React JSX 3화면)를 <strong>React 18 + Vite 프로젝트(<code>web/</code>)</strong> 로 옮겨 폰트·React·디자인 번들을 전부 로컬 vendoring한 뒤, <strong>AppShell</strong>(고정 헤더 + 신뢰 클러스터 + 사이드레일 + 3화면 라우팅)을 <code>GET /api/health</code>에 실배선한다. 화면 내부 데이터 배선(질의응답/인덱싱/평가의 실제 fetch)은 다음 페이즈로 넘기고, 이 페이즈는 <strong>껍데기·셋업·헬스 신호</strong>까지만 한다.</p>
+<hr>
+<h3>사전 조건 (이전 페이즈 산출물 — 파일에서 직접 확인. 없으면 중단·보고)</h3>
+<p>컨텍스트 초기화 후 단독 실행되므로, 시작 전 아래를 <strong>그대로 실행해 존재·시그니처를 확인</strong>하라. 하나라도 빠지면 이 페이즈를 진행하지 말고 <strong>누락 목록을 보고한 뒤 중단</strong>한다.</p>
+<pre><code class="language-bash"># 1) 백엔드 핵심 산출물 (페이즈 7·8 결과). UI는 이 함수들을 HTTP로 감싼다 — 없으면 감쌀 대상이 없음 → 중단.
+ls -1 src/app/answer.py eval/evaluate.py src/retrieve/search.py src/store/vector_store.py 2&gt;&amp;1
+grep -n &quot;def answer&quot; src/app/answer.py 2&gt;&amp;1
+grep -n &quot;def evaluate&quot; eval/evaluate.py 2&gt;&amp;1
+grep -n &quot;def search&quot; src/retrieve/search.py 2&gt;&amp;1
+# 인덱싱 경로 (페이즈 2·3): 로더·청커·벡터스토어
+ls -1 src/ingest/loaders.py src/ingest/chunker.py 2&gt;&amp;1
+
+# 2) 디자인 시스템 정본 (이미 리포에 존재해야 함)
+ls -1 &quot;디자인/docs-em Design System/tokens/fonts.css&quot; \
+      &quot;디자인/docs-em Design System/styles.css&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/AppShell.jsx&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/QueryScreen.jsx&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/IndexScreen.jsx&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/EvalScreen.jsx&quot; 2&gt;&amp;1
+ls -1 &quot;디자인/docs-em Design System/components&quot; 2&gt;&amp;1
+
+# 3) 런타임 도구
+node --version 2&gt;&amp;1   # 없으면 안내 후 중단 (Vite는 Node 18+ 필요)
+npm --version  2&gt;&amp;1
+uv --version   2&gt;&amp;1
+</code></pre>
+<p><strong>중단 규칙</strong>:</p>
+<ul>
+<li><code>src/app/answer.py</code> 또는 <code>eval/evaluate.py</code> 또는 <code>src/retrieve/search.py</code>가 없으면 → <strong>&quot;백엔드 페이즈 7·8 미완료. 페이즈 9 진행 불가&quot;</strong> 보고 후 중단. (이 함수들을 감싸는 게 이 페이즈의 본질이므로 더미로 대체하지 말 것.)</li>
+<li>디자인 키트(<code>ui_kits/docs-em/*.jsx</code>)가 없으면 → <strong>&quot;디자인 키트 누락&quot;</strong> 보고 후 중단. (UI를 처음부터 그리지 말 것. 정본 키트 복사가 출발점이다.)</li>
+<li><code>node</code>/<code>npm</code>이 없으면 → <strong>&quot;Node 18+ 미설치. <code>brew install node</code> 또는 nvm 안내&quot;</strong> 출력 후 프론트 작업 중단(FastAPI 부분은 진행 가능). 실측 환경에서 Node가 있으면 그대로 진행.</li>
+</ul>
+<blockquote>
+<p>확인된 백엔드 시그니처(고정 — 이 페이즈에서 <strong>변경 금지</strong>, 그대로 HTTP로 감싸기):</p>
+<ul>
+<li><code>answer(query, *, model=&quot;google/gemma-4-e4b&quot;, top_n=5) -&gt; {&quot;text&quot;: str, &quot;citations&quot;: [{doc_id, source_path, page|section}]}</code></li>
+<li><code>search(query, *, top_k=30, use_bm25=True) -&gt; list[SearchHit(chunk, score, rank, source)]</code></li>
+<li><code>evaluate(golden_path=&quot;eval/queries.yaml&quot;, *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False) -&gt; EvalResult(recall_at_1/3/5/10, mrr, ndcg_at_10, per_query)</code></li>
+<li>인덱싱: <code>src/ingest/{loaders,chunker}</code> + <code>src/store/vector_store.py</code> (LanceDB, 사이드카 <code>_index_header.json</code>)</li>
+</ul>
+<p><strong>실제 시그니처가 위와 다르면</strong> API 라우터를 억지로 끼워맞추지 말고 <strong>불일치를 먼저 보고</strong>하라. 백엔드 함수 시그니처는 이 페이즈에서 손대지 않는다.</p>
+</blockquote>
+<hr>
+<h3>절대 규칙 (이 페이즈에서 위반 금지)</h3>
+<ul>
+<li><strong>INV-3 외부 API 0건 — 최우선.</strong> 폰트·아이콘·React·번들·CSS 어디에도 외부 호출(<code>http(s)://</code>, CDN, unpkg, jsdelivr, fonts.googleapis, fonts.gstatic)이 빌드 산출물에 남으면 안 된다. <strong>모두 빌드타임 vendoring</strong>으로 로컬화한다. 완료 기준에서 정적 grep으로 0건을 강제한다.</li>
+<li><strong>백엔드 경유만.</strong> UI/API 서버는 <strong>LMStudio(<code>localhost:1234</code>)를 직접 호출하지 않는다.</strong> 추론은 백엔드 <code>answer()</code>/<code>search()</code>/<code>evaluate()</code>만 경유한다. API 서버 안에서 <code>openai</code> 클라이언트를 새로 만들거나 <code>localhost:1234</code>를 직접 fetch하지 말 것(<code>grep</code>으로 0건 강제).</li>
+<li><strong>CORS는 로컬만.</strong> <code>allow_origins</code>는 <code>http://localhost:*</code> / <code>http://127.0.0.1:*</code>만. <code>&quot;*&quot;</code> 금지.</li>
+<li><strong>신뢰 시그널 고정.</strong> 헤더의 <code>ConnectionBadge</code>(localhost:1234) · <code>ExternalCallsCounter</code>(0) · <code>100% LOCAL</code>은 3화면 모두에서 <strong>항상 노출, 숨김·제거 금지.</strong> 이 페이즈에서 이 셋을 <code>GET /api/health</code> 실데이터에 연결한다. <code>ExternalCallsCounter</code>는 <strong>항상 0</strong>을 표시한다(외부 호출이 0이므로). 0이 아닌 값이 나오면 그건 버그다.<ul>
+<li><strong><code>ConnectionBadge</code>의 status 값은 정본 <code>components/feedback/ConnectionBadge.jsx</code>의 <code>STATES</code>에 정의된 <code>ok</code>/<code>delay</code>/<code>down</code> <strong>3개만</strong> 사용한다.</strong> 코드는 <code>const s = STATES[status] || STATES.ok</code>이므로 <strong>정의에 없는 문자열(예: <code>&quot;error&quot;</code>)을 넘기면 조용히 <code>ok</code>(청록 &quot;연결됨&quot;)로 폴백</strong>해 연결이 끊겼는데 초록 정상으로 표시되는 신뢰 시그널 왜곡 버그가 난다. <strong><code>&quot;error&quot;</code>는 절대 사용 금지.</strong> 헬스 실패/연결 끊김 → <code>status=&quot;down&quot;</code>(빨강 &quot;연결 끊김&quot;), 지연 → <code>status=&quot;delay&quot;</code>(앰버 &quot;지연&quot;), 정상 → <code>status=&quot;ok&quot;</code>(청록 &quot;연결됨&quot;). (키트·정본 컴포넌트는 수정하지 않고 그대로 쓴다.)</li>
+</ul>
+</li>
+<li><strong>디자인 토큰만.</strong> 색/간격/타이포/radius는 전부 <code>tokens/*.css</code> CSS 변수(<code>var(--teal)</code>, <code>var(--bg-default)</code>, <code>var(--font-mono)</code>, <code>var(--radius-md)</code> 등)로. HEX·px 하드코딩 신규 도입 금지(키트가 inline style로 이미 쓰는 값은 보존하되 새로 추가하지 말 것). 데이터·식별자·점수는 <code>.mono</code>(JetBrains Mono).</li>
+<li><strong>이모지 금지.</strong> 아이콘은 Lucide(<code>Icon</code> 컴포넌트, strokeWidth 1.75)만. 정본 <code>Icon.jsx</code>는 Lucide 경로 데이터를 이미 인라인 vendoring한 자기완결 컴포넌트다 — <strong>추가 아이콘 패키지(<code>lucide-react</code> 등)·아이콘 CDN 도입 금지.</strong></li>
+<li><strong>BGE-M3 화면A 노출 금지.</strong> 이 페이즈는 화면 껍데기/셸만 다루므로 BGE-M3(1024) 미채택 DECISION을 새로 노출하지 않는다. 키트 IndexScreen(화면 B)의 기존 <code>⚠+모달</code> 표현은 건드리지 말 것.</li>
+<li><strong>데모 수치 확정값만.</strong> 셸/헬스에는 수치를 발명하지 않는다. 확정 사실(<code>localhost:1234</code>·<code>768</code>·<code>EXTERNAL CALLS: 0</code>)만 노출.</li>
+<li><strong>범위 한정.</strong> 이 페이즈에서 화면 내부의 가짜 데이터를 실제 API 응답으로 바꾸지 <strong>않는다</strong>(키트 하드코딩 그대로 유지). 셸·라우팅·헬스 신호만 실배선. 화면별 배선은 페이즈 10~11.</li>
+</ul>
+<hr>
+<h3>작업 지시 (구체 단계)</h3>
+<h4>1. FastAPI API 서버 — <code>src/api/server.py</code></h4>
+<p>백엔드와 <strong>같은 venv(Python 3.11)</strong> 에 FastAPI를 설치한다.</p>
+<pre><code class="language-bash">uv venv --python 3.11           # 이미 있으면 재사용
+source .venv/bin/activate
+uv pip install &quot;fastapi&gt;=0.111&quot; &quot;uvicorn[standard]&gt;=0.30&quot; &quot;python-multipart&gt;=0.0.9&quot;
+</code></pre>
+<p><code>src/api/__init__.py</code>(빈 파일)와 <code>src/api/server.py</code>를 생성한다. 엔드포인트:</p>
+<ul>
+<li><code>GET /api/health</code> → 다음 JSON:<pre><code class="language-json">{
+  &quot;ok&quot;: true,
+  &quot;llm_endpoint&quot;: &quot;localhost:1234&quot;,
+  &quot;llm_connected&quot;: true,
+  &quot;external_calls&quot;: 0,
+  &quot;embedding_dim&quot;: 768,
+  &quot;normalized&quot;: true
+}
+</code></pre>
+<ul>
+<li><code>llm_connected</code>: LMStudio 연결 여부를 <strong>백엔드를 통해서만</strong> 판단한다. <code>localhost:1234</code>를 API 서버가 직접 fetch하지 말 것. 백엔드(<code>src/llm/client.py</code>)에 헬스/핑 함수가 있으면 그걸 호출한다. <strong>단, 정본 계약(<code>docs/04_아키텍처_API/02_내부API_인터페이스.md</code> §2.1)의 <code>src/llm/client.py</code>에는 <code>chat()</code>만 정의돼 있고 헬스/핑 함수가 없다</strong> — 없으면 새로 LMStudio에 연결 판정 로직을 박지 말고 <code>llm_connected</code>를 <code>null</code>(불확실) 또는 <code>false</code>로 <strong>정직하게</strong> 두고, <code>external_calls</code>는 항상 <code>0</code>을 반환한다.</li>
+<li><code>external_calls</code>는 <strong>상수 0</strong>. 절대 외부 호출 카운터를 켜지 말 것.</li>
+</ul>
+</li>
+<li><code>POST /api/answer</code> body <code>{&quot;query&quot;: str, &quot;model&quot;?: str, &quot;top_n&quot;?: int}</code> → <code>answer(query, model=..., top_n=...)</code> 반환값을 그대로 JSON 응답.</li>
+<li><code>POST /api/search</code> body <code>{&quot;query&quot;: str, &quot;top_k&quot;?: int, &quot;use_bm25&quot;?: bool}</code> → <code>search(...)</code>를 호출하고 <code>SearchHit</code>를 <strong>JSON 직렬화 가능한 dict</strong>로 변환(<code>{chunk: {chunk_id, doc_id, text, source_path, chunk_index, meta}, score, rank, source}</code>)해 리스트로 반환.</li>
+<li><code>POST /api/eval</code> body <code>{&quot;use_bm25&quot;?: bool, &quot;use_rerank&quot;?: bool, &quot;golden_path&quot;?: str}</code> → <code>evaluate(...)</code> 반환 <code>EvalResult</code>를 그대로 JSON.</li>
+<li>인덱싱 엔드포인트(최소 3개, 백엔드 함수에 맞춰 얇게):<ul>
+<li><code>POST /api/index/upload</code> (<code>multipart/form-data</code>, 파일) → 업로드 파일을 로컬 임시/데이터 디렉토리에 저장하고 저장 경로·수락여부를 반환. (휴가규정.pdf·출장경비.docx 같은 허용 형식만, 그 외는 거부 목록에 사유와 함께.)</li>
+<li><code>POST /api/index/reindex</code> → <code>src/ingest/{loaders,chunker}</code> + <code>src/store/vector_store.py</code>로 재색인. 정본 계약·아키텍처에는 top-level 재색인 진입 함수가 없고 <code>ingest</code>가 적재 시 embed/store를 호출하는 구조뿐이다. 재색인 진입 함수가 있으면 호출하고, 없으면 로더→청커→임베딩→저장을 조합한다. <strong>불확실하면 백엔드 함수 시그니처를 grep으로 확인 후 배선</strong>하고, 진입점이 모호하면 TODO 주석 + <code>501 Not Implemented</code>로 정직하게 두되 라우트는 만들어 둔다.</li>
+<li><code>GET /api/index/list</code> → 현재 색인 목록을 사이드카 <code>_index_header.json</code>(또는 벡터스토어 조회)에서 읽어 반환.</li>
+</ul>
+</li>
+</ul>
+<p>서버 공통:</p>
+<ul>
+<li><strong>CORS</strong>: <code>CORSMiddleware</code>로 <code>allow_origins</code>를 <code>http://localhost:5173</code>, <code>http://127.0.0.1:5173</code>(Vite dev)만 허용. <code>allow_methods=[&quot;*&quot;]</code>는 무방하나 origin은 로컬 고정.</li>
+<li>백엔드 import는 <code>from src.app.answer import answer</code> 등 <strong>기존 모듈 경로 그대로</strong>. 함수 시그니처 변경 금지.</li>
+<li>LMStudio 직접 호출/<code>openai</code> import <strong>0건</strong>(완료 기준에서 grep 강제).</li>
+<li>실행: <code>uvicorn src.api.server:app --port 8000 --host 127.0.0.1</code>. <code>if __name__ == &quot;__main__&quot;</code> 가드도 추가.</li>
+</ul>
+<h4>2. React 18 + Vite 프론트 — <code>web/</code></h4>
+<p><code>web/</code> 디렉토리에 Vite + React 18 프로젝트를 만든다(대화형 <code>create</code> 금지, 파일을 직접 생성).</p>
+<ul>
+<li><code>web/package.json</code>: <code>react@^18</code>, <code>react-dom@^18</code>, devDeps <code>vite@^5</code>, <code>@vitejs/plugin-react@^4</code>. <code>type: &quot;module&quot;</code>. 스크립트 <code>dev</code>/<code>build</code>/<code>preview</code>. <strong><code>lucide-react</code>는 추가하지 않는다</strong> — 정본 <code>Icon.jsx</code>가 Lucide 경로 데이터를 이미 인라인 보유한 자기완결 컴포넌트이므로 외부 아이콘 패키지가 불필요하고, 추가하면 INV-3 검증 대상만 넓어진다.</li>
+<li><code>web/vite.config.js</code>: React 플러그인. dev 서버 <code>server.proxy</code>로 <code>/api</code> → <code>http://127.0.0.1:8000</code> 프록시(프론트에서 같은 origin <code>fetch(&quot;/api/...&quot;)</code>로 호출, CORS·하드코딩 URL 회피).</li>
+<li><code>npm install</code>로 React·Vite를 <strong>npm 로컬 설치</strong>(node_modules) — 더 이상 UMD CDN 사용 안 함.</li>
+<li><code>web/index.html</code>: 키트 <code>ui_kits/docs-em/index.html</code>의 CDN <code>&lt;script&gt;</code>(react/react-dom/babel/<code>_ds_bundle.js</code>) 로딩 방식을 <strong>버린다</strong>. 대신 <code>&lt;script type=&quot;module&quot; src=&quot;/src/main.jsx&quot;&gt;</code> 하나만. 폰트·토큰 CSS를 import로 연결.</li>
+<li><code>web/src/main.jsx</code>: <code>createRoot</code>로 <code>App</code> 마운트. <code>import &quot;./styles.css&quot;</code>(아래 vendoring한 토큰 진입).</li>
+</ul>
+<p><strong>디자인 시스템 vendoring (복사, 정본 수정 금지)</strong>:</p>
+<ul>
+<li><code>디자인/docs-em Design System/tokens/*.css</code>, <code>styles.css</code> → <code>web/src/styles/</code>로 복사. <code>web/src/main.jsx</code>가 진입 CSS를 import.</li>
+<li><code>디자인/docs-em Design System/components/**/*.jsx</code> → <code>web/src/ds/components/</code>로 복사.</li>
+<li><code>디자인/docs-em Design System/ui_kits/docs-em/{AppShell,QueryScreen,IndexScreen,EvalScreen}.jsx</code> → <code>web/src/screens/</code>로 복사.</li>
+<li><strong><code>window.DocsEmDesignSystem_afe3d1</code> 전역 의존 제거 → ESM import로 전환.</strong> 키트/컴포넌트는 현재 <code>const { Button, ... } = window.DocsEmDesignSystem_afe3d1</code>로 전역에서 구조분해한다. 이를 각 컴포넌트 파일의 <code>export</code>(named export) + 화면 파일 상단의 <code>import { Button, IconButton, ConnectionBadge, ExternalCallsCounter, ... } from &quot;../ds/components&quot;</code>로 바꾼다. <code>components/</code>에 배럴 <code>index.js</code>를 만들어 21개 컴포넌트를 re-export(이름은 <code>_ds_manifest.json</code>/<code>_ds_bundle.js</code> 헤더의 컴포넌트 명 그대로: Icon, DataTable, Kbd, Metric, ScoreBar, ScoreChip, Tag, ConnectionBadge, ExternalCallsCounter, GateChip, ProgressBar, StatusPill, Tooltip, Button, IconButton, Input, Segmented, Select, Switch, Card, Tabs). <code>ExternalCallsCounter</code>는 <code>ConnectionBadge.jsx</code>에 함께 있으니 거기서 둘 다 export.</li>
+<li><strong><code>Icon</code>은 정본 <code>Icon.jsx</code>를 그대로 복사해 쓴다.</strong> 이미 Lucide 1.75 경로 데이터가 <code>PATHS</code> 상수에 인라인 vendoring돼 있으므로 <strong>내부 구조를 다시 쓰지 말고</strong>, 같은 디렉토리의 <code>ConnectionBadge</code> 등에서 <code>import { Icon } from &quot;../core/Icon.jsx&quot;</code>처럼 import하는 <strong>상대경로만 ESM으로 유지</strong>하면 된다. <code>lucide-react</code>나 외부 아이콘 CDN 도입 금지.</li>
+<li><strong>키트 레이아웃 함수 <code>SideRail</code>/<code>RailSection</code> ESM 전환 (누락 방지 — 필수).</strong> 정본 <code>AppShell.jsx</code>는 <code>SideRail</code>(L77)·<code>RailSection</code>(L85)·<code>AppShell</code>·<code>Logo</code>를 <strong>export 없는 plain function</strong>으로 정의하고 파일 끝에서 <code>Object.assign(window, { AppShell, Logo, SideRail, RailSection })</code>로 전역 노출한다. 그리고 <code>EvalScreen.jsx</code>(L129·130·143·156)·<code>IndexScreen.jsx</code>(L85·86·90·110)는 이들을 <code>&lt;window.SideRail&gt;</code>·<code>&lt;window.RailSection&gt;</code>으로 교차 참조한다. babel/UMD에선 최상위 함수가 전역이라 동작하지만 <strong>ESM 전환 시 이 <code>window.*</code> 참조가 미정의로 깨진다.</strong> 처리:<ul>
+<li><code>web/src/screens/AppShell.jsx</code>에서 <code>SideRail</code>·<code>RailSection</code>(필요 시 <code>Logo</code>도)을 **named <code>export</code>**로 바꾸고, 파일 끝의 <code>Object.assign(window, { ... })</code> 줄은 <strong>삭제</strong>한다.</li>
+<li><code>web/src/screens/EvalScreen.jsx</code>·<code>IndexScreen.jsx</code> 상단에서 <code>import { SideRail, RailSection } from &quot;./AppShell.jsx&quot;</code>로 가져오고 <code>&lt;window.SideRail&gt;</code>/<code>&lt;window.RailSection&gt;</code> 참조를 <code>&lt;SideRail&gt;</code>/<code>&lt;RailSection&gt;</code>으로 교체한다. (<code>SideRail</code>/<code>RailSection</code>은 매니페스트 21개 컴포넌트에 <strong>포함되지 않으므로</strong> <code>ds/components</code> 배럴이 아니라 <code>AppShell</code>(또는 별도 <code>web/src/screens/layout.jsx</code> 모듈로 분리)에서 export한다.)</li>
+<li>각 화면 파일 끝의 <code>Object.assign(window, { QueryScreen })</code>·<code>{ IndexScreen }</code>·<code>{ EvalScreen }</code>도 <strong>삭제</strong>하고 화면 컴포넌트를 named <code>export</code>로 바꿔, <code>App.jsx</code>가 <code>import { AppShell } from &quot;./screens/AppShell.jsx&quot;</code> / <code>import { QueryScreen } from &quot;./screens/QueryScreen.jsx&quot;</code> 식으로 직접 import한다.</li>
+<li>결과적으로 <code>web/src/screens</code>·<code>web/src/ds</code> 어디에도 <code>window.</code> 참조가 남지 않아야 한다(완료 기준 #5의 <code>window\.</code> grep이 이를 검증한다).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>JSX 전역→ESM 전환은 키트의 <strong>시각/구조를 바꾸지 말 것.</strong> import 배선만 바꾼다. 인라인 style·로직·문구·레이아웃은 그대로.</p>
+</blockquote>
+<h4>3. 폐쇄망 vendoring — 폰트</h4>
+<p><code>tokens/fonts.css</code>(정본)는 Pretendard(jsdelivr CDN)·JetBrains Mono(Google Fonts <code>@import</code>)를 외부에서 끌어온다. <strong>빌드 산출물에 외부 URL이 남으면 INV-3 위반</strong>이다.</p>
+<ul>
+<li><code>web/src/styles/fonts/</code>에 <code>.woff2</code>를 로컬로 둔다:<ul>
+<li>Pretendard Regular/Medium/SemiBold/Bold (woff2 4종).</li>
+<li>JetBrains Mono 400/500/600/700 (woff2).</li>
+</ul>
+</li>
+<li>폰트 바이너리가 리포에 없으면: <strong>인터넷 차단 가정이므로 자동 다운로드를 시도하지 말고</strong>, <code>web/src/styles/fonts/README.md</code>에 &quot;필요한 .woff2 파일명 목록 + 출처(Pretendard v1.3.9, JetBrains Mono)&quot;를 적고 <strong>사용자에게 업로드를 1회 요청</strong>한다. (네트워크가 허용되면 그때 받아 vendoring. 이 PC 환경 정책을 따른다.) 파일이 들어오기 전까지 <code>fonts.css</code>는 로컬 경로로 작성해 두되, 폰트 누락 시 fallback(시스템 sans/mono)이 동작하도록 <code>font-family</code> 스택에 <code>system-ui</code>/<code>monospace</code>를 남긴다.</li>
+<li><code>web/src/styles/fonts.css</code>: 모든 <code>@import url(&quot;https://...&quot;)</code>·<code>src: url(&quot;https://...&quot;)</code>를 <strong>로컬 상대경로</strong>(<code>url(&quot;./fonts/Pretendard-Regular.woff2&quot;)</code>)로 재지정. Google Fonts <code>@import</code> 줄은 <strong>삭제</strong>하고 JetBrains Mono도 <code>@font-face</code> + 로컬 woff2로 선언.</li>
+<li>정본(<code>디자인/...</code>)의 <code>fonts.css</code>는 <strong>수정하지 말고</strong>(정본 보존), <code>web/</code> 사본만 로컬화한다.</li>
+</ul>
+<h4>4. AppShell 배선 — <code>web/src/screens/AppShell.jsx</code> + <code>web/src/App.jsx</code></h4>
+<ul>
+<li><code>web/src/App.jsx</code>: 화면 라우팅을 <strong>상태 토글</strong>로 구현(<code>react-router</code> 도입은 선택 — 3화면뿐이라 <code>useState(&quot;query&quot;|&quot;index&quot;|&quot;eval&quot;)</code>로 충분, 가볍게 가라). <code>AppShell</code>·<code>QueryScreen</code>·<code>IndexScreen</code>·<code>EvalScreen</code>은 <strong>ESM import</strong>로 직접 가져온다(전역 <code>window.*</code> 사용 금지). <code>AppShell</code>에 <code>active</code>/<code>onNavigate</code>/<code>children</code>을 넘기고, <code>active</code>에 따라 <code>&lt;QueryScreen/&gt;</code>/<code>&lt;IndexScreen/&gt;</code>/<code>&lt;EvalScreen/&gt;</code>을 children으로 렌더.</li>
+<li><strong>헬스 배선</strong>: <code>App</code>(또는 AppShell)에서 마운트 시 <code>fetch(&quot;/api/health&quot;)</code> 1회 호출:<ul>
+<li>성공·<code>llm_connected: true</code> → <code>ConnectionBadge status=&quot;ok&quot; endpoint=&quot;localhost:1234&quot;</code>(청록 &quot;연결됨&quot;).</li>
+<li>실패/<code>false</code>/<code>null</code> → <code>ConnectionBadge status=&quot;down&quot; endpoint=&quot;localhost:1234&quot;</code>(빨강 &quot;연결 끊김&quot;). 응답이 느려 지연 판정일 때만 <code>status=&quot;delay&quot;</code>(앰버 &quot;지연&quot;). <strong><code>status=&quot;error&quot;</code> 등 정본 <code>STATES</code>에 없는 문자열은 절대 넘기지 말 것 — 조용히 <code>ok</code>로 폴백돼 끊겼는데 초록으로 보이는 신뢰 시그널 왜곡 버그가 난다.</strong> (연결 실패해도 &quot;100% LOCAL&quot;·&quot;EXTERNAL CALLS: 0&quot;은 유지 — 로컬 정체성은 연결과 무관.)</li>
+<li><code>ExternalCallsCounter count={health.external_calls ?? 0}</code> — 항상 0. <code>100% LOCAL</code> 라벨은 고정.</li>
+</ul>
+</li>
+<li>키트 <code>AppShell</code>의 트러스트 클러스터는 현재 <code>status=&quot;ok&quot;</code>·<code>count={0}</code> 하드코딩이다. 이를 health state로 바꾸되 <strong>시각·문구·구성은 동일</strong>하게.</li>
+<li>사이드레일·고정 헤더·<code>ScreenNav</code>(검색/인덱싱/평가 + Lucide 아이콘 search/database/gauge)는 키트 구조 그대로 유지.</li>
+<li>화면 컴포넌트 내부의 가짜 데이터·인터랙션은 <strong>이 페이즈에서 건드리지 않는다</strong>(껍데기만 정상 렌더되면 OK).</li>
+</ul>
+<hr>
+<h3>산출물 (생성/수정 파일 목록)</h3>
+<ul>
+<li>생성: <code>src/api/__init__.py</code></li>
+<li>생성: <code>src/api/server.py</code> (FastAPI — health/answer/search/eval/index 라우트, CORS 로컬, 외부호출 0)</li>
+<li>생성: <code>web/package.json</code>, <code>web/vite.config.js</code>, <code>web/index.html</code></li>
+<li>생성: <code>web/src/main.jsx</code>, <code>web/src/App.jsx</code></li>
+<li>복사·전환: <code>web/src/screens/{AppShell,QueryScreen,IndexScreen,EvalScreen}.jsx</code> (전역→ESM import; <code>window.*</code>·<code>Object.assign(window,...)</code> 전부 제거, <code>SideRail</code>/<code>RailSection</code>은 AppShell에서 named export)</li>
+<li>복사·전환: <code>web/src/ds/components/**</code> + <code>web/src/ds/components/index.js</code>(배럴, 21 컴포넌트 named export. <code>Icon.jsx</code>는 정본 그대로 복사 — lucide-react 미사용)</li>
+<li>복사: <code>web/src/styles/{styles.css,tokens/*.css}</code></li>
+<li>생성·로컬화: <code>web/src/styles/fonts.css</code> + <code>web/src/styles/fonts/</code> (woff2 또는 업로드 요청 README)</li>
+<li>수정: <code>web/src/screens/AppShell.jsx</code> (트러스트 클러스터를 <code>/api/health</code> 실데이터에 배선)</li>
+<li>(정본 <code>디자인/...</code>·백엔드 <code>src/app</code>·<code>eval/</code>은 <strong>수정 금지</strong>)</li>
+</ul>
+<hr>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><strong>외부 호출 0건 — 최우선(INV-3).</strong> 빌드 산출물·소스에서 외부 URL 0건:<pre><code class="language-bash">cd web &amp;&amp; npm run build
+# 빌드 산출물(dist) + 소스에서 외부 호출 패턴 0건이어야 함
+grep -rEn &quot;https?://(cdn|unpkg|fonts\.googleapis|fonts\.gstatic|jsdelivr)&quot; web/dist web/src 2&gt;/dev/null &amp;&amp; echo &quot;FAIL: 외부 URL 잔존&quot; || echo &quot;PASS: 외부 URL 0건&quot;
+</code></pre>
+하나라도 잡히면 <strong>실패</strong> — vendoring을 끝낼 때까지 다음 페이즈 금지.</li>
+<li><strong>API 서버가 LMStudio·openai 직접 호출 0건:</strong><pre><code class="language-bash">grep -rEn &quot;openai|OpenAI\(|localhost:1234|127\.0\.0\.1:1234|:1234&quot; src/api/ &amp;&amp; echo &quot;FAIL&quot; || echo &quot;PASS&quot;
+</code></pre>
+(<code>localhost:1234</code>는 health 응답의 <strong>문자열 라벨</strong>로만 등장 가능 — fetch/클라이언트 생성이 아니라면 허용. 위 grep에 걸리면 라벨인지 호출인지 사람이 확인.)</li>
+<li><strong>헬스 라우트 동작:</strong> <code>GET /api/health</code>가 <code>external_calls: 0</code>을 포함한 JSON 200 반환.</li>
+<li><strong>CORS 로컬 고정:</strong> <code>src/api/server.py</code>에 <code>allow_origins=&quot;*&quot;</code>가 없고 <code>localhost</code>/<code>127.0.0.1</code>만.</li>
+<li><strong>프론트 빌드 성공·전역 의존 제거:</strong> <code>npm run build</code> 성공, 그리고<pre><code class="language-bash">grep -rn &quot;DocsEmDesignSystem_afe3d1\|window\.&quot; web/src/screens web/src/ds &amp;&amp; echo &quot;FAIL: 전역 잔존&quot; || echo &quot;PASS: ESM 전환&quot;
+</code></pre>
+이 광의 <code>window\.</code> grep은 <code>DocsEmDesignSystem_afe3d1</code> 전역뿐 아니라 <strong>키트의 <code>window.SideRail</code>·<code>window.RailSection</code> 교차 참조와 <code>window.AppShell</code>/<code>window.QueryScreen</code> 등 화면 전역 참조, <code>Object.assign(window, ...)</code> 노출까지 모두 잡는다.</strong> 즉 작업 지시 #2의 SideRail/RailSection·화면 ESM 전환을 빠뜨리면 여기서 <strong>FAIL</strong>로 걸러진다(의도된 검증). 정당한 <code>window</code> 사용(예: <code>window.matchMedia</code>)이 꼭 필요하면 해당 줄만 사람이 확인해 예외 처리.</li>
+<li><strong>AppShell 렌더·신뢰 시그널 노출:</strong> dev 서버에서 3화면 모두 <code>ConnectionBadge</code>(localhost:1234)·<code>ExternalCallsCounter</code>(0)·<code>100% LOCAL</code>이 헤더에 보이고, <code>ScreenNav</code>로 query↔index↔eval 토글이 된다. 헬스 실패 시 <code>ConnectionBadge</code>가 <code>down</code>(빨강 &quot;연결 끊김&quot;)으로 표시되는지 확인(초록 &quot;연결됨&quot;으로 폴백되면 status 값 오류).</li>
+<li><strong>BGE-M3 화면A 미노출:</strong> QueryScreen에 BGE-M3(1024) 신규 표현이 추가되지 않았다(키트 원본과 화면A 표현 동일).</li>
+</ol>
+<hr>
+<h3>검증 명령 (복붙 실행 — macOS BSD 기준)</h3>
+<pre><code class="language-bash"># --- 백엔드 API 서버 ---
+source .venv/bin/activate
+uv pip install &quot;fastapi&gt;=0.111&quot; &quot;uvicorn[standard]&gt;=0.30&quot; &quot;python-multipart&gt;=0.0.9&quot;
+# 서버 기동(백그라운드)
+uvicorn src.api.server:app --host 127.0.0.1 --port 8000 &amp;
+SERVER_PID=$!
+sleep 2
+# health
+curl -s http://127.0.0.1:8000/api/health | python3 -m json.tool
+# external_calls=0 확인
+curl -s http://127.0.0.1:8000/api/health | grep -q &#39;&quot;external_calls&quot;: 0&#39; &amp;&amp; echo &quot;PASS health&quot; || echo &quot;FAIL health&quot;
+# API 서버 외부호출/openai 0건
+grep -rEn &quot;openai|OpenAI\(&quot; src/api/ &amp;&amp; echo &quot;FAIL openai&quot; || echo &quot;PASS no-openai&quot;
+# CORS 와일드카드 금지
+grep -rn &#39;allow_origins=\[&quot;\*&quot;\]\|allow_origins=\&quot;\*\&quot;&#39; src/api/ &amp;&amp; echo &quot;FAIL cors-wildcard&quot; || echo &quot;PASS cors-local&quot;
+kill $SERVER_PID 2&gt;/dev/null
+
+# --- 프론트 ---
+cd web
+node --version &amp;&amp; npm --version
+npm install
+npm run build
+# 외부 URL 0건 (빌드 산출물 + 소스)
+grep -rEn &quot;https?://(cdn|unpkg|fonts\.googleapis|fonts\.gstatic|jsdelivr)&quot; dist src 2&gt;/dev/null &amp;&amp; echo &quot;FAIL external-url&quot; || echo &quot;PASS no-external-url&quot;
+# 전역 의존 제거 (DocsEmDesignSystem 전역 + window.SideRail/RailSection + 화면 전역 + Object.assign(window,...) 모두 검출)
+grep -rn &quot;DocsEmDesignSystem_afe3d1\|window\.&quot; src &amp;&amp; echo &quot;FAIL global-dep&quot; || echo &quot;PASS esm&quot;
+# lucide-react 미도입 확인 (정본 Icon.jsx 자기완결)
+grep -rn &quot;lucide-react&quot; package.json src &amp;&amp; echo &quot;FAIL lucide-react 도입&quot; || echo &quot;PASS no-lucide-react&quot;
+# dev 서버 수동 확인 (백엔드도 8000에 떠 있어야 /api 프록시 동작)
+echo &quot;수동: &#39;npm run dev&#39; 후 http://localhost:5173 에서 3화면 토글·헤더 신뢰 클러스터 확인. 백엔드 정지 상태로 새로고침 시 ConnectionBadge가 down(빨강 &#39;연결 끊김&#39;)인지 확인&quot;
+</code></pre>
+<hr>
+<h3>다음 페이즈 핸드오프</h3>
+<ul>
+<li><strong>산출</strong>: 로컬 FastAPI(<code>:8000</code>, <code>/api/health|answer|search|eval|index/*</code>) + Vite 프론트(<code>web/</code>, <code>:5173</code>, <code>/api</code> 프록시) + ESM 전환된 디자인 시스템 + 폐쇄망 vendoring 폰트 + 헬스 배선된 AppShell·3화면 라우팅 껍데기.</li>
+<li><strong>다음(페이즈 10)</strong>: QueryScreen(화면 A) 실배선 — <code>POST /api/answer</code>·<code>POST /api/search</code>로 가짜 데이터를 교체. 인라인 각주(인용⊆Top-k), 검색모드 Segmented(벡터/BM25/하이브리드RRF), Top-k=5 청크카드, 격차 -0.018, cutoff 앰버점선을 실응답에 연결. (citation은 전달 Top-k의 부분집합, 추측 금지, prompt_tokens=0 앰버 태그.)</li>
+<li><strong>남은 일 메모</strong>: 폰트 woff2가 아직 업로드 안 됐으면 페이즈 10 시작 전 vendoring 마무리. <code>/api/index/reindex</code>가 <code>501</code>로 남았으면 인덱싱 화면(B) 배선 페이즈에서 백엔드 진입점 확정 후 구현.</li>
+</ul>
+<pre><code>
+</code></pre>
+</article>
+<article class="doc" data-id="07_실행프롬프트/11_페이즈10_ui_query.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#06_UIUX%2F01_%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C_%EC%B0%B8%EC%A1%B0.md" data-nav>디자인 시스템 참조</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a> · 디자인 원본 <code>디자인/docs-em Design System/</code></p>
+</blockquote>
+<h1>페이즈 10: 화면 A 질의응답 + 출처 인용 (실제 검색·답변 배선)</h1>
+<h3>이 페이즈의 목표 (1~2문장)</h3>
+<p>디자인 키트 <code>QueryScreen.jsx</code>를 <code>web/</code>로 가져와 하드코딩 데이터(<code>const TOPK</code>, <code>q</code>, 인라인 답변·각주·출처 라인)를 우리 백엔드 FastAPI(<code>/api/answer</code>, <code>/api/search</code>)의 실제 응답으로 교체한다. 질의 입력 → 검색·답변 → <code>{text, citations}</code> + Top-k 청크 렌더링까지, 외부 호출 0건·신뢰 시그널 고정·디자인 토큰만 사용하는 폐쇄망 ESM 앱으로 동작시키는 것이 목표다.</p>
+<h3>사전 조건 (반드시 먼저 검증 — 없으면 즉시 중단·보고)</h3>
+<p>컨텍스트가 초기화된 상태로 단독 실행되므로, <strong>작업 시작 전 아래를 파일에서 직접 확인</strong>한다. 하나라도 없으면 절대 추측·임시구현하지 말고 즉시 중단하고 무엇이 없는지 보고한다.</p>
+<pre><code class="language-bash"># 1) 프로젝트 루트 고정 (git 루트가 docs-em 이어야 함)
+git rev-parse --show-toplevel   # → .../docs-em
+
+# 2) 백엔드 함수 존재 확인 (페이즈 0~8 산출물)
+ls -la src/app/answer.py src/retrieve/search.py eval/evaluate.py src/store/vector_store.py
+grep -n &quot;def answer&quot; src/app/answer.py        # answer(query, *, model, top_n)
+grep -n &quot;def search&quot; src/retrieve/search.py    # search(query, *, top_k, use_bm25)
+
+# 3) FastAPI 서버(페이즈 9 산출물) 존재 확인 + 엔드포인트 계약 추출
+#    존재 확인만으로 끝내지 말 것 — 라우터 파일을 읽어 실제 경로·요청/응답 스키마를 추출한다.
+ls -la src/server/app.py 2&gt;/dev/null || ls -la web/server.py 2&gt;/dev/null
+ROUTER=$(ls src/server/app.py web/server.py 2&gt;/dev/null | head -1)
+grep -nE &quot;@app\.(post|get)|@router\.(post|get)|/api/&quot; &quot;$ROUTER&quot;   # 실제 엔드포인트 경로
+grep -nE &quot;answer\(|search\(|use_bm25|mode|rrf|hybrid|top_n|top_k&quot; &quot;$ROUTER&quot;  # 모드→검색기 매핑·인자 전달 방식
+grep -nE &quot;BaseModel|class .*Request|class .*Response|return \{&quot; &quot;$ROUTER&quot;    # 요청/응답 스키마
+
+# 4) 디자인 키트 + 토큰 + 번들 존재 확인 (정본)
+ls -la &quot;디자인/docs-em Design System/ui_kits/docs-em/QueryScreen.jsx&quot;
+ls -la &quot;디자인/docs-em Design System/ui_kits/docs-em/AppShell.jsx&quot;
+ls -la &quot;디자인/docs-em Design System/styles.css&quot; &quot;디자인/docs-em Design System/_ds_bundle.js&quot;
+ls -d  &quot;디자인/docs-em Design System/tokens&quot;
+</code></pre>
+<p><strong>중단 규칙</strong></p>
+<ul>
+<li><code>src/app/answer.py</code> 또는 <code>eval/evaluate.py</code> 또는 디자인 키트가 없으면 → <strong>중단</strong>하고 &quot;사전 조건 미충족: &lt;없는 파일 경로&gt;. 페이즈 0~8(백엔드) 또는 페이즈 9(FastAPI 서버/web 스캐폴드)를 먼저 완료해야 함&quot; 이라고 보고.</li>
+<li>페이즈 9 산출물(FastAPI 서버, <code>/api/answer</code>·<code>/api/search</code> 엔드포인트, <code>web/</code> Vite 스캐폴드, vendoring된 폰트·React)이 없으면 → 이 페이즈는 <strong>그 엔드포인트에 배선만</strong> 하므로, 엔드포인트가 없으면 중단하고 페이즈 9를 먼저 요구. (이 프롬프트에서 백엔드 함수 시그니처를 새로 만들지 말 것.)</li>
+<li><strong>계약 추출 필수</strong>: 위 3)에서 라우터 파일을 읽어 ⓐ실제 엔드포인트 경로, ⓑ요청 바디 키(특히 모드/검색기 인자명), ⓒ응답 JSON 키, ⓓ<code>mode</code>(vector/bm25/hybrid)가 백엔드에서 <strong>어떻게 검색기 선택으로 노출되는지</strong>를 확정하지 못하면 배선을 시작하지 말고, 추출한 계약을 보고에 명시한 뒤 진행한다. <code>ls</code> 존재 확인만으로는 배선 불가(아래 백엔드 함수 시그니처 주의 참조).</li>
+</ul>
+<blockquote>
+<p>참고: 백엔드 함수 시그니처는 <strong>고정</strong>이며 변경 금지다.</p>
+<ul>
+<li><code>answer(query, *, model, top_n) -&gt; {&quot;text&quot;: str, &quot;citations&quot;: [{doc_id, source_path, page|section}]}</code></li>
+<li><code>search(query, *, top_k, use_bm25) -&gt; list[SearchHit(chunk, score, rank, source)]</code></li>
+</ul>
+<p><strong>모드 매핑 주의(시그니처 한계)</strong>: <code>search()</code>는 <code>use_bm25</code> 불리언만 받으므로 <code>vector</code>/<code>bm25</code>는 표현 가능하나 <strong><code>hybrid RRF</code>를 표현할 파라미터가 없다</strong>. 또한 <code>answer(query, *, model, top_n)</code>에는 <code>mode</code>/<code>use_bm25</code> 인자가 없어, 모드가 <strong>답변 생성에 반영되는 경로는 페이즈 9 엔드포인트가 어떻게 노출했는지에 전적으로 의존</strong>한다(예: 엔드포인트가 <code>mode</code>를 받아 내부에서 검색기를 골라 <code>answer</code>에 컨텍스트를 주입하는지, 아니면 프론트가 <code>/api/search</code>로 모드별 Top-k를 받아 그 Top-k를 <code>/api/answer</code>에 컨텍스트로 넘기는지). 따라서 <strong>사전 조건 3)의 라우터 계약 추출 결과를 따른다.</strong> 엔드포인트가 <code>mode</code>를 직접 받으면 그대로 전달하고, 받지 않으면 <code>/api/search</code>로 모드별 Top-k를 가져온 뒤 <code>/api/answer</code>에 그 Top-k를 컨텍스트로 넘기는 형태인지 계약으로 확인해 배선한다. 추측으로 플래그명을 지어내지 말 것.</p>
+<p>FastAPI 엔드포인트가 이미 이 함수들을 감싸 JSON으로 노출한다고 가정한다. 실제 엔드포인트 경로/응답 키가 위와 다르면, <strong>프론트를 실제 응답에 맞추고</strong> 그 매핑을 산출물 보고에 명시한다(백엔드 변경 금지).</p>
+</blockquote>
+<h3>절대 규칙 (이 페이즈 불변식·디자인 규칙)</h3>
+<ul>
+<li><strong>INV-3 외부(클라우드 추론) 호출 0건</strong>: 폰트·아이콘·React·Babel·디자인 번들·런타임 어디에도 외부 URL 호출 금지. CDN은 전부 빌드타임 vendoring(로컬 파일). <code>unpkg.com</code>·<code>cdn.jsdelivr.net</code>·<code>fonts.googleapis.com</code> 등 원격 URL이 빌드 산출물(<code>web/dist</code> 또는 서빙되는 <code>index.html</code>/CSS/JS)에 하나라도 남으면 실패.</li>
+<li><strong>fetch 대상과 ConnectionBadge 엔드포인트는 별개 — 혼동 금지</strong>:<ul>
+<li>UI가 실제로 <code>fetch</code>하는 대상은 **오직 동일 출처 우리 백엔드(FastAPI)**뿐이다 — <code>/api/...</code> 상대경로 또는 <code>http://localhost:&lt;백엔드포트&gt;</code>(예 <code>localhost:8000</code>, 페이즈 9가 정한 포트).</li>
+<li>헤더의 <code>ConnectionBadge endpoint=&quot;localhost:1234&quot;</code>는 <strong>LMStudio(추론 백엔드)의 표시</strong>일 뿐이며, <strong>UI는 <code>localhost:1234</code>를 직접 호출하지 않는다.</strong> 임베딩·생성·헬스체크를 포함해 어떤 fetch도 <code>1234</code>로 직접 쏘지 말 것. 배지가 가리키는 <code>1234</code>(표시값)와 프론트가 fetch하는 백엔드 포트(예 <code>8000</code>)는 서로 다른 것이며, <code>ConnectionBadge</code>의 <code>endpoint</code>를 fetch 대상 포트로 바꾸지 말 것. LMStudio 상태는 <strong>백엔드가 보고한 값</strong>을 표시할 뿐이다(공통 컨텍스트 &quot;UI는 LMStudio를 직접 부르지 않고 백엔드를 통해 호출&quot;과 일치).</li>
+</ul>
+</li>
+<li><strong>신뢰 시그널 고정</strong>: 헤더의 <code>ConnectionBadge endpoint=&quot;localhost:1234&quot;</code> · <code>ExternalCallsCounter count={0}</code> · <code>100% LOCAL</code> 클러스터(=<code>AppShell.jsx</code>의 <code>TrustCluster</code>)는 <strong>존재·노출이 모든 상태에서 고정</strong> — 숨김·삭제 금지.<ul>
+<li><code>ExternalCallsCounter count</code>는 <strong>0 고정</strong>: 클라우드 추론 외부 호출이 0건이라는 의미이며(동일 출처 백엔드 fetch는 외부 호출로 세지 않는다), 동적으로 증가시키지 말 것.</li>
+<li><code>ConnectionBadge status</code>: 키트 기본은 <code>status=&quot;ok&quot;</code>이고 enum은 <strong><code>&#39;ok&#39; | &#39;delay&#39; | &#39;down&#39;</code></strong>(amber = <code>&#39;delay&#39;</code>). <strong>클러스터의 존재/노출은 절대 고정</strong>이되, <code>status</code> 값은 <strong>백엔드가 보고한 LMStudio 헬스를 반영해도 된다</strong>(백엔드 헬스 응답이 <code>ok</code>/<code>delay</code>/<code>down</code>을 주면 그대로 표시). 단, ⓐUI가 <code>1234</code>를 직접 핑하지 말고 백엔드가 보고한 값만 쓸 것, ⓑ백엔드 헬스 정보가 없으면 기본 <code>status=&quot;ok&quot;</code> 유지, ⓒerror/연결실패(우리 백엔드 fetch 자체가 실패) 시에는 헬스를 알 수 없으므로 <strong>클러스터를 그대로 노출하되 <code>status</code>는 임의로 바꾸지 말고 마지막으로 알려진 값(없으면 <code>&quot;ok&quot;</code>)을 유지</strong>한다(클러스터 숨김·<code>count</code> 변경은 어떤 경우에도 금지).</li>
+</ul>
+</li>
+<li><strong>디자인 토큰·컴포넌트만</strong>: 모든 색/간격/폰트/모션은 <code>tokens/*.css</code> CSS 변수(<code>var(--teal)</code>, <code>var(--green)</code>, <code>var(--amber)</code>, <code>var(--red)</code>, <code>var(--font-mono)</code>, <code>var(--radius-md)</code>, <code>var(--dur-fast)</code> 등)로만. 하드코딩 HEX·임의 px 색 금지. 컴포넌트는 <code>window.DocsEmDesignSystem_afe3d1</code>(또는 ESM 전환 시 동등 export)의 것만 사용. 데이터·식별자·점수는 모두 <code>.mono</code>(JetBrains Mono, tabular-nums). 아이콘은 Lucide(stroke 1.75), <strong>이모지 금지</strong>(✕·▲·▼는 텍스트 기호로 유지, 이모지로 치환 금지).</li>
+<li><strong>BGE-M3(1024) 화면 A 노출 절대 금지</strong>: EMB 표기는 nomic 768d만. 모델 셀렉트·임베딩 표기에 BGE-M3 등장 금지.</li>
+<li><strong>정직한 수치</strong>: 점수·격차를 미화하지 않는다. 격차는 실제 부호 그대로(예 <code>-0.018</code>), 회귀/실패도 그대로. <code>prompt_tokens=0</code>이면 앰버 <code>(unreliable)</code> 태그(INV-4). 확정 수치만 사실로 취급: <code>768</code>·<code>-0.018</code>·<code>0.687→0.695</code>·<code>12,972자</code>·<code>ctx 8192/65536</code>·<code>localhost:1234</code>. <strong>데모 식별자(hr-0412/tr-0203·p.N)는 가짜값</strong> — 실제 응답이 오면 응답의 진짜 <code>doc_id</code>(<code>{doc_id}#{chunk_index}</code> 정본)·<code>source_path</code>·<code>page|section</code>으로 교체한다. 데모 문서는 <code>휴가규정.pdf</code>·<code>출장경비.docx</code> 2종만.</li>
+<li><strong>인용은 Top-k의 부분집합만 — 매칭 키 고정</strong>: 답변 <code>citations</code>의 각 항목은 반드시 전달된 Top-k 청크에 존재하는 것이어야 한다(백엔드 보장). UI도 표시 직전 검증하되, <strong>양쪽 키가 비대칭</strong>임에 유의한다: <code>citation</code>은 <code>{doc_id, source_path, page|section}</code>이고 <code>SearchHit</code>는 <code>chunk</code>(+<code>chunk_index</code>)·<code>score</code>·<code>rank</code>·<code>source</code>다. 따라서 <strong>부분집합 매칭 키를 다음 순서로 통일해 생성</strong>한다:<ol>
+<li><strong>1순위(정본 합성 ID)</strong>: 양쪽 모두에서 <code>{doc_id}#{chunk_index}</code>를 만들 수 있으면 그 합성 ID로 매칭한다. <code>citation</code>에 <code>chunk_index</code>가 직접 없으면 <code>source_path</code>(또는 <code>doc_id</code>)+<code>page|section</code>이 동일한 Top-k 청크를 찾아 그 청크의 <code>chunk_index</code>로 합성 ID를 역산해 키를 맞춘다.</li>
+<li><strong>2순위(폴백 키)</strong>: 합성 ID를 만들 수 없으면 <code>doc_id</code>(=<code>source_path</code> 파일 단위)+<code>page|section</code> 동등성으로 매칭한다.</li>
+</ol>
+<ul>
+<li>매칭 키는 <strong>citation 쪽과 Top-k 쪽에서 동일한 규칙으로 생성</strong>해야 하며(한쪽은 합성 ID, 다른 쪽은 page/section처럼 키가 어긋나면 <strong>모든 각주가 스킵</strong>되는 회귀가 발생하므로), 어느 키 규칙을 적용했는지 보고에 명시한다. citation이 어떤 키로도 Top-k에 매칭되지 않으면 그 각주는 렌더하지 말고 콘솔/메타에 경고. 근거 부족 시 &quot;확실하지 않습니다&quot; 카드, 추측·임의 각주 생성 금지.</li>
+</ul>
+</li>
+<li><strong>근거 부족 처리</strong>: 검색 결과 0건이거나 모든 점수가 cutoff 미만이면 → &quot;확실하지 않습니다&quot; 상태 카드만 표시. 답변 본문·각주·출처 라인 렌더 금지.</li>
+</ul>
+<h3>작업 지시 (구체 단계)</h3>
+<p>모든 경로는 절대경로 또는 git 루트(<code>docs-em/</code>) 상대다. 디자인 키트는 <strong>정본을 복사</strong>해서 <code>web/</code>에서 수정한다(정본 <code>디자인/docs-em Design System/</code> 직접 수정 금지).</p>
+<ol>
+<li><p><strong>web/ 스캐폴드 확인·확장 (페이즈 9 산출물 위에 작업)</strong></p>
+<ul>
+<li><code>web/</code>가 Vite ESM 프로젝트(React 18, 폰트·React vendoring 완료)인지 확인. 없으면 중단(사전 조건). 있으면 그 안에서 작업.</li>
+<li>디자인 정본을 <code>web/</code>로 복사: <code>QueryScreen.jsx</code>·<code>AppShell.jsx</code>를 <code>web/src/screens/</code>(또는 페이즈 9가 정한 위치)로 가져온다. <code>tokens/*.css</code>·<code>styles.css</code>·<code>_ds_bundle.js</code>(또는 ESM화된 디자인 컴포넌트)·<code>assets/</code>도 페이즈 9 방식대로 로컬 포함. <strong>CDN <code>src</code>를 로컬 파일로 재지정</strong>(폰트 <code>tokens/fonts.css</code>의 <code>@import</code>·<code>@font-face src</code>를 <code>assets/fonts/*.woff2</code>로, React/Babel을 npm 의존성으로).</li>
+</ul>
+</li>
+<li><p><strong>API 클라이언트 작성</strong> (<code>web/src/api/client.js</code>)</p>
+<ul>
+<li>동일 출처 <code>/api/...</code>(또는 페이즈 9가 정한 베이스 URL = 우리 FastAPI 포트, 예 <code>localhost:8000</code>)로만 fetch. <strong><code>localhost:1234</code>(LMStudio)나 외부 도메인으로의 직접 fetch 금지.</strong></li>
+<li>함수 2개:<ul>
+<li><code>postAnswer({ query, mode, model, topN })</code> → <code>mode</code>(<code>vector</code>/<code>bm25</code>/<code>hybrid</code>)를 <strong>사전 조건 3)에서 추출한 백엔드 계약</strong>에 맞춰 매핑. 일반 규칙: <code>vector</code> → <code>use_bm25=false</code>, <code>bm25</code> → <code>use_bm25=true</code>(+ 점수 라벨 bm25), <code>hybrid</code> → 엔드포인트가 노출한 hybrid/RRF 인자명 그대로. <strong>엔드포인트가 <code>mode</code>를 직접 받지 않으면</strong>(시그니처상 <code>answer</code>·<code>search</code>엔 mode 없음) → <code>/api/search</code>로 모드별 Top-k를 받은 뒤 <code>/api/answer</code>에 그 Top-k를 컨텍스트로 전달(계약이 그 형태인지 라우터로 확인). 추측 플래그명 금지. 반환: <code>{ text, citations, topk, meta }</code> 정규화.</li>
+<li><code>postSearch({ query, mode, topK })</code> → Top-k 청크 리스트.</li>
+</ul>
+</li>
+<li>응답 정규화: 백엔드의 <code>SearchHit(chunk, score, rank, source)</code>·<code>answer().citations({doc_id, source_path, page|section})</code>를 UI가 쓰는 카드 모양(<code>{rank, doc, loc, id, score, cited, snippet, label?}</code>)으로 변환. <code>id</code>는 정본 <code>{doc_id}#{chunk_index}</code> 형식으로 생성해 <code>.mono</code> 노출(citation·Top-k 양쪽에서 위 매칭 키 규칙대로 동일 생성). <code>loc</code>은 <code>page</code> 있으면 <code>p.{page}</code>, 없으면 <code>section</code>. <code>doc</code>은 <code>source_path</code>의 파일명.</li>
+<li>모든 fetch는 <code>try/catch</code> + AbortController(타임아웃). 네트워크 오류 시 연결에러 상태 반환(추측 데이터 금지).</li>
+</ul>
+</li>
+<li><p><strong>QueryScreen 배선 (<code>web/src/screens/QueryScreen.jsx</code>)</strong> — 키트 구조 유지하고 데이터원만 교체:</p>
+<ul>
+<li><strong>삭제</strong>: 상단 <code>const TOPK = [...]</code>(6<del>12행 하드코딩), 답변 본문 하드코딩 문장(126행)·<code>SourceLine</code>/<code>Footnote</code> 하드코딩 호출(132</del>133행)·<code>MetaLine</code> 하드코딩 3줄(120~122행)·<code>&lt;div&gt;연차 휴가 신청 절차&lt;/div&gt;</code> 하드코딩 질문(103행).</li>
+<li><strong>상태</strong>: <code>q</code>(입력), <code>submittedQuery</code>(전송된 질의), <code>mode</code>(Segmented), <code>model</code>(GEN Select), <code>result</code>({text, citations, topk, meta}), <code>status</code>(<code>idle</code>/<code>loading</code>/<code>ok</code>/<code>empty</code>/<code>error</code>), <code>hl</code>(호버 하이라이트 청크 id), <code>metaOpen</code>.</li>
+<li><strong>전송</strong>: <code>전송</code> 버튼/Enter → <code>status=loading</code> → <code>postAnswer</code> 호출 → 성공 시 <code>result</code> 채우고 <code>status=ok</code>. 결과 0건/컷오프 미만이면 <code>status=empty</code>. 예외면 <code>status=error</code>. 모드/모델 변경은 즉시 재요청하지 말고(과호출 방지) 다음 전송에 반영.</li>
+<li><strong>질문 버블</strong>: <code>submittedQuery</code> 렌더(없으면 빈 상태).</li>
+<li><strong>답변 본문 + 인라인 각주</strong>: <code>result.text</code>를 렌더하되, <code>result.citations</code> 순서대로 <code>[¹][²]…</code> 각주를 본문 끝/문장 경계에 배치(백엔드가 인라인 마커를 안 주면 citations를 답변 하단 각주열로 렌더하고 각 마커는 해당 청크 id에 연결). 각 <code>Footnote</code>의 <code>id</code> = citation의 청크 id(위 매칭 키 규칙으로 생성한 합성 ID). <strong>citation이 <code>result.topk</code>에 매칭되지 않으면 그 각주 스킵 + 경고</strong>(부분집합 검증).</li>
+<li><strong>각주 ↔ Top-k 호버 하이라이트</strong>: 기존 <code>hl</code>/<code>onHover</code> 메커니즘 유지. <code>Footnote</code>·<code>SourceLine</code>·<code>ChunkCard</code>가 **같은 매칭 키(합성 ID 또는 폴백 키)**를 청크 <code>id</code>로 공유 → 호버 시 <code>var(--teal-tint)</code>/<code>box-shadow</code> 하이라이트(키트 동작 그대로).</li>
+<li><strong>출처 섹션</strong>: <code>result.citations</code>를 <code>SourceLine</code>으로 매핑(<code>n</code>=인덱스+1, <code>id</code>/<code>doc</code>/<code>loc</code>은 정규화값).</li>
+<li><strong>검색모드 Segmented</strong>: <code>vector</code>/<code>bm25</code>/<code>hybrid RRF</code> 그대로. 선택값이 <code>mode</code> 상태 → API 파라미터로 연결. 패널 헤더 &quot;k=5 · {RRF/벡터/BM25} 정렬&quot; 라벨도 <code>mode</code> 연동(키트에 이미 있음).</li>
+<li><strong>Top-k 청크 카드(=<code>ChunkCard</code>)</strong>: <code>result.topk</code>(k=5) 매핑. <code>ScoreChip</code>의 <code>kind</code>는 <code>mode === &quot;bm25&quot; ? &quot;bm25&quot; : &quot;sim&quot;</code>(키트 그대로), <code>value</code>=score. 정답/오답 라벨(<code>▲정답</code>·<code>✕오답</code>·<code>—</code>)은 <strong>백엔드가 golden 매칭 정보를 주면</strong> 표시, 없으면 모든 청크 <code>none</code>(임의 정답 판정 금지). <code>격차</code>는 백엔드가 주면 표시(예 <code>-0.018</code>), 없으면 생략. <code>id</code>는 <code>.mono</code>로 정본 형식.</li>
+<li><strong>cutoff 앰버 점선</strong>: 백엔드가 cutoff 점수를 주면 그 경계에 점선, 아니면 마지막 청크 뒤 <code>cutoff —</code>(키트 기본) 유지.</li>
+<li><strong>재시도/폴백 메타 아코디언</strong>: <code>result.meta</code>에 재시도/폴백 정보(<code>content 빈값 → reasoning_content 폴백</code>, <code>finish_reason=length 재시도</code>, <code>잘림 N자</code> 등)가 있으면 <code>MetaLine</code>으로 렌더(있을 때만 &quot;재시도 N&quot; 토글 노출), <strong>기본 접힘</strong>. 없으면 토글 자체를 숨김. <code>prompt_tokens=0</code>이면 앰버 <code>(unreliable)</code> 태그.</li>
+<li><strong>헤더 표기</strong>: GEN 모델 Select(실제 선택 → API <code>model</code> 인자), EMB는 <code>text-embedding-nomic… · 768d</code> <strong>읽기전용</strong>. BGE-M3 등장 금지.</li>
+</ul>
+</li>
+<li><p><strong>상태 화면</strong>:</p>
+<ul>
+<li><code>idle</code>(전송 전): 빈 상태 안내(예시 질의 칩 <code>연차 휴가 신청 절차</code>·<code>출장경비 정산</code>은 클릭 시 입력만 채움).</li>
+<li><code>loading</code>: 본문·패널에 스켈레톤/스피너(디자인 토큰, 바운스 금지, <code>prefers-reduced-motion</code> 존중).</li>
+<li><code>empty</code>(근거 부족): &quot;확실하지 않습니다&quot; 카드(추측·각주 없음).</li>
+<li><code>error</code>(우리 백엔드 fetch 실패): 연결에러 카드 + 재시도 버튼. <strong>신뢰 시그널 클러스터는 그대로 노출</strong>하고 <code>ExternalCallsCounter count=0</code> 유지·<code>ConnectionBadge</code>는 클러스터를 숨기지 않은 채 <code>status</code>를 마지막 알려진 값(없으면 <code>&quot;ok&quot;</code>)으로 유지(외부 호출 0 불변, 클러스터 동적 숨김·<code>count</code> 변경 금지).</li>
+</ul>
+</li>
+<li><p><strong>AppShell 유지</strong>: <code>TrustCluster</code>(localhost:1234·EXTERNAL CALLS 0·100% LOCAL) 그대로 사용. <code>ConnectionBadge</code>의 <code>endpoint=&quot;localhost:1234&quot;</code>는 LMStudio 표시값으로 유지(이 포트로 직접 fetch 금지). 화면 네비는 페이즈 9 구조 유지(이 페이즈는 query 화면만 실배선, index/eval은 후속 페이즈).</p>
+</li>
+</ol>
+<h3>산출물 (생성/수정 파일 목록)</h3>
+<ul>
+<li>생성: <code>web/src/api/client.js</code> (동일 출처 fetch 클라이언트, mode→API 파라미터 매핑·응답 정규화·매칭 키 생성)</li>
+<li>수정/이관: <code>web/src/screens/QueryScreen.jsx</code> (키트 복사본 — 하드코딩 제거, API 배선, 상태 머신, 부분집합 검증)</li>
+<li>확인/필요시 수정: <code>web/src/screens/AppShell.jsx</code>(TrustCluster 유지), <code>web/index.html</code> 또는 진입 ESM(외부 <code>&lt;script src=unpkg/cdn&gt;</code> 제거·로컬 vendoring), <code>web/src/tokens/fonts.css</code>(폰트 src 로컬 재지정), <code>web/vite.config.*</code>·<code>web/package.json</code>(필요 의존성)</li>
+<li>보고에 명시: ⓐ실제 백엔드 엔드포인트 경로·요청/응답 키가 스펙과 다르면 그 매핑표, ⓑ<code>mode</code>(vector/bm25/hybrid)가 백엔드에서 어떻게 노출되는지(엔드포인트가 <code>mode</code>를 받는지, 아니면 search→answer 2단 호출인지), ⓒ citations⊆topk에 적용한 매칭 키 규칙(합성 ID인지 폴백 키인지).</li>
+</ul>
+<h3>완료 기준 (통과 못 하면 다음 페이즈 금지)</h3>
+<ol>
+<li><code>web/</code>에서 <code>npm run dev</code>(또는 페이즈 9 스크립트)로 화면 A가 뜨고, <strong>실제 백엔드가 떠 있을 때</strong> 질의 전송 → 답변 본문 + Top-k 5개 청크 + 출처 라인이 <strong>하드코딩이 아닌 fetch 응답</strong>으로 렌더된다.</li>
+<li>검색모드 3종(벡터/BM25/하이브리드RRF) 전환 시 API 파라미터가 바뀌고(<code>use_bm25</code> 등, 또는 계약상 모드 경로) 결과가 갱신된다. BM25 모드에서 ScoreChip 라벨이 bm25로 표기.</li>
+<li>인라인 각주 ↔ Top-k 청크 호버 하이라이트가 <strong>공통 매칭 키</strong>로 양방향 연동된다. <strong>citations ⊆ topk 검증 통과</strong>(Top-k에 매칭되지 않는 인용 각주는 렌더 안 됨). 정상 응답에서 각주가 전부 스킵되지 않음(키 규칙이 양쪽 동일).</li>
+<li>근거 부족(0건/컷오프 미만) 입력에서 &quot;확실하지 않습니다&quot; 카드만 뜨고 각주·추측 답변이 없다. 우리 백엔드 fetch 실패 시 error 카드 + 신뢰 클러스터 유지.</li>
+<li><strong>외부 호출 0건 정적 점검 통과</strong>(아래 검증 명령): 빌드 산출물/서빙 파일에 <code>unpkg</code>·<code>jsdelivr</code>·<code>googleapis</code>·<code>http(s)://</code>(localhost·동일출처 제외) 원격 URL 0건. 폰트·React·번들 전부 로컬. <strong><code>fetch</code> 대상에 <code>localhost:1234</code> 직접 호출 0건</strong>(우리 백엔드 포트만).</li>
+<li>신뢰 시그널 클러스터(localhost:1234·EXTERNAL CALLS 0·100% LOCAL)가 모든 상태에서 노출. <code>ExternalCallsCounter count=0</code> 불변. BGE-M3 화면 A 노출 0건.</li>
+<li>모든 색/간격/폰트가 디자인 토큰(CSS 변수)·DS 컴포넌트로만 — 하드코딩 HEX·이모지 0건.</li>
+</ol>
+<h3>검증 명령 (복붙 실행 — macOS BSD 기준; <code>grep -P</code>/<code>(?!...)</code> 미사용)</h3>
+<pre><code class="language-bash">cd &quot;$(git rev-parse --show-toplevel)&quot;
+
+# A. 사전 조건 (없으면 중단)
+ls -la src/app/answer.py eval/evaluate.py &quot;디자인/docs-em Design System/ui_kits/docs-em/QueryScreen.jsx&quot; || echo &quot;STOP: 사전조건 미충족&quot;
+
+# A2. 페이즈 9 엔드포인트 계약 추출 (라우터 파일을 읽었는지 — 경로/모드 매핑 확인)
+ROUTER=$(ls src/server/app.py web/server.py 2&gt;/dev/null | head -1)
+[ -n &quot;$ROUTER&quot; ] &amp;&amp; grep -nE &quot;/api/|@app\.(post|get)|use_bm25|mode|rrf|hybrid|top_n|top_k&quot; &quot;$ROUTER&quot; || echo &quot;STOP: 페이즈 9 라우터 없음&quot;
+
+# B. 하드코딩 제거 확인 (web/ 복사본에서 더미 데이터가 사라졌는지)
+grep -RnE &quot;tr-0203|hr-0412|sim: 0\.713|const TOPK&quot; web/src/ &amp;&amp; echo &quot;FAIL: 하드코딩 데모데이터 잔존&quot; || echo &quot;OK: 하드코딩 제거됨&quot;
+
+# C. 외부 호출 0건 정적 점검 (소스 + 빌드 산출물). localhost/상대경로만 허용.
+#    BSD grep은 (?!...) 부정형 전방탐색 미지원 → 원격 URL 전부 추출 후 허용목록을 2단계 grep -v로 제외.
+( npm --prefix web run build 2&gt;/dev/null || true )
+grep -REn &quot;unpkg\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com&quot; web/index.html web/src web/dist web/public 2&gt;/dev/null &amp;&amp; echo &quot;FAIL: 외부 CDN 잔존&quot; || echo &quot;OK: CDN 0건&quot;
+grep -REno &quot;https?://[^\&quot;&#39;\` ]*&quot; web/dist web/src 2&gt;/dev/null | grep -vE &quot;localhost|127\.0\.0\.1|w3\.org&quot; &amp;&amp; echo &quot;REVIEW: 원격 URL 점검(위 줄 확인)&quot; || echo &quot;OK: 원격 URL 없음&quot;
+
+# D. fetch 대상이 동일출처/우리 백엔드뿐인지 + 1234 직접 호출 없는지
+grep -RnE &quot;fetch\(|axios&quot; web/src &amp;&amp; grep -RnE &quot;fetch\(([&#39;\&quot;\`])(/api|http://localhost)&quot; web/src &amp;&amp; echo &quot;OK: 동일출처 fetch&quot;
+grep -RnE &quot;fetch\([^)]*localhost:1234&quot; web/src &amp;&amp; echo &quot;FAIL: LMStudio(1234) 직접 호출&quot; || echo &quot;OK: 1234 직접 호출 없음&quot;
+
+# E. BGE-M3 화면 A 노출 0건 + 신뢰 시그널 존재
+grep -RniE &quot;bge-m3|bge_m3|1024&quot; web/src/screens/QueryScreen.jsx &amp;&amp; echo &quot;FAIL: BGE-M3/1024 노출&quot; || echo &quot;OK: BGE-M3 미노출&quot;
+grep -RnE &quot;ExternalCallsCounter|localhost:1234|100% LOCAL&quot; web/src &amp;&amp; echo &quot;OK: 신뢰 시그널 고정&quot;
+
+# F. 이모지 0건 (화면 A 소스) — BSD grep -P 불가 → perl로 점검
+perl -CSD -ne &#39;print &quot;$.: $_&quot; if /[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{2190}-\x{21FF}\x{2B00}-\x{2BFF}]/&#39; web/src/screens/QueryScreen.jsx &amp;&amp; echo &quot;FAIL: 이모지 발견&quot; || echo &quot;OK: 이모지 0건&quot;
+
+# G. 실서버 연동 스모크 (백엔드+프론트 기동 후) — 엔드포인트·포트는 사전 조건 3)에서 추출한 실제값으로 교체
+curl -s -X POST http://localhost:8000/api/answer -H &#39;Content-Type: application/json&#39; \
+  -d &#39;{&quot;query&quot;:&quot;연차 휴가 신청 절차&quot;,&quot;mode&quot;:&quot;hybrid&quot;}&#39; | head -c 800; echo
+</code></pre>
+<p>(B·C·E·F가 모두 OK여야 통과. A2는 라우터 계약 추출 확인. G는 백엔드 기동 시 <code>text</code>/<code>citations</code> JSON이 와야 함. F의 <code>perl</code>이 아무 줄도 출력하지 않아야 통과.)</p>
+<h3>다음 페이즈 핸드오프</h3>
+<ul>
+<li>산출: 화면 A가 실제 <code>/api/answer</code>·<code>/api/search</code>에 배선됨. API 클라이언트(<code>web/src/api/client.js</code>)·정규화 로직·매칭 키 규칙·상태 머신·부분집합 검증·폐쇄망 vendoring 패턴 확립.</li>
+<li>다음(페이즈 11 — 화면 B 인덱싱 / 이후 화면 C 평가): 이 페이즈의 <code>web/src/api/client.js</code> fetch 패턴(동일 출처 백엔드만, <code>1234</code> 직접 호출 금지)·응답 정규화·&quot;확실하지 않습니다&quot;/error/loading 상태 머신·디자인 토큰 배선 방식을 그대로 재사용. <code>IndexScreen.jsx</code>(드롭존·5노드 파이프라인·<code>prompt_tokens=0 (unreliable)</code> 앰버·색인테이블)와 <code>EvalScreen.jsx</code>(Recall@1 KPI·before▸after·<code>+rrf</code> 0▸1.0 데모·통제실험)를 같은 방식으로 인덱싱 API·<code>evaluate()</code> 결과에 배선한다. <strong>BGE-M3는 화면 B 레일에서만 ⚠+DECISION 모달</strong>(화면 A·C 노출 금지) — 이 경계를 다음 페이즈에서 지킬 것.</li>
+</ul>
+</article>
+<article class="doc" data-id="07_실행프롬프트/12_페이즈11_ui_index_eval.md" hidden><blockquote>
+<p><strong>이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.</strong>
+페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 <a href="#07_%EC%8B%A4%ED%96%89%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%2F00_%EC%8B%A4%ED%96%89%EA%B0%9C%EC%9A%94.md" data-nav>00_실행개요.md</a> 참조.
+정본: <a href="#06_UIUX%2F01_%EB%94%94%EC%9E%90%EC%9D%B8%EC%8B%9C%EC%8A%A4%ED%85%9C_%EC%B0%B8%EC%A1%B0.md" data-nav>디자인 시스템 참조</a> · <a href="#04_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_API%2F02_%EB%82%B4%EB%B6%80API_%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4.md" data-nav>내부 API 계약</a> · <a href="#99_AI%EC%B0%B8%EC%A1%B0%2F01_%EC%8B%A4%EC%B8%A1%EC%A0%9C%EC%95%BD_%EB%B6%88%EB%B3%80%EC%8B%9D.md" data-nav>불변식 INV-1~8</a> · 디자인 원본 <code>디자인/docs-em Design System/</code></p>
+</blockquote>
+<h1>페이즈 11: 화면 B 인덱싱 + 화면 C 평가 대시보드 (실제 배선)</h1>
+<h3>이 페이즈의 목표</h3>
+<p>디자인 키트 <code>IndexScreen.jsx</code>·<code>EvalScreen.jsx</code>를 <code>web/</code>로 가져와 가짜 데이터를 걷어내고 실제 백엔드 API(업로드·인덱싱·평가)에 배선한다. 화면 B는 드롭존→파이프라인 진행→색인 문서 테이블을 실데이터로 굴리고, 화면 C는 실험 드롭다운→<code>POST /api/eval</code>→<code>EvalResult</code>를 KPI·골든셋·통제실험·회귀 드릴다운으로 렌더한다.</p>
+<hr>
+<h3>사전 조건 (컨텍스트 초기화 후 단독 실행 — 파일에서 직접 확인, 없으면 즉시 중단·보고)</h3>
+<p>이 페이즈는 페이즈 0~10 산출물에 <strong>하드 의존</strong>한다. 작업 시작 전 아래를 그대로 실행해 모두 존재함을 확인하라. <strong>하나라도 없으면 코드를 만들지 말고 &quot;사전 조건 미충족: &lt;누락 항목&gt;. 페이즈 <N>을 먼저 완료해야 함&quot;만 보고하고 중단</strong>한다. 누락분을 발명·스텁으로 메우는 것은 금지다.</p>
+<pre><code class="language-bash"># (1) 백엔드 함수 계약 — 페이즈 4·7 산출물. 시그니처를 직접 grep으로 확인
+ls -1 src/app/answer.py eval/evaluate.py src/retrieve/search.py src/store/vector_store.py 2&gt;&amp;1
+grep -nE &quot;def answer\(&quot; src/app/answer.py        || echo &quot;MISSING answer()&quot;
+grep -nE &quot;def evaluate\(&quot; eval/evaluate.py        || echo &quot;MISSING evaluate()&quot;
+grep -nE &quot;recall_at_1|recall_at_3|recall_at_5|recall_at_10|mrr|ndcg&quot; eval/evaluate.py | head || echo &quot;MISSING EvalResult fields&quot;
+# use_bm25 단일 스위치 확인 — 별도 RRF 플래그가 없고 use_bm25=True가 곧 RRF 하이브리드(source=&quot;rrf&quot;)인지 확인
+grep -nE &quot;use_bm25|use_rerank|source *= *.rrf.|source=\&quot;rrf\&quot;&quot; eval/evaluate.py src/retrieve/search.py | head
+grep -nE &quot;NotImplementedError.*rerank|rerank.*phase 7&quot; eval/evaluate.py | head   # use_rerank=True는 미구현(phase 7)
+
+# (2) 인덱싱·로딩 산출물 — 페이즈 2·3
+ls -1 src/ingest/loaders.py src/ingest/chunker.py 2&gt;&amp;1
+grep -nE &quot;class VectorStore|_index_header&quot; src/store/vector_store.py | head || echo &quot;MISSING vector store&quot;
+
+# (3) 디자인 키트 (정본) — 출발점으로 복사할 원본
+ls -1 &quot;디자인/docs-em Design System/ui_kits/docs-em/IndexScreen.jsx&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/EvalScreen.jsx&quot; \
+      &quot;디자인/docs-em Design System/ui_kits/docs-em/AppShell.jsx&quot; \
+      &quot;디자인/docs-em Design System/_ds_bundle.js&quot; 2&gt;&amp;1
+
+# (4) 페이즈 9·10 산출물 — Vite 스캐폴드 + FastAPI + 화면 A 배선 + vendoring
+ls -1 web/package.json web/vite.config.* web/index.html 2&gt;&amp;1
+ls -1 web/src/screens/QueryScreen.jsx web/src/AppShell.jsx 2&gt;&amp;1 || echo &quot;MISSING Phase10 wired QueryScreen/AppShell&quot;
+ls -1 web/server/main.py 2&gt;&amp;1 || ls -1 server/main.py api/main.py 2&gt;&amp;1   # FastAPI 진입점 (페이즈 9)
+ls -1 web/src/lib/api.js web/src/lib/ds.js 2&gt;&amp;1 || echo &quot;CHECK Phase10 api client / ds re-export location&quot;
+# vendoring 확인: React·폰트가 로컬에 있고 index.html이 CDN을 안 부르는지
+grep -rEn &quot;unpkg|cdn|jsdelivr|googleapis|fonts.gstatic|@babel/standalone&quot; web/index.html web/src 2&gt;/dev/null &amp;&amp; echo &quot;VENDOR FAIL: 외부 호출 잔존&quot; || echo &quot;vendor ok&quot;
+</code></pre>
+<ul>
+<li><code>src/app/answer.py</code>·<code>eval/evaluate.py</code>·디자인 키트 4종 중 <strong>하나라도 없으면 중단</strong>한다.</li>
+<li>페이즈 9의 FastAPI 진입점·페이즈 10의 <code>web/</code> 구조(컴포넌트 import 방식, ds 번들 노출 방식, api 클라이언트 위치)를 <strong>그대로 따른다</strong>. 새 구조를 발명하지 말고, 화면 A가 이미 쓰는 패턴(예: <code>web/src/lib/api.js</code>의 <code>fetch</code> 래퍼, <code>web/src/lib/ds.js</code>의 <code>DocsEmDesignSystem_afe3d1</code> re-export)을 재사용하라. 페이즈 10이 다른 경로를 썼다면 그 경로를 따른다.</li>
+</ul>
+<hr>
+<h3>절대 규칙 (이 페이즈 관련 불변식·디자인)</h3>
+<ul>
+<li><strong>INV-3 외부 호출 0건</strong>: 추론·임베딩·생성·폰트·아이콘·번들·런타임 어디에도 외부 클라우드/CDN 호출 금지. UI는 LMStudio를 직접 부르지 않고 <strong>우리 FastAPI 백엔드만</strong> <code>fetch</code>한다. 백엔드만 <code>localhost:1234</code>로 임베딩/생성. 빌드 산출물에 <code>unpkg/jsdelivr/cdn/googleapis/gstatic/@babel/standalone</code> 문자열이 0건이어야 한다.</li>
+<li><strong>신뢰 시그널 고정</strong>: 헤더의 <code>ConnectionBadge endpoint=&quot;localhost:1234&quot;</code>·<code>ExternalCallsCounter count={0}</code>·<code>100% LOCAL</code>은 B·C 화면에서도 항상 노출, 숨김·변경 금지(AppShell이 제공). 카운터는 항상 0.</li>
+<li><strong>디자인 토큰·컴포넌트만</strong>: 색은 <code>var(--teal/--green/--amber/--red/--blue/--fg-*/--surface-*/--border-*)</code> 토큰만. 컴포넌트는 <code>window.DocsEmDesignSystem_afe3d1</code>(Button·StatusPill·DataTable·ProgressBar·Card·Tag·ScoreChip·GateChip·Select·Icon 등)·<code>SideRail</code>·<code>RailSection</code>만 사용. 새 색상값(HEX 리터럴)·새 컴포넌트 발명 금지. 데이터·식별자·점수는 <code>.mono</code>/<code>var(--font-mono)</code>.</li>
+<li><strong>이모지(컬러 픽토그램) 금지 — 단, ⚠/✔/✓는 이모지가 아님</strong>: 디자인 시스템의 금지 대상은 <strong>컬러 이모지 픽토그램</strong>(😀🔥📄 등)이지, 키트가 상태 마커로 쓰는 기하/기호 글리프(<code>⚠</code>·<code>✔</code>·<code>✓</code>·<code>⟳</code>·<code>○</code>·<code>▸</code>·<code>▲</code>·<code>▼</code>·<code>□</code>·<code>■</code>·<code>⊆</code>)가 아니다. 그러나 완료기준 #8의 emoji-grep 정규식 범위(<code>U+2600–27BF</code>)는 <code>⚠</code>(U+26A0)·<code>✔</code>(U+2714)·<code>✓</code>(U+2713) 세 글리프를 오탐한다. <strong>두 방법 중 하나를 일관되게 적용</strong>하라:<ul>
+<li>(권장) 키트의 <code>✔</code>/<code>✓</code>는 <code>Icon name=&quot;check&quot;</code>로, <code>⚠</code>는 <code>Icon name=&quot;alert-triangle&quot;</code>로 교체한다(Lucide, stroke 1.75). 이렇게 하면 게이트 grep과 자연히 일치한다. <code>⚠ 유지</code>로 지시된 BGE-M3 DECISION 마커·INV-7 통제위반 마커도 모두 <code>Icon name=&quot;alert-triangle&quot;</code>로 표현한다.</li>
+<li>(대안) 기호 글리프를 그대로 유지하려면 완료기준 #8·검증 (C)의 emoji-grep 정규식에서 <code>⚠</code>(U+26A0)·<code>✔</code>(U+2714)·<code>✓</code>(U+2713)을 화이트리스트로 제외한다.
+어느 쪽이든 <strong>지시(&quot;⚠ 유지&quot;)와 게이트(&quot;이모지 0건&quot;)가 충돌하지 않아야</strong> 한다. 새 컬러 이모지 픽토그램 추가는 여전히 0건.</li>
+</ul>
+</li>
+<li><strong>바운스 모션 금지</strong>(<code>prefers-reduced-motion</code> 존중).</li>
+<li><strong>정직한 수치</strong>: <code>Recall@1=0</code>·격차 <code>−0.018</code>·<code>REGRESS</code>를 미화하지 않는다. <code>prompt_tokens=0</code>엔 <code>(unreliable)</code> 앰버 태그(INV-4). 토큰 카운트로 길이 판단 금지.</li>
+<li><strong>BGE-M3는 미채택 DECISION</strong>: 화면 A 노출 금지(여긴 해당 없음). <strong>화면 B 좌레일에서만</strong> alert-triangle 아이콘+DECISION 모달로 노출. nomic 768·norm1이 활성, BGE-M3 1024는 비활성+경고. 토글을 실제로 모델 교체에 배선하지 말 것(모달만 띄움 — 단독변수 원칙·재인덱싱 비용 경고).</li>
+<li><strong>벡터스토어</strong>: LanceDB가 확정. ChromaDB는 미선택 <code>DECISION</code> placeholder(점선·<code>opacity</code> 흐림)로만 표기, 클릭 불가.</li>
+<li><strong>INV-7 단일 변수 원칙(화면 C에서 UI 강제)</strong>: 통제 실험에서 변수 1개=정상(check), <strong>2개 이상 동시 변경 시 &quot;통제 위반&quot;</strong> 경고(alert-triangle)를 띄운다. 실험 선택은 baseline/+bm25/+rrf 중 하나만(단일 변수 변경).</li>
+<li><strong>데모 식별자·데모 지표는 가짜</strong>: <code>hr-0412/tr-0203/p.N</code>은 시안용 가짜값. 확정 사실은 768·−0.018·0.687→0.695·12,972자·ctx 8192/65536·localhost:1234·데모 문서 <code>휴가규정.pdf</code>·<code>출장경비.docx</code> 2종뿐. 화면 C의 안정성 게이지(content 빈값률 8%·length 재시도율 12%)·<code>+0.012</code>는 <strong>데모값</strong> → 실 API가 해당 지표를 안 주면 <strong><code>(데모)</code> 배지</strong>를 붙여 명시하고, <code>EvalResult</code>가 주는 값(recall_at_1/3/5/10·mrr·ndcg_at_10·per_query)만 실데이터로 채운다.</li>
+<li><strong><code>+rrf</code> 회귀 성공 경로 전체는 데모다(발명 금지 — SSOT 근거)</strong>: SSOT(<code>docs/07_실행프롬프트/06_페이즈5_hybrid.md</code> line 40)는 *&quot;RRF 하이브리드만으로 이 질의가 1위로 전환된다는 실측 근거는 없다… 미측정 결과를 &#39;반드시 1로 전환&#39;이라 단정하는 것 자체가 발명 금지 위반&quot;*이라 명시하고, 이 −0.018/3위 실패의 직접 교정 수단을 <strong>L2 임베딩 교체(BGE-M3) 또는 L3 리랭커</strong>로 규정한다. 또한 <code>use_rerank=True</code>는 정본에서 <code>NotImplementedError(&quot;rerank: phase 7&quot;)</code>이고 이 페이즈는 <code>use_rerank=False</code>로만 호출하므로, 리랭커 기반 개선은 <code>evaluate</code>로 얻을 수 없다. 따라서 <strong><code>+rrf</code> 성공 데모 일체</strong>(Recall@1 <code>0 ▸ 1</code>, 격차 <code>+0.012</code>, 회귀 순위 <code>3 ▸ 1</code>, <code>GateChip PASS</code>/G1 PASS, L2 타임라인 <code>done</code>, <code>dem-flash</code> 애니메이션)는 <strong>백엔드가 줄 수 없는 값=데모</strong>이며, KpiGap·안정성 게이지와 <strong>동일하게 <code>(데모)</code> 배지를 의무 표기</strong>한다. 실값으로 채울 수 있는 것은 오직 <code>evaluate</code>가 반환하는 <code>recall_at_1/3/5/10</code>·<code>mrr</code>·<code>ndcg_at_10</code>·<code>per_query</code>뿐이다.</li>
+<li><strong>근거 부족 시 추측 금지</strong>: 백엔드가 안 주는 필드는 만들어내지 말고 &quot;—&quot; 또는 <code>(데모)</code>로 명시.</li>
+</ul>
+<hr>
+<h3>백엔드 함수 계약 (고정 — 변경 금지, FastAPI는 이를 HTTP로 노출)</h3>
+<pre><code># eval/evaluate.py
+evaluate(golden_path=&quot;eval/queries.yaml&quot;, *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False)
+  -&gt; EvalResult(recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query)
+  # use_rerank=True 는 NotImplementedError(&quot;rerank: phase 7&quot;) — 이 페이즈는 항상 use_rerank=False.
+# src/app/answer.py (참고)
+answer(query, *, model, top_n) -&gt; {&quot;text&quot;: str, &quot;citations&quot;: [{doc_id, source_path, page|section}]}
+# src/retrieve/search.py (참고)
+search(query, *, top_k, use_bm25) -&gt; list[SearchHit(chunk, score, rank, source∈{dense,bm25,rrf,rerank})]
+  # use_bm25=False → source=&quot;dense&quot; (dense 단독)
+  # use_bm25=True  → source=&quot;rrf&quot;   (dense+BM25 RRF 하이브리드). 별도 RRF 결합 on/off 인자는 존재하지 않는다.
+# 인덱싱: src/ingest/{loaders,chunker} + src/store/vector_store.py (LanceDB, 사이드카 _index_header.json)
+</code></pre>
+<p><strong>실험→파라미터 매핑 (백엔드는 2상태뿐 — 정본 고정, 발명 금지)</strong>: 정본 계약상 dense vs 하이브리드를 가르는 스위치는 <code>use_bm25</code> <strong>하나뿐</strong>이고, <code>use_bm25=True</code>가 곧 dense+BM25 RRF 결합(<code>source=&quot;rrf&quot;</code>)이다. 별도 &#39;RRF on/off&#39; 인자는 없다. 따라서 백엔드 평가 호출은 정확히 <strong>2상태</strong>로 고정한다:</p>
+<ul>
+<li><code>baseline</code> → <code>use_bm25=False, use_rerank=False</code> (변수 0, 기준선)</li>
+<li><code>+bm25</code> 와 <code>+rrf</code> → <strong>둘 다 <code>use_bm25=True, use_rerank=False</code>인 동일한 하이브리드 호출</strong>. 백엔드가 반환하는 <code>EvalResult</code>는 두 라벨에서 같다.</li>
+</ul>
+<p>즉 <strong><code>+bm25</code>와 <code>+rrf</code>는 같은 백엔드 호출로 귀결됨을 인정</strong>한다. <code>+rrf</code>를 <code>use_bm25=True</code>와 구분되는 별도 실 실험으로 취급하지 말 것(발명 금지). UI에서 <code>+rrf</code>를 별도 항목으로 보이고 싶다면 <strong><code>(데모)</code> 라벨</strong>로 표기하고, 그 항목의 회귀 성공 시각화(0▸1·+0.012·3▸1·PASS)는 위 절대 규칙대로 <strong>전부 <code>(데모)</code> 배지</strong> 처리한다. 실 KPI(recall/mrr/ndcg/per_query)는 <code>use_bm25=True</code> 하이브리드 호출의 실값으로만 채운다.</p>
+<hr>
+<h3>작업 지시 (구체 단계)</h3>
+<p><strong>0. 위치·패턴 확인.</strong> 페이즈 10이 만든 <code>web/</code> 구조를 따른다. 아래는 기본 가정 경로다 — 페이즈 10이 다르게 뒀으면 그쪽을 따른다.</p>
+<ul>
+<li>화면 컴포넌트: <code>web/src/screens/</code></li>
+<li>API 클라이언트: <code>web/src/lib/api.js</code> (화면 A가 쓰는 <code>fetch</code> 래퍼 재사용; base는 같은 오리진 <code>/api</code> 또는 페이즈 9가 정한 dev 프록시)</li>
+<li>DS 번들 노출: 페이즈 10이 <code>_ds_bundle.js</code>를 vendoring해 <code>window.DocsEmDesignSystem_afe3d1</code>로 노출하고 <code>AppShell</code>/<code>SideRail</code>/<code>RailSection</code>을 제공하는 방식 — 그대로 사용.</li>
+</ul>
+<p><strong>1. FastAPI 엔드포인트 추가</strong> (페이즈 9 진입점 파일, 예: <code>web/server/main.py</code>). 화면 A가 쓰는 라우터에 인덱싱·평가 라우트를 <strong>추가만</strong> 한다(기존 변경 최소). 모두 백엔드 함수를 감싼다.</p>
+<ul>
+<li><code>POST /api/index/upload</code> — multipart 파일 수신. <strong>확장자 화이트리스트 <code>.pdf</code>·<code>.docx</code>만 허용</strong>, 그 외는 저장하지 않고 <code>{&quot;accepted&quot;: [...], &quot;rejected&quot;: [{&quot;name&quot;,&quot;reason&quot;:&quot;unsupported·skip&quot;}]}</code> 반환(거부는 415가 아니라 본문에 사유). 허용분은 데모 문서 디렉토리(페이즈 2·3이 읽는 경로)에 저장.</li>
+<li><code>POST /api/index/run</code> — 업로드된(또는 기존) 문서를 <code>src/ingest/loaders</code>→<code>chunker</code>→<code>embed</code>→<code>vector_store</code>로 인덱싱. <strong>멱등</strong>: 문서ID+청크해시 동일 시 재생성 안 함(페이즈 3 멱등 로직 사용, 없으면 호출만 하고 백엔드가 처리). 진행 상황을 단계별로 반환. 구현 택1:<ul>
+<li>단순: 동기 처리 후 5단계 결과(파싱/문장분리/청킹/임베딩/저장 각 카운트)를 한 번에 JSON 반환.</li>
+<li>진행형(권장): <code>POST /api/index/run</code>이 job_id 반환 + <code>GET /api/index/status?job_id=</code>로 폴링(2초 간격), 단계별 <code>{label, tool, count, state(done/active/pending), pct}</code> 배열. 파싱 실패 문서는 <code>state:&quot;error&quot;</code>로 스킵(전체 중단 금지).</li>
+<li><strong><code>prompt_tokens</code>는 사용하지 않는다</strong>(INV-4). 길이/청킹은 char 가드 기준. 응답에 토큰 카운트 넣지 말 것.</li>
+</ul>
+</li>
+<li><code>GET /api/index/docs</code> — 색인된 문서 목록 <code>[{name, chunks, dim:768, model:&quot;nomic&quot;, at, status:&quot;ok&quot;|&quot;error&quot;, note}]</code>. 사이드카 <code>_index_header.json</code>/벡터스토어에서 읽는다. 파싱 실패 문서는 <code>status:&quot;error&quot;</code>(청크/차원/모델 &quot;–&quot;).</li>
+<li><code>POST /api/eval</code> — body <code>{&quot;experiment&quot;:&quot;baseline|bm25|rrf&quot;}</code>. <strong>위 2상태 매핑대로</strong> <code>evaluate(golden_path=&quot;eval/queries.yaml&quot;, k_list=[1,3,5,10], use_bm25=(experiment!=&quot;baseline&quot;), use_rerank=False)</code> 호출 → <code>EvalResult</code>를 <code>{recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query}</code>로 직렬화 반환. <strong><code>experiment</code>가 <code>&quot;bm25&quot;</code>든 <code>&quot;rrf&quot;</code>든 <code>use_bm25=True</code>로 동일 호출</strong>(둘 다 RRF 하이브리드, 백엔드 결과 동일). <code>golden_path</code>는 페이즈 4 골든셋 경로 <code>eval/queries.yaml</code>(grep로 재확인). <code>use_rerank</code>는 절대 <code>True</code>로 주지 않는다(NotImplementedError).</li>
+<li>모든 라우트는 동기/예외 시 정직한 에러 JSON 반환. 외부 호출 0(백엔드만 localhost:1234 임베딩).</li>
+</ul>
+<p><strong>2. 화면 B <code>IndexScreen.jsx</code> 복사·배선</strong> (<code>디자인/docs-em Design System/ui_kits/docs-em/IndexScreen.jsx</code> → <code>web/src/screens/IndexScreen.jsx</code>). 키트 레이아웃·디자인은 그대로 두고 하드코딩만 교체한다.</p>
+<ul>
+<li>키트 상단 <code>const { Icon, IconButton, Button, Input, StatusPill, Tag, Card, DataTable, ProgressBar } = window.DocsEmDesignSystem_afe3d1;</code> 와 <code>window.SideRail</code>·<code>window.RailSection</code>·<code>React.useState</code> 사용 패턴 유지(페이즈 10의 import 방식에 맞춰 조정).</li>
+<li><strong>드롭존</strong>: <code>&lt;input type=file&gt;</code>+드래그앤드롭. 클라이언트에서 먼저 <code>.pdf</code>/<code>.docx</code> 필터 → 그 외는 <code>Tag tone=&quot;amber&quot; icon=&quot;x&quot;</code>로 &quot;거부: <name> · 지원 안 함·스킵&quot; 표기(키트의 거부 목록 UI 재사용). 허용분을 <code>POST /api/index/upload</code>로 전송, 서버가 추가 거부한 항목도 합쳐 표시.</li>
+<li><strong>파이프라인 5노드</strong>: 키트 <code>PIPE</code>/<code>PipeNode</code> 구조 유지. 데이터를 <code>/api/index/run</code>(+status 폴링) 응답으로 채운다. <code>state</code>에 따라 색(done=green, active=teal, pending=faint)·<code>ProgressBar</code>·실시간 카운트. 파싱(pymupdf/python-docx)→문장분리(kss)→청킹→임베딩(nomic)→저장. 폴링은 <code>setInterval</code>(언마운트/완료 시 <code>clearInterval</code>).</li>
+<li>파이프라인 하단 <strong><code>prompt_tokens=0 (unreliable)</code></strong> 앰버 문구 유지(INV-4) — 정적 텍스트.</li>
+<li><strong>색인 문서 테이블</strong>: 키트 <code>DataTable</code> 컬럼(문서명·청크·차원·모델·색인 시각·상태) 유지, <code>rows</code>를 <code>/api/index/docs</code>로 교체. 파싱 실패행은 <code>StatusPill tone=&quot;error&quot;&gt;파싱실패·스킵</code>. 멱등 안내 문구(<code>문서ID + 청크해시 동일 시 생성 안 함</code>)·전체/선택 재색인 버튼은 <code>/api/index/run</code>에 배선(재색인 시 멱등이라 변화 없으면 &quot;재색인 0 · 변경 없음&quot; note).</li>
+<li><strong>좌레일 임베딩 토글</strong>: nomic(768·norm1) 활성 고정. BGE-M3(1024)는 alert-triangle 아이콘 + 클릭 시 <code>DecisionModal</code>(키트 제공)만 띄움 — 실제 교체 배선 금지. 모달 문구(768→1024 전체 재인덱싱·norm 재측정 경고) 유지. 벡터스토어: LanceDB 표기, ChromaDB는 점선·흐림 <code>DECISION</code> placeholder(클릭 불가). 좌레일 하단 <code>localhost:1234/v1</code>·<code>api_key=lm-studio (dummy)</code> 유지.</li>
+<li>키트의 <code>✔</code>/<code>✓</code>/<code>⚠</code> 글리프는 <strong>절대 규칙(이모지)</strong> 항목에 따라 <code>Icon name=&quot;check&quot;</code>/<code>Icon name=&quot;alert-triangle&quot;</code>로 교체(또는 grep 화이트리스트 — 둘 중 채택한 방식 일관 적용).</li>
+</ul>
+<p><strong>3. 화면 C <code>EvalScreen.jsx</code> 복사·배선</strong> (<code>…/ui_kits/docs-em/EvalScreen.jsx</code> → <code>web/src/screens/EvalScreen.jsx</code>). 키트의 KPI·골든셋·통제실험·드릴다운·타임라인 레이아웃 유지, 데이터만 실 API로.</p>
+<ul>
+<li>상단 <code>const { Icon, Button, Select, StatusPill, GateChip, Tag, Card, ScoreChip } = window.DocsEmDesignSystem_afe3d1;</code> 유지.</li>
+<li><strong>실험 드롭다운/좌레일 실험 선택</strong>(baseline/+bm25/+rrf) → 선택 시 <code>POST /api/eval {experiment}</code> 호출(로딩 상태 표시). 한 번에 하나만 선택(단일 변수). <strong><code>+bm25</code>와 <code>+rrf</code>는 같은 <code>use_bm25=True</code> 호출이라 백엔드 <code>EvalResult</code>가 동일</strong>함을 인지하고, 두 라벨에서 같은 실값이 흐르는 것을 버그로 취급하지 말 것. <code>+rrf</code>의 회귀 성공 시각화는 아래 규칙대로 <code>(데모)</code>.</li>
+<li><strong>거대 Recall@1 KPI</strong>(<code>KpiRecall</code>): <code>recall_at_1</code> <strong>실값</strong>으로. <code>0</code>이면 red+<code>REGRESS</code>+<code>GateChip state=&quot;fail&quot;</code>, <code>1.0</code>이면 green+<code>GateChip state=&quot;pass&quot; G1 PASS</code>. <code>[□■■■]</code> 셀 배열은 <code>recall_at_1/3/5/10</code> <strong>실값</strong>으로. <strong>단, <code>0 → 1</code> 전환 자체와 그에 결부된 <code>dem-flash</code>(red→green) 애니메이션·<code>G1 PASS</code> 점등은 <code>+rrf</code> 데모 경로에서만 발생하므로 <code>(데모)</code> 배지를 동반</strong>한다(실 baseline/+bm25 하이브리드에서 회귀 케이스 Recall@1은 SSOT상 0으로 관측될 뿐, 1로 전환된다는 실측 근거 없음). <code>prefers-reduced-motion</code> 시 애니메이션 비활성.</li>
+<li><strong>유사도 격차 KPI</strong>(<code>KpiGap</code>): 회귀 케이스 정답−오답 격차. <code>per_query</code>에서 회귀 케이스(<code>q001</code>/&quot;연차 휴가 신청 절차&quot;)의 격차를 뽑아 쓴다. <code>per_query</code>가 격차를 안 주면 확정 데모값 <code>−0.018</code>(baseline)에 <strong><code>(데모)</code> 배지</strong>를 붙여 표기하고 실값 가능 시 교체. <code>+rrf</code>의 <code>+0.012</code>는 <strong>데모값</strong> → 항상 <code>(데모)</code> 배지. 미화 금지(음수는 red).</li>
+<li><strong>골든셋 테이블</strong>(<code>GOLDEN</code>/<code>GoldenRow</code>): before(baseline)▸after(현재 실험) Δ. 행 = Recall@1/3/5/10·MRR·nDCG@10. before는 baseline <code>EvalResult</code>(최초 1회 캐시), after는 현재 선택 실험. <code>DataTable</code>/미니 <code>ScoreBar</code> 막대로 시각화. Δ 양수=green▲ 음수=red▼. (after가 <code>+bm25</code>/<code>+rrf</code>면 같은 하이브리드 실값임에 유의.)</li>
+<li><strong>통제 실험 비교</strong>(<code>ExpRow</code>): baseline=변수0, +bm25=변수1(check), +rrf=변수1(check), &quot;임베딩교체+RRF 동시&quot;=변수2 → <code>StatusPill tone=&quot;warn&quot;&gt;통제 위반</code>(alert-triangle). 변수 2개 동시 선택을 UI에서 막거나 경고(INV-7). 이 비교는 정적 라벨이어도 됨(원칙 시각화).</li>
+<li><strong>안정성 게이지</strong>(<code>Gauge</code>): content 빈값 발생률·length 재시도율. 실 API가 해당 지표를 주면 실값, 아니면 키트 데모값(8%/12%)에 <strong><code>(데모)</code></strong> 문구 유지(키트에 이미 있음). 임계 ≥25% 앰버.</li>
+<li><strong>회귀 드릴다운</strong>: &quot;연차 휴가 신청 절차&quot;(<code>q001</code>) → 휴가규정.pdf 정답 순위·정답 점수(0.695)·최상위 오답(출장경비.docx)·격차·게이트. <strong>정답 순위·격차는 <code>per_query</code>의 실값을 우선</strong>(baseline/+bm25 하이브리드 실값)으로 채운다. baseline·+bm25(=하이브리드 실값)에서 회귀 케이스는 SSOT상 실패(red)로 관측. <strong><code>+rrf</code> 성공 시각화(순위 <code>3 ▸ 1</code>·격차 <code>+0.012</code>·<code>GateChip PASS</code>)는 백엔드가 줄 수 없는 데모이므로 전부 <code>(데모)</code> 배지를 단다</strong>(SSOT 06_페이즈5 line 40: RRF만으로 1위 전환 실측 근거 없음·교정 레버는 L2/L3). 데모 순위/격차를 실 <code>per_query</code> 값처럼 보이게 하지 말 것.</li>
+<li><strong>L1→L2→L3 타임라인</strong>(<code>TimelineNode</code>): 키트 유지(정적). <strong><code>+rrf</code> 성공 시 L2 <code>done</code> 점등은 데모 경로</strong>이므로 <code>(데모)</code> 배지와 함께 표기(실 evaluate는 L2 임베딩 교체를 수행하지 않음).</li>
+</ul>
+<p><strong>4. AppShell 네비 연결</strong>: 페이즈 10의 <code>web/src/App</code>(또는 라우터)에서 <code>index</code>·<code>eval</code> 탭이 새 <code>IndexScreen</code>/<code>EvalScreen</code>을 렌더하도록 연결(키트 <code>index.html</code>의 <code>active === &quot;index&quot; ? IndexScreen : EvalScreen</code> 분기 패턴). AppShell 헤더의 신뢰 클러스터는 손대지 않는다.</p>
+<hr>
+<h3>산출물 (생성/수정 파일)</h3>
+<ul>
+<li>생성: <code>web/src/screens/IndexScreen.jsx</code> (키트 복사+배선)</li>
+<li>생성: <code>web/src/screens/EvalScreen.jsx</code> (키트 복사+배선)</li>
+<li>수정: 페이즈 9 FastAPI 진입점(예: <code>web/server/main.py</code>) — <code>/api/index/upload</code>·<code>/api/index/run</code>(+<code>/api/index/status</code>)·<code>/api/index/docs</code>·<code>/api/eval</code> 라우트 추가</li>
+<li>수정: <code>web/src/lib/api.js</code> — 인덱싱·평가용 fetch 함수 추가(화면 A 래퍼 재사용)</li>
+<li>수정: 페이즈 10의 라우팅/<code>App</code> 진입(예: <code>web/src/App.jsx</code>) — index/eval 탭 ↔ 새 화면 연결</li>
+<li>(필요 시) <code>web/server/</code>의 업로드 저장 경로·골든셋 경로 상수(<code>eval/queries.yaml</code>)</li>
+</ul>
+<hr>
+<h3>완료 기준 (모두 통과해야 다음 페이즈 가능 — 미통과 시 커밋·진행 금지)</h3>
+<ol>
+<li><strong>빌드 성공</strong>: <code>web/</code>에서 <code>npm run build</code> 무오류.</li>
+<li><strong>외부 호출 0건 정적 점검</strong>: 빌드 산출물(<code>web/dist</code> 또는 소스+index.html)에 <code>unpkg|jsdelivr|cdn|googleapis|gstatic|@babel/standalone</code> 문자열 <strong>0건</strong>. 프론트 코드가 <code>localhost:1234</code>를 직접 <code>fetch</code>하지 않음(백엔드만). 신뢰 클러스터(<code>ExternalCallsCounter count={0}</code>) 렌더됨.</li>
+<li><strong>화면 B 거부 동작</strong>: 드롭존에 <code>.xlsx</code>/<code>.hwp</code> 투입 시 인덱싱 없이 &quot;지원 안 함·스킵&quot; 거부 표기. <code>.pdf</code>/<code>.docx</code>만 업로드 API로 전송.</li>
+<li><strong>화면 B 인덱싱 실데이터</strong>: 데모 문서 2종 인덱싱 시 파이프라인 5노드가 실 카운트로 진행 완료, 색인 테이블에 차원 768·모델 nomic으로 행 표시. 재색인 멱등(2회째 변경 없음). 파싱 실패 문서는 error 행으로 스킵(전체 중단 안 함).</li>
+<li><strong>화면 C 평가 실데이터(2상태)</strong>: 실험 baseline/+bm25/+rrf 전환 시 <code>POST /api/eval</code>가 <code>EvalResult</code>를 반환하고 Recall@1/3/5/10·MRR·nDCG@10 KPI·골든셋·드릴다운이 <strong>실값</strong>으로 갱신. <strong>매핑은 2상태</strong>(<code>baseline</code>=<code>use_bm25=False</code>, <code>+bm25</code>·<code>+rrf</code>=<code>use_bm25=True</code> 동일 호출)이며 <code>+bm25</code>와 <code>+rrf</code>가 같은 실값을 내는 것은 정상이다. baseline에서 회귀 케이스 Recall@1=0(red·REGRESS·G1 미달) 재현. <strong><code>+rrf</code> 회귀 성공 시각화 전체(<code>0 ▸ 1</code>·<code>+0.012</code>·순위 <code>3 ▸ 1</code>·<code>GateChip PASS</code>/G1 PASS·L2 <code>done</code>·<code>dem-flash</code>)에는 <code>(데모)</code> 배지가 붙어 있어야 하며, 실 <code>per_query</code>/실 KPI 자리에 데모 성공값이 새지 않는다</strong>(실값은 evaluate가 주는 recall/mrr/ndcg/per_query뿐).</li>
+<li><strong>BGE-M3 미채택 규칙</strong>: 화면 B 좌레일에서만 BGE-M3가 alert-triangle+DECISION 모달로 노출(실제 모델 교체 배선 없음). ChromaDB는 클릭 불가 placeholder. 화면 A·C 어디에도 BGE-M3 채택 UI 없음.</li>
+<li><strong>INV-4·INV-7 표기</strong>: 화면 B에 <code>prompt_tokens=0 (unreliable)</code> 앰버 표기 존재. 화면 C 통제실험에서 변수 2개 동시 = &quot;통제 위반&quot;(alert-triangle).</li>
+<li><strong>디자인 토큰·이모지 점검</strong>: 두 화면 JSX에 HEX 색상 리터럴(<code>#xxxxxx</code>) 신규 추가 0건(모두 <code>var(--…)</code> 토큰). <strong>새 컬러 이모지 픽토그램 0건</strong>. emoji-grep은 상태 마커 <code>⚠</code>/<code>✔</code>/<code>✓</code>를 오탐하므로, (a) 이들을 <code>Icon name=&quot;check|alert-triangle&quot;</code>로 교체했거나 (b) grep 정규식에서 <code>U+26A0</code>·<code>U+2714</code>·<code>U+2713</code>을 화이트리스트 제외했어야 하며, 어느 경우든 게이트가 PASS여야 한다(채택한 방식과 게이트가 일치).</li>
+</ol>
+<hr>
+<h3>검증 명령 (macOS BSD 기준 — 복붙 실행)</h3>
+<pre><code class="language-bash"># (A) 빌드
+( cd web &amp;&amp; npm run build ) || { echo &quot;BUILD FAIL&quot;; exit 1; }
+
+# (B) 외부 호출/CDN 정적 점검 — 0건이어야 통과
+grep -rEn &quot;unpkg|jsdelivr|cdn\.|jsdelivr|googleapis|fonts\.gstatic|@babel/standalone&quot; web/dist web/index.html web/src 2&gt;/dev/null \
+  &amp;&amp; { echo &quot;FAIL: 외부 호출 잔존&quot;; exit 1; } || echo &quot;PASS: 외부 호출 0&quot;
+# 프론트가 LMStudio 직접 호출 안 함
+grep -rEn &quot;localhost:1234|127\.0\.0\.1:1234&quot; web/src 2&gt;/dev/null \
+  &amp;&amp; { echo &quot;FAIL: 프론트가 LMStudio 직접 호출&quot;; exit 1; } || echo &quot;PASS: 프론트는 백엔드만 호출&quot;
+
+# (C) HEX 색상 리터럴 신규 0건 / 컬러 이모지 0건 (배선한 두 화면)
+grep -nE &quot;#[0-9a-fA-F]{6}&quot; web/src/screens/IndexScreen.jsx web/src/screens/EvalScreen.jsx \
+  &amp;&amp; { echo &quot;FAIL: HEX 리터럴&quot;; exit 1; } || echo &quot;PASS: 토큰만 사용&quot;
+# 이모지 grep: 상태 마커 ⚠(U+26A0)·✔(U+2714)·✓(U+2713)은 디자인시스템 허용 기호이므로 화이트리스트 제외.
+# (방식 a를 택해 Icon으로 교체했다면 애초에 매칭 0건. 방식 b를 택했다면 이 제외가 게이트.)
+grep -nP &quot;[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}]&quot; web/src/screens/*.jsx 2&gt;/dev/null \
+  | grep -vP &quot;[\x{26A0}\x{2714}\x{2713}]&quot; \
+  &amp;&amp; { echo &quot;FAIL: 컬러 이모지&quot;; exit 1; } || echo &quot;PASS: 컬러 이모지 0 (⚠/✔/✓ 허용 제외)&quot;
+
+# (D) 백엔드 라우트 존재 확인
+grep -nE &quot;/api/index/upload|/api/index/run|/api/index/docs|/api/eval&quot; web/server/main.py server/main.py 2&gt;/dev/null | head
+# /api/eval 이 use_bm25 2상태 매핑이고 use_rerank=True를 절대 주지 않는지 확인
+grep -nE &quot;use_bm25|use_rerank|experiment&quot; web/server/main.py server/main.py 2&gt;/dev/null | head
+grep -nE &quot;use_rerank *= *True&quot; web/server/main.py server/main.py 2&gt;/dev/null \
+  &amp;&amp; { echo &quot;FAIL: use_rerank=True (NotImplementedError)&quot;; exit 1; } || echo &quot;PASS: use_rerank 미사용&quot;
+
+# (E) 핵심 규칙 문자열 존재 확인
+grep -rn &quot;prompt_tokens=0&quot; web/src/screens/IndexScreen.jsx &amp;&amp; echo &quot;PASS: INV-4 표기&quot;
+grep -rniE &quot;통제 위반|단일 변수|변수 2&quot; web/src/screens/EvalScreen.jsx &amp;&amp; echo &quot;PASS: INV-7 표기&quot;
+grep -rniE &quot;BGE-M3|DECISION&quot; web/src/screens/IndexScreen.jsx &amp;&amp; echo &quot;PASS: BGE-M3 화면B 한정&quot;
+grep -rniE &quot;BGE-M3&quot; web/src/screens/EvalScreen.jsx web/src/screens/QueryScreen.jsx 2&gt;/dev/null \
+  &amp;&amp; { echo &quot;FAIL: BGE-M3가 화면 A/C에 노출&quot;; exit 1; } || echo &quot;PASS: A/C 미노출&quot;
+# +rrf 성공 시각화에 (데모) 배지가 붙어 있는지 — 0▸1/+0.012/3▸1/PASS 인근에 데모 표기 필수
+grep -rniE &quot;데모|demo&quot; web/src/screens/EvalScreen.jsx | grep -iE &quot;rrf|\+0.012|3 ?▸ ?1|0 ?▸ ?1|dem-flash|PASS&quot; \
+  &amp;&amp; echo &quot;PASS: +rrf 성공경로 (데모) 표기&quot; || { echo &quot;FAIL: +rrf 성공값에 (데모) 배지 누락&quot;; exit 1; }
+
+# (F) 런타임 스모크 (백엔드·LMStudio 기동 상태에서)
+#   FastAPI 기동(페이즈 9 방식) 후:
+curl -s -X POST localhost:8000/api/eval -H &#39;content-type: application/json&#39; -d &#39;{&quot;experiment&quot;:&quot;baseline&quot;}&#39; \
+  | python3 -c &quot;import sys,json; d=json.load(sys.stdin); assert {&#39;recall_at_1&#39;,&#39;recall_at_3&#39;,&#39;recall_at_5&#39;,&#39;recall_at_10&#39;,&#39;mrr&#39;,&#39;ndcg_at_10&#39;} &lt;= set(d), d; print(&#39;PASS eval keys; recall@1=&#39;,d[&#39;recall_at_1&#39;])&quot;
+# +bm25 와 +rrf 는 같은 use_bm25=True 호출 → 같은 EvalResult 여야 정상(2상태 매핑 검증)
+B=$(curl -s -X POST localhost:8000/api/eval -H &#39;content-type: application/json&#39; -d &#39;{&quot;experiment&quot;:&quot;bm25&quot;}&#39;)
+R=$(curl -s -X POST localhost:8000/api/eval -H &#39;content-type: application/json&#39; -d &#39;{&quot;experiment&quot;:&quot;rrf&quot;}&#39;)
+[ &quot;$B&quot; = &quot;$R&quot; ] &amp;&amp; echo &quot;PASS: +bm25 == +rrf (동일 use_bm25=True 호출)&quot; || echo &quot;WARN: +bm25 != +rrf — 매핑이 2상태인지 재확인&quot;
+curl -s localhost:8000/api/index/docs | python3 -c &quot;import sys,json; d=json.load(sys.stdin); print(&#39;docs rows:&#39;,len(d)); assert all(r.get(&#39;dim&#39;) in (768,&#39;768&#39;,&#39;–&#39;) for r in d), d; print(&#39;PASS docs dim 768&#39;)&quot;
+# 거부 동작: 더미 .xlsx 업로드 시 rejected에 잡혀야 함
+printf &#39;x&#39; &gt; /tmp/report.xlsx
+curl -s -X POST localhost:8000/api/index/upload -F file=@/tmp/report.xlsx \
+  | python3 -c &quot;import sys,json; d=json.load(sys.stdin); assert d.get(&#39;rejected&#39;), d; print(&#39;PASS reject xlsx&#39;)&quot;
+</code></pre>
+<blockquote>
+<p>포트(8000)·진입점 경로·dev 프록시는 페이즈 9가 정한 값으로 치환한다. (F)는 LMStudio(localhost:1234, nomic 로드)·백엔드 기동을 전제로 한다. <code>+bm25</code>와 <code>+rrf</code>가 동일 결과인 것은 정본 2상태 매핑상 <strong>정상</strong>(버그 아님).</p>
+</blockquote>
+<hr>
+<h3>다음 페이즈 핸드오프</h3>
+<ul>
+<li>화면 A(페이즈 10)·B·C 3화면이 모두 실 백엔드에 배선 완료 → docs-em 웹 UI 기능 셋 완성.</li>
+<li>다음 페이즈는 폐쇄망 패키징·E2E 통합 검증(전체 외부 호출 0 재확인)·운영 기동 스크립트(FastAPI+정적 빌드 서빙) 정리. 산출물: <code>web/dist</code> 정적 서빙 + 백엔드 통합 기동 1커맨드.</li>
+<li>인계 사실: 인덱싱/평가 API 계약(<code>/api/index/*</code>·<code>/api/eval</code> 응답 스키마), <strong>실험→<code>evaluate</code> 파라미터 매핑은 2상태</strong>(<code>baseline</code>=<code>use_bm25=False</code> / <code>+bm25</code>·<code>+rrf</code>=<code>use_bm25=True</code> 동일 RRF 하이브리드 호출, <code>use_rerank</code> 항상 False), <strong><code>+rrf</code> 회귀 성공 경로(0▸1·+0.012·3▸1·PASS·L2 done·dem-flash)는 데모이며 <code>(데모)</code> 배지 고정</strong>(실 교정 레버는 L2 BGE-M3/L3 리랭커 — 미구현, SSOT 06_페이즈5 line 40), 안정성 게이지·KpiGap의 데모값 표기 위치(실 지표 연결 TODO), BGE-M3·ChromaDB는 DECISION placeholder로 동결 상태.</li>
+</ul>
 </article>
 <article class="doc" data-id="99_AI참조/00_AI작업규칙.md" hidden><h1>AI 작업 규칙 (00_AI작업규칙)</h1>
 <blockquote>

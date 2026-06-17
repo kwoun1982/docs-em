@@ -1,0 +1,158 @@
+> **이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.**
+> 페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 [00_실행개요.md](./00_실행개요.md) 참조.
+> 정본: [디자인 시스템 참조](../06_UIUX/01_디자인시스템_참조.md) · [내부 API 계약](../04_아키텍처_API/02_내부API_인터페이스.md) · [불변식 INV-1~8](../99_AI참조/01_실측제약_불변식.md) · 디자인 원본 `디자인/docs-em Design System/`
+
+# 페이즈 10: 화면 A 질의응답 + 출처 인용 (실제 검색·답변 배선)
+
+### 이 페이즈의 목표 (1~2문장)
+디자인 키트 `QueryScreen.jsx`를 `web/`로 가져와 하드코딩 데이터(`const TOPK`, `q`, 인라인 답변·각주·출처 라인)를 우리 백엔드 FastAPI(`/api/answer`, `/api/search`)의 실제 응답으로 교체한다. 질의 입력 → 검색·답변 → `{text, citations}` + Top-k 청크 렌더링까지, 외부 호출 0건·신뢰 시그널 고정·디자인 토큰만 사용하는 폐쇄망 ESM 앱으로 동작시키는 것이 목표다.
+
+### 사전 조건 (반드시 먼저 검증 — 없으면 즉시 중단·보고)
+컨텍스트가 초기화된 상태로 단독 실행되므로, **작업 시작 전 아래를 파일에서 직접 확인**한다. 하나라도 없으면 절대 추측·임시구현하지 말고 즉시 중단하고 무엇이 없는지 보고한다.
+
+```bash
+# 1) 프로젝트 루트 고정 (git 루트가 docs-em 이어야 함)
+git rev-parse --show-toplevel   # → .../docs-em
+
+# 2) 백엔드 함수 존재 확인 (페이즈 0~8 산출물)
+ls -la src/app/answer.py src/retrieve/search.py eval/evaluate.py src/store/vector_store.py
+grep -n "def answer" src/app/answer.py        # answer(query, *, model, top_n)
+grep -n "def search" src/retrieve/search.py    # search(query, *, top_k, use_bm25)
+
+# 3) FastAPI 서버(페이즈 9 산출물) 존재 확인 + 엔드포인트 계약 추출
+#    존재 확인만으로 끝내지 말 것 — 라우터 파일을 읽어 실제 경로·요청/응답 스키마를 추출한다.
+ls -la src/server/app.py 2>/dev/null || ls -la web/server.py 2>/dev/null
+ROUTER=$(ls src/server/app.py web/server.py 2>/dev/null | head -1)
+grep -nE "@app\.(post|get)|@router\.(post|get)|/api/" "$ROUTER"   # 실제 엔드포인트 경로
+grep -nE "answer\(|search\(|use_bm25|mode|rrf|hybrid|top_n|top_k" "$ROUTER"  # 모드→검색기 매핑·인자 전달 방식
+grep -nE "BaseModel|class .*Request|class .*Response|return \{" "$ROUTER"    # 요청/응답 스키마
+
+# 4) 디자인 키트 + 토큰 + 번들 존재 확인 (정본)
+ls -la "디자인/docs-em Design System/ui_kits/docs-em/QueryScreen.jsx"
+ls -la "디자인/docs-em Design System/ui_kits/docs-em/AppShell.jsx"
+ls -la "디자인/docs-em Design System/styles.css" "디자인/docs-em Design System/_ds_bundle.js"
+ls -d  "디자인/docs-em Design System/tokens"
+```
+
+**중단 규칙**
+- `src/app/answer.py` 또는 `eval/evaluate.py` 또는 디자인 키트가 없으면 → **중단**하고 "사전 조건 미충족: <없는 파일 경로>. 페이즈 0~8(백엔드) 또는 페이즈 9(FastAPI 서버/web 스캐폴드)를 먼저 완료해야 함" 이라고 보고.
+- 페이즈 9 산출물(FastAPI 서버, `/api/answer`·`/api/search` 엔드포인트, `web/` Vite 스캐폴드, vendoring된 폰트·React)이 없으면 → 이 페이즈는 **그 엔드포인트에 배선만** 하므로, 엔드포인트가 없으면 중단하고 페이즈 9를 먼저 요구. (이 프롬프트에서 백엔드 함수 시그니처를 새로 만들지 말 것.)
+- **계약 추출 필수**: 위 3)에서 라우터 파일을 읽어 ⓐ실제 엔드포인트 경로, ⓑ요청 바디 키(특히 모드/검색기 인자명), ⓒ응답 JSON 키, ⓓ`mode`(vector/bm25/hybrid)가 백엔드에서 **어떻게 검색기 선택으로 노출되는지**를 확정하지 못하면 배선을 시작하지 말고, 추출한 계약을 보고에 명시한 뒤 진행한다. `ls` 존재 확인만으로는 배선 불가(아래 백엔드 함수 시그니처 주의 참조).
+
+> 참고: 백엔드 함수 시그니처는 **고정**이며 변경 금지다.
+> - `answer(query, *, model, top_n) -> {"text": str, "citations": [{doc_id, source_path, page|section}]}`
+> - `search(query, *, top_k, use_bm25) -> list[SearchHit(chunk, score, rank, source)]`
+>
+> **모드 매핑 주의(시그니처 한계)**: `search()`는 `use_bm25` 불리언만 받으므로 `vector`/`bm25`는 표현 가능하나 **`hybrid RRF`를 표현할 파라미터가 없다**. 또한 `answer(query, *, model, top_n)`에는 `mode`/`use_bm25` 인자가 없어, 모드가 **답변 생성에 반영되는 경로는 페이즈 9 엔드포인트가 어떻게 노출했는지에 전적으로 의존**한다(예: 엔드포인트가 `mode`를 받아 내부에서 검색기를 골라 `answer`에 컨텍스트를 주입하는지, 아니면 프론트가 `/api/search`로 모드별 Top-k를 받아 그 Top-k를 `/api/answer`에 컨텍스트로 넘기는지). 따라서 **사전 조건 3)의 라우터 계약 추출 결과를 따른다.** 엔드포인트가 `mode`를 직접 받으면 그대로 전달하고, 받지 않으면 `/api/search`로 모드별 Top-k를 가져온 뒤 `/api/answer`에 그 Top-k를 컨텍스트로 넘기는 형태인지 계약으로 확인해 배선한다. 추측으로 플래그명을 지어내지 말 것.
+>
+> FastAPI 엔드포인트가 이미 이 함수들을 감싸 JSON으로 노출한다고 가정한다. 실제 엔드포인트 경로/응답 키가 위와 다르면, **프론트를 실제 응답에 맞추고** 그 매핑을 산출물 보고에 명시한다(백엔드 변경 금지).
+
+### 절대 규칙 (이 페이즈 불변식·디자인 규칙)
+- **INV-3 외부(클라우드 추론) 호출 0건**: 폰트·아이콘·React·Babel·디자인 번들·런타임 어디에도 외부 URL 호출 금지. CDN은 전부 빌드타임 vendoring(로컬 파일). `unpkg.com`·`cdn.jsdelivr.net`·`fonts.googleapis.com` 등 원격 URL이 빌드 산출물(`web/dist` 또는 서빙되는 `index.html`/CSS/JS)에 하나라도 남으면 실패.
+- **fetch 대상과 ConnectionBadge 엔드포인트는 별개 — 혼동 금지**:
+  - UI가 실제로 `fetch`하는 대상은 **오직 동일 출처 우리 백엔드(FastAPI)**뿐이다 — `/api/...` 상대경로 또는 `http://localhost:<백엔드포트>`(예 `localhost:8000`, 페이즈 9가 정한 포트).
+  - 헤더의 `ConnectionBadge endpoint="localhost:1234"`는 **LMStudio(추론 백엔드)의 표시**일 뿐이며, **UI는 `localhost:1234`를 직접 호출하지 않는다.** 임베딩·생성·헬스체크를 포함해 어떤 fetch도 `1234`로 직접 쏘지 말 것. 배지가 가리키는 `1234`(표시값)와 프론트가 fetch하는 백엔드 포트(예 `8000`)는 서로 다른 것이며, `ConnectionBadge`의 `endpoint`를 fetch 대상 포트로 바꾸지 말 것. LMStudio 상태는 **백엔드가 보고한 값**을 표시할 뿐이다(공통 컨텍스트 "UI는 LMStudio를 직접 부르지 않고 백엔드를 통해 호출"과 일치).
+- **신뢰 시그널 고정**: 헤더의 `ConnectionBadge endpoint="localhost:1234"` · `ExternalCallsCounter count={0}` · `100% LOCAL` 클러스터(=`AppShell.jsx`의 `TrustCluster`)는 **존재·노출이 모든 상태에서 고정** — 숨김·삭제 금지.
+  - `ExternalCallsCounter count`는 **0 고정**: 클라우드 추론 외부 호출이 0건이라는 의미이며(동일 출처 백엔드 fetch는 외부 호출로 세지 않는다), 동적으로 증가시키지 말 것.
+  - `ConnectionBadge status`: 키트 기본은 `status="ok"`이고 enum은 **`'ok' | 'delay' | 'down'`**(amber = `'delay'`). **클러스터의 존재/노출은 절대 고정**이되, `status` 값은 **백엔드가 보고한 LMStudio 헬스를 반영해도 된다**(백엔드 헬스 응답이 `ok`/`delay`/`down`을 주면 그대로 표시). 단, ⓐUI가 `1234`를 직접 핑하지 말고 백엔드가 보고한 값만 쓸 것, ⓑ백엔드 헬스 정보가 없으면 기본 `status="ok"` 유지, ⓒerror/연결실패(우리 백엔드 fetch 자체가 실패) 시에는 헬스를 알 수 없으므로 **클러스터를 그대로 노출하되 `status`는 임의로 바꾸지 말고 마지막으로 알려진 값(없으면 `"ok"`)을 유지**한다(클러스터 숨김·`count` 변경은 어떤 경우에도 금지).
+- **디자인 토큰·컴포넌트만**: 모든 색/간격/폰트/모션은 `tokens/*.css` CSS 변수(`var(--teal)`, `var(--green)`, `var(--amber)`, `var(--red)`, `var(--font-mono)`, `var(--radius-md)`, `var(--dur-fast)` 등)로만. 하드코딩 HEX·임의 px 색 금지. 컴포넌트는 `window.DocsEmDesignSystem_afe3d1`(또는 ESM 전환 시 동등 export)의 것만 사용. 데이터·식별자·점수는 모두 `.mono`(JetBrains Mono, tabular-nums). 아이콘은 Lucide(stroke 1.75), **이모지 금지**(✕·▲·▼는 텍스트 기호로 유지, 이모지로 치환 금지).
+- **BGE-M3(1024) 화면 A 노출 절대 금지**: EMB 표기는 nomic 768d만. 모델 셀렉트·임베딩 표기에 BGE-M3 등장 금지.
+- **정직한 수치**: 점수·격차를 미화하지 않는다. 격차는 실제 부호 그대로(예 `-0.018`), 회귀/실패도 그대로. `prompt_tokens=0`이면 앰버 `(unreliable)` 태그(INV-4). 확정 수치만 사실로 취급: `768`·`-0.018`·`0.687→0.695`·`12,972자`·`ctx 8192/65536`·`localhost:1234`. **데모 식별자(hr-0412/tr-0203·p.N)는 가짜값** — 실제 응답이 오면 응답의 진짜 `doc_id`(`{doc_id}#{chunk_index}` 정본)·`source_path`·`page|section`으로 교체한다. 데모 문서는 `휴가규정.pdf`·`출장경비.docx` 2종만.
+- **인용은 Top-k의 부분집합만 — 매칭 키 고정**: 답변 `citations`의 각 항목은 반드시 전달된 Top-k 청크에 존재하는 것이어야 한다(백엔드 보장). UI도 표시 직전 검증하되, **양쪽 키가 비대칭**임에 유의한다: `citation`은 `{doc_id, source_path, page|section}`이고 `SearchHit`는 `chunk`(+`chunk_index`)·`score`·`rank`·`source`다. 따라서 **부분집합 매칭 키를 다음 순서로 통일해 생성**한다:
+  1. **1순위(정본 합성 ID)**: 양쪽 모두에서 `{doc_id}#{chunk_index}`를 만들 수 있으면 그 합성 ID로 매칭한다. `citation`에 `chunk_index`가 직접 없으면 `source_path`(또는 `doc_id`)+`page|section`이 동일한 Top-k 청크를 찾아 그 청크의 `chunk_index`로 합성 ID를 역산해 키를 맞춘다.
+  2. **2순위(폴백 키)**: 합성 ID를 만들 수 없으면 `doc_id`(=`source_path` 파일 단위)+`page|section` 동등성으로 매칭한다.
+  - 매칭 키는 **citation 쪽과 Top-k 쪽에서 동일한 규칙으로 생성**해야 하며(한쪽은 합성 ID, 다른 쪽은 page/section처럼 키가 어긋나면 **모든 각주가 스킵**되는 회귀가 발생하므로), 어느 키 규칙을 적용했는지 보고에 명시한다. citation이 어떤 키로도 Top-k에 매칭되지 않으면 그 각주는 렌더하지 말고 콘솔/메타에 경고. 근거 부족 시 "확실하지 않습니다" 카드, 추측·임의 각주 생성 금지.
+- **근거 부족 처리**: 검색 결과 0건이거나 모든 점수가 cutoff 미만이면 → "확실하지 않습니다" 상태 카드만 표시. 답변 본문·각주·출처 라인 렌더 금지.
+
+### 작업 지시 (구체 단계)
+모든 경로는 절대경로 또는 git 루트(`docs-em/`) 상대다. 디자인 키트는 **정본을 복사**해서 `web/`에서 수정한다(정본 `디자인/docs-em Design System/` 직접 수정 금지).
+
+1. **web/ 스캐폴드 확인·확장 (페이즈 9 산출물 위에 작업)**
+   - `web/`가 Vite ESM 프로젝트(React 18, 폰트·React vendoring 완료)인지 확인. 없으면 중단(사전 조건). 있으면 그 안에서 작업.
+   - 디자인 정본을 `web/`로 복사: `QueryScreen.jsx`·`AppShell.jsx`를 `web/src/screens/`(또는 페이즈 9가 정한 위치)로 가져온다. `tokens/*.css`·`styles.css`·`_ds_bundle.js`(또는 ESM화된 디자인 컴포넌트)·`assets/`도 페이즈 9 방식대로 로컬 포함. **CDN `src`를 로컬 파일로 재지정**(폰트 `tokens/fonts.css`의 `@import`·`@font-face src`를 `assets/fonts/*.woff2`로, React/Babel을 npm 의존성으로).
+
+2. **API 클라이언트 작성** (`web/src/api/client.js`)
+   - 동일 출처 `/api/...`(또는 페이즈 9가 정한 베이스 URL = 우리 FastAPI 포트, 예 `localhost:8000`)로만 fetch. **`localhost:1234`(LMStudio)나 외부 도메인으로의 직접 fetch 금지.**
+   - 함수 2개:
+     - `postAnswer({ query, mode, model, topN })` → `mode`(`vector`/`bm25`/`hybrid`)를 **사전 조건 3)에서 추출한 백엔드 계약**에 맞춰 매핑. 일반 규칙: `vector` → `use_bm25=false`, `bm25` → `use_bm25=true`(+ 점수 라벨 bm25), `hybrid` → 엔드포인트가 노출한 hybrid/RRF 인자명 그대로. **엔드포인트가 `mode`를 직접 받지 않으면**(시그니처상 `answer`·`search`엔 mode 없음) → `/api/search`로 모드별 Top-k를 받은 뒤 `/api/answer`에 그 Top-k를 컨텍스트로 전달(계약이 그 형태인지 라우터로 확인). 추측 플래그명 금지. 반환: `{ text, citations, topk, meta }` 정규화.
+     - `postSearch({ query, mode, topK })` → Top-k 청크 리스트.
+   - 응답 정규화: 백엔드의 `SearchHit(chunk, score, rank, source)`·`answer().citations({doc_id, source_path, page|section})`를 UI가 쓰는 카드 모양(`{rank, doc, loc, id, score, cited, snippet, label?}`)으로 변환. `id`는 정본 `{doc_id}#{chunk_index}` 형식으로 생성해 `.mono` 노출(citation·Top-k 양쪽에서 위 매칭 키 규칙대로 동일 생성). `loc`은 `page` 있으면 `p.{page}`, 없으면 `section`. `doc`은 `source_path`의 파일명.
+   - 모든 fetch는 `try/catch` + AbortController(타임아웃). 네트워크 오류 시 연결에러 상태 반환(추측 데이터 금지).
+
+3. **QueryScreen 배선 (`web/src/screens/QueryScreen.jsx`)** — 키트 구조 유지하고 데이터원만 교체:
+   - **삭제**: 상단 `const TOPK = [...]`(6~12행 하드코딩), 답변 본문 하드코딩 문장(126행)·`SourceLine`/`Footnote` 하드코딩 호출(132~133행)·`MetaLine` 하드코딩 3줄(120~122행)·`<div>연차 휴가 신청 절차</div>` 하드코딩 질문(103행).
+   - **상태**: `q`(입력), `submittedQuery`(전송된 질의), `mode`(Segmented), `model`(GEN Select), `result`({text, citations, topk, meta}), `status`(`idle`/`loading`/`ok`/`empty`/`error`), `hl`(호버 하이라이트 청크 id), `metaOpen`.
+   - **전송**: `전송` 버튼/Enter → `status=loading` → `postAnswer` 호출 → 성공 시 `result` 채우고 `status=ok`. 결과 0건/컷오프 미만이면 `status=empty`. 예외면 `status=error`. 모드/모델 변경은 즉시 재요청하지 말고(과호출 방지) 다음 전송에 반영.
+   - **질문 버블**: `submittedQuery` 렌더(없으면 빈 상태).
+   - **답변 본문 + 인라인 각주**: `result.text`를 렌더하되, `result.citations` 순서대로 `[¹][²]…` 각주를 본문 끝/문장 경계에 배치(백엔드가 인라인 마커를 안 주면 citations를 답변 하단 각주열로 렌더하고 각 마커는 해당 청크 id에 연결). 각 `Footnote`의 `id` = citation의 청크 id(위 매칭 키 규칙으로 생성한 합성 ID). **citation이 `result.topk`에 매칭되지 않으면 그 각주 스킵 + 경고**(부분집합 검증).
+   - **각주 ↔ Top-k 호버 하이라이트**: 기존 `hl`/`onHover` 메커니즘 유지. `Footnote`·`SourceLine`·`ChunkCard`가 **같은 매칭 키(합성 ID 또는 폴백 키)**를 청크 `id`로 공유 → 호버 시 `var(--teal-tint)`/`box-shadow` 하이라이트(키트 동작 그대로).
+   - **출처 섹션**: `result.citations`를 `SourceLine`으로 매핑(`n`=인덱스+1, `id`/`doc`/`loc`은 정규화값).
+   - **검색모드 Segmented**: `vector`/`bm25`/`hybrid RRF` 그대로. 선택값이 `mode` 상태 → API 파라미터로 연결. 패널 헤더 "k=5 · {RRF/벡터/BM25} 정렬" 라벨도 `mode` 연동(키트에 이미 있음).
+   - **Top-k 청크 카드(=`ChunkCard`)**: `result.topk`(k=5) 매핑. `ScoreChip`의 `kind`는 `mode === "bm25" ? "bm25" : "sim"`(키트 그대로), `value`=score. 정답/오답 라벨(`▲정답`·`✕오답`·`—`)은 **백엔드가 golden 매칭 정보를 주면** 표시, 없으면 모든 청크 `none`(임의 정답 판정 금지). `격차`는 백엔드가 주면 표시(예 `-0.018`), 없으면 생략. `id`는 `.mono`로 정본 형식.
+   - **cutoff 앰버 점선**: 백엔드가 cutoff 점수를 주면 그 경계에 점선, 아니면 마지막 청크 뒤 `cutoff —`(키트 기본) 유지.
+   - **재시도/폴백 메타 아코디언**: `result.meta`에 재시도/폴백 정보(`content 빈값 → reasoning_content 폴백`, `finish_reason=length 재시도`, `잘림 N자` 등)가 있으면 `MetaLine`으로 렌더(있을 때만 "재시도 N" 토글 노출), **기본 접힘**. 없으면 토글 자체를 숨김. `prompt_tokens=0`이면 앰버 `(unreliable)` 태그.
+   - **헤더 표기**: GEN 모델 Select(실제 선택 → API `model` 인자), EMB는 `text-embedding-nomic… · 768d` **읽기전용**. BGE-M3 등장 금지.
+
+4. **상태 화면**:
+   - `idle`(전송 전): 빈 상태 안내(예시 질의 칩 `연차 휴가 신청 절차`·`출장경비 정산`은 클릭 시 입력만 채움).
+   - `loading`: 본문·패널에 스켈레톤/스피너(디자인 토큰, 바운스 금지, `prefers-reduced-motion` 존중).
+   - `empty`(근거 부족): "확실하지 않습니다" 카드(추측·각주 없음).
+   - `error`(우리 백엔드 fetch 실패): 연결에러 카드 + 재시도 버튼. **신뢰 시그널 클러스터는 그대로 노출**하고 `ExternalCallsCounter count=0` 유지·`ConnectionBadge`는 클러스터를 숨기지 않은 채 `status`를 마지막 알려진 값(없으면 `"ok"`)으로 유지(외부 호출 0 불변, 클러스터 동적 숨김·`count` 변경 금지).
+
+5. **AppShell 유지**: `TrustCluster`(localhost:1234·EXTERNAL CALLS 0·100% LOCAL) 그대로 사용. `ConnectionBadge`의 `endpoint="localhost:1234"`는 LMStudio 표시값으로 유지(이 포트로 직접 fetch 금지). 화면 네비는 페이즈 9 구조 유지(이 페이즈는 query 화면만 실배선, index/eval은 후속 페이즈).
+
+### 산출물 (생성/수정 파일 목록)
+- 생성: `web/src/api/client.js` (동일 출처 fetch 클라이언트, mode→API 파라미터 매핑·응답 정규화·매칭 키 생성)
+- 수정/이관: `web/src/screens/QueryScreen.jsx` (키트 복사본 — 하드코딩 제거, API 배선, 상태 머신, 부분집합 검증)
+- 확인/필요시 수정: `web/src/screens/AppShell.jsx`(TrustCluster 유지), `web/index.html` 또는 진입 ESM(외부 `<script src=unpkg/cdn>` 제거·로컬 vendoring), `web/src/tokens/fonts.css`(폰트 src 로컬 재지정), `web/vite.config.*`·`web/package.json`(필요 의존성)
+- 보고에 명시: ⓐ실제 백엔드 엔드포인트 경로·요청/응답 키가 스펙과 다르면 그 매핑표, ⓑ`mode`(vector/bm25/hybrid)가 백엔드에서 어떻게 노출되는지(엔드포인트가 `mode`를 받는지, 아니면 search→answer 2단 호출인지), ⓒ citations⊆topk에 적용한 매칭 키 규칙(합성 ID인지 폴백 키인지).
+
+### 완료 기준 (통과 못 하면 다음 페이즈 금지)
+1. `web/`에서 `npm run dev`(또는 페이즈 9 스크립트)로 화면 A가 뜨고, **실제 백엔드가 떠 있을 때** 질의 전송 → 답변 본문 + Top-k 5개 청크 + 출처 라인이 **하드코딩이 아닌 fetch 응답**으로 렌더된다.
+2. 검색모드 3종(벡터/BM25/하이브리드RRF) 전환 시 API 파라미터가 바뀌고(`use_bm25` 등, 또는 계약상 모드 경로) 결과가 갱신된다. BM25 모드에서 ScoreChip 라벨이 bm25로 표기.
+3. 인라인 각주 ↔ Top-k 청크 호버 하이라이트가 **공통 매칭 키**로 양방향 연동된다. **citations ⊆ topk 검증 통과**(Top-k에 매칭되지 않는 인용 각주는 렌더 안 됨). 정상 응답에서 각주가 전부 스킵되지 않음(키 규칙이 양쪽 동일).
+4. 근거 부족(0건/컷오프 미만) 입력에서 "확실하지 않습니다" 카드만 뜨고 각주·추측 답변이 없다. 우리 백엔드 fetch 실패 시 error 카드 + 신뢰 클러스터 유지.
+5. **외부 호출 0건 정적 점검 통과**(아래 검증 명령): 빌드 산출물/서빙 파일에 `unpkg`·`jsdelivr`·`googleapis`·`http(s)://`(localhost·동일출처 제외) 원격 URL 0건. 폰트·React·번들 전부 로컬. **`fetch` 대상에 `localhost:1234` 직접 호출 0건**(우리 백엔드 포트만).
+6. 신뢰 시그널 클러스터(localhost:1234·EXTERNAL CALLS 0·100% LOCAL)가 모든 상태에서 노출. `ExternalCallsCounter count=0` 불변. BGE-M3 화면 A 노출 0건.
+7. 모든 색/간격/폰트가 디자인 토큰(CSS 변수)·DS 컴포넌트로만 — 하드코딩 HEX·이모지 0건.
+
+### 검증 명령 (복붙 실행 — macOS BSD 기준; `grep -P`/`(?!...)` 미사용)
+```bash
+cd "$(git rev-parse --show-toplevel)"
+
+# A. 사전 조건 (없으면 중단)
+ls -la src/app/answer.py eval/evaluate.py "디자인/docs-em Design System/ui_kits/docs-em/QueryScreen.jsx" || echo "STOP: 사전조건 미충족"
+
+# A2. 페이즈 9 엔드포인트 계약 추출 (라우터 파일을 읽었는지 — 경로/모드 매핑 확인)
+ROUTER=$(ls src/server/app.py web/server.py 2>/dev/null | head -1)
+[ -n "$ROUTER" ] && grep -nE "/api/|@app\.(post|get)|use_bm25|mode|rrf|hybrid|top_n|top_k" "$ROUTER" || echo "STOP: 페이즈 9 라우터 없음"
+
+# B. 하드코딩 제거 확인 (web/ 복사본에서 더미 데이터가 사라졌는지)
+grep -RnE "tr-0203|hr-0412|sim: 0\.713|const TOPK" web/src/ && echo "FAIL: 하드코딩 데모데이터 잔존" || echo "OK: 하드코딩 제거됨"
+
+# C. 외부 호출 0건 정적 점검 (소스 + 빌드 산출물). localhost/상대경로만 허용.
+#    BSD grep은 (?!...) 부정형 전방탐색 미지원 → 원격 URL 전부 추출 후 허용목록을 2단계 grep -v로 제외.
+( npm --prefix web run build 2>/dev/null || true )
+grep -REn "unpkg\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com" web/index.html web/src web/dist web/public 2>/dev/null && echo "FAIL: 외부 CDN 잔존" || echo "OK: CDN 0건"
+grep -REno "https?://[^\"'\` ]*" web/dist web/src 2>/dev/null | grep -vE "localhost|127\.0\.0\.1|w3\.org" && echo "REVIEW: 원격 URL 점검(위 줄 확인)" || echo "OK: 원격 URL 없음"
+
+# D. fetch 대상이 동일출처/우리 백엔드뿐인지 + 1234 직접 호출 없는지
+grep -RnE "fetch\(|axios" web/src && grep -RnE "fetch\((['\"\`])(/api|http://localhost)" web/src && echo "OK: 동일출처 fetch"
+grep -RnE "fetch\([^)]*localhost:1234" web/src && echo "FAIL: LMStudio(1234) 직접 호출" || echo "OK: 1234 직접 호출 없음"
+
+# E. BGE-M3 화면 A 노출 0건 + 신뢰 시그널 존재
+grep -RniE "bge-m3|bge_m3|1024" web/src/screens/QueryScreen.jsx && echo "FAIL: BGE-M3/1024 노출" || echo "OK: BGE-M3 미노출"
+grep -RnE "ExternalCallsCounter|localhost:1234|100% LOCAL" web/src && echo "OK: 신뢰 시그널 고정"
+
+# F. 이모지 0건 (화면 A 소스) — BSD grep -P 불가 → perl로 점검
+perl -CSD -ne 'print "$.: $_" if /[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{2190}-\x{21FF}\x{2B00}-\x{2BFF}]/' web/src/screens/QueryScreen.jsx && echo "FAIL: 이모지 발견" || echo "OK: 이모지 0건"
+
+# G. 실서버 연동 스모크 (백엔드+프론트 기동 후) — 엔드포인트·포트는 사전 조건 3)에서 추출한 실제값으로 교체
+curl -s -X POST http://localhost:8000/api/answer -H 'Content-Type: application/json' \
+  -d '{"query":"연차 휴가 신청 절차","mode":"hybrid"}' | head -c 800; echo
+```
+(B·C·E·F가 모두 OK여야 통과. A2는 라우터 계약 추출 확인. G는 백엔드 기동 시 `text`/`citations` JSON이 와야 함. F의 `perl`이 아무 줄도 출력하지 않아야 통과.)
+
+### 다음 페이즈 핸드오프
+- 산출: 화면 A가 실제 `/api/answer`·`/api/search`에 배선됨. API 클라이언트(`web/src/api/client.js`)·정규화 로직·매칭 키 규칙·상태 머신·부분집합 검증·폐쇄망 vendoring 패턴 확립.
+- 다음(페이즈 11 — 화면 B 인덱싱 / 이후 화면 C 평가): 이 페이즈의 `web/src/api/client.js` fetch 패턴(동일 출처 백엔드만, `1234` 직접 호출 금지)·응답 정규화·"확실하지 않습니다"/error/loading 상태 머신·디자인 토큰 배선 방식을 그대로 재사용. `IndexScreen.jsx`(드롭존·5노드 파이프라인·`prompt_tokens=0 (unreliable)` 앰버·색인테이블)와 `EvalScreen.jsx`(Recall@1 KPI·before▸after·`+rrf` 0▸1.0 데모·통제실험)를 같은 방식으로 인덱싱 API·`evaluate()` 결과에 배선한다. **BGE-M3는 화면 B 레일에서만 ⚠+DECISION 모달**(화면 A·C 노출 금지) — 이 경계를 다음 페이즈에서 지킬 것.

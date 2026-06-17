@@ -1,0 +1,225 @@
+> **이 파일 전체를 에이전트형 코딩 도구(Claude Code/Cursor)에 붙여넣어 이 페이즈 하나만 실행하세요.**
+> 페이즈 사이에 컨텍스트를 초기화합니다. 사용법·순서·게이트는 [00_실행개요.md](./00_실행개요.md) 참조.
+> 정본: [디자인 시스템 참조](../06_UIUX/01_디자인시스템_참조.md) · [내부 API 계약](../04_아키텍처_API/02_내부API_인터페이스.md) · [불변식 INV-1~8](../99_AI참조/01_실측제약_불변식.md) · 디자인 원본 `디자인/docs-em Design System/`
+
+# 페이즈 11: 화면 B 인덱싱 + 화면 C 평가 대시보드 (실제 배선)
+
+### 이 페이즈의 목표
+디자인 키트 `IndexScreen.jsx`·`EvalScreen.jsx`를 `web/`로 가져와 가짜 데이터를 걷어내고 실제 백엔드 API(업로드·인덱싱·평가)에 배선한다. 화면 B는 드롭존→파이프라인 진행→색인 문서 테이블을 실데이터로 굴리고, 화면 C는 실험 드롭다운→`POST /api/eval`→`EvalResult`를 KPI·골든셋·통제실험·회귀 드릴다운으로 렌더한다.
+
+---
+
+### 사전 조건 (컨텍스트 초기화 후 단독 실행 — 파일에서 직접 확인, 없으면 즉시 중단·보고)
+
+이 페이즈는 페이즈 0~10 산출물에 **하드 의존**한다. 작업 시작 전 아래를 그대로 실행해 모두 존재함을 확인하라. **하나라도 없으면 코드를 만들지 말고 "사전 조건 미충족: <누락 항목>. 페이즈 <N>을 먼저 완료해야 함"만 보고하고 중단**한다. 누락분을 발명·스텁으로 메우는 것은 금지다.
+
+```bash
+# (1) 백엔드 함수 계약 — 페이즈 4·7 산출물. 시그니처를 직접 grep으로 확인
+ls -1 src/app/answer.py eval/evaluate.py src/retrieve/search.py src/store/vector_store.py 2>&1
+grep -nE "def answer\(" src/app/answer.py        || echo "MISSING answer()"
+grep -nE "def evaluate\(" eval/evaluate.py        || echo "MISSING evaluate()"
+grep -nE "recall_at_1|recall_at_3|recall_at_5|recall_at_10|mrr|ndcg" eval/evaluate.py | head || echo "MISSING EvalResult fields"
+# use_bm25 단일 스위치 확인 — 별도 RRF 플래그가 없고 use_bm25=True가 곧 RRF 하이브리드(source="rrf")인지 확인
+grep -nE "use_bm25|use_rerank|source *= *.rrf.|source=\"rrf\"" eval/evaluate.py src/retrieve/search.py | head
+grep -nE "NotImplementedError.*rerank|rerank.*phase 7" eval/evaluate.py | head   # use_rerank=True는 미구현(phase 7)
+
+# (2) 인덱싱·로딩 산출물 — 페이즈 2·3
+ls -1 src/ingest/loaders.py src/ingest/chunker.py 2>&1
+grep -nE "class VectorStore|_index_header" src/store/vector_store.py | head || echo "MISSING vector store"
+
+# (3) 디자인 키트 (정본) — 출발점으로 복사할 원본
+ls -1 "디자인/docs-em Design System/ui_kits/docs-em/IndexScreen.jsx" \
+      "디자인/docs-em Design System/ui_kits/docs-em/EvalScreen.jsx" \
+      "디자인/docs-em Design System/ui_kits/docs-em/AppShell.jsx" \
+      "디자인/docs-em Design System/_ds_bundle.js" 2>&1
+
+# (4) 페이즈 9·10 산출물 — Vite 스캐폴드 + FastAPI + 화면 A 배선 + vendoring
+ls -1 web/package.json web/vite.config.* web/index.html 2>&1
+ls -1 web/src/screens/QueryScreen.jsx web/src/AppShell.jsx 2>&1 || echo "MISSING Phase10 wired QueryScreen/AppShell"
+ls -1 web/server/main.py 2>&1 || ls -1 server/main.py api/main.py 2>&1   # FastAPI 진입점 (페이즈 9)
+ls -1 web/src/lib/api.js web/src/lib/ds.js 2>&1 || echo "CHECK Phase10 api client / ds re-export location"
+# vendoring 확인: React·폰트가 로컬에 있고 index.html이 CDN을 안 부르는지
+grep -rEn "unpkg|cdn|jsdelivr|googleapis|fonts.gstatic|@babel/standalone" web/index.html web/src 2>/dev/null && echo "VENDOR FAIL: 외부 호출 잔존" || echo "vendor ok"
+```
+
+- `src/app/answer.py`·`eval/evaluate.py`·디자인 키트 4종 중 **하나라도 없으면 중단**한다.
+- 페이즈 9의 FastAPI 진입점·페이즈 10의 `web/` 구조(컴포넌트 import 방식, ds 번들 노출 방식, api 클라이언트 위치)를 **그대로 따른다**. 새 구조를 발명하지 말고, 화면 A가 이미 쓰는 패턴(예: `web/src/lib/api.js`의 `fetch` 래퍼, `web/src/lib/ds.js`의 `DocsEmDesignSystem_afe3d1` re-export)을 재사용하라. 페이즈 10이 다른 경로를 썼다면 그 경로를 따른다.
+
+---
+
+### 절대 규칙 (이 페이즈 관련 불변식·디자인)
+
+- **INV-3 외부 호출 0건**: 추론·임베딩·생성·폰트·아이콘·번들·런타임 어디에도 외부 클라우드/CDN 호출 금지. UI는 LMStudio를 직접 부르지 않고 **우리 FastAPI 백엔드만** `fetch`한다. 백엔드만 `localhost:1234`로 임베딩/생성. 빌드 산출물에 `unpkg/jsdelivr/cdn/googleapis/gstatic/@babel/standalone` 문자열이 0건이어야 한다.
+- **신뢰 시그널 고정**: 헤더의 `ConnectionBadge endpoint="localhost:1234"`·`ExternalCallsCounter count={0}`·`100% LOCAL`은 B·C 화면에서도 항상 노출, 숨김·변경 금지(AppShell이 제공). 카운터는 항상 0.
+- **디자인 토큰·컴포넌트만**: 색은 `var(--teal/--green/--amber/--red/--blue/--fg-*/--surface-*/--border-*)` 토큰만. 컴포넌트는 `window.DocsEmDesignSystem_afe3d1`(Button·StatusPill·DataTable·ProgressBar·Card·Tag·ScoreChip·GateChip·Select·Icon 등)·`SideRail`·`RailSection`만 사용. 새 색상값(HEX 리터럴)·새 컴포넌트 발명 금지. 데이터·식별자·점수는 `.mono`/`var(--font-mono)`.
+- **이모지(컬러 픽토그램) 금지 — 단, ⚠/✔/✓는 이모지가 아님**: 디자인 시스템의 금지 대상은 **컬러 이모지 픽토그램**(😀🔥📄 등)이지, 키트가 상태 마커로 쓰는 기하/기호 글리프(`⚠`·`✔`·`✓`·`⟳`·`○`·`▸`·`▲`·`▼`·`□`·`■`·`⊆`)가 아니다. 그러나 완료기준 #8의 emoji-grep 정규식 범위(`U+2600–27BF`)는 `⚠`(U+26A0)·`✔`(U+2714)·`✓`(U+2713) 세 글리프를 오탐한다. **두 방법 중 하나를 일관되게 적용**하라:
+  - (권장) 키트의 `✔`/`✓`는 `Icon name="check"`로, `⚠`는 `Icon name="alert-triangle"`로 교체한다(Lucide, stroke 1.75). 이렇게 하면 게이트 grep과 자연히 일치한다. `⚠ 유지`로 지시된 BGE-M3 DECISION 마커·INV-7 통제위반 마커도 모두 `Icon name="alert-triangle"`로 표현한다.
+  - (대안) 기호 글리프를 그대로 유지하려면 완료기준 #8·검증 (C)의 emoji-grep 정규식에서 `⚠`(U+26A0)·`✔`(U+2714)·`✓`(U+2713)을 화이트리스트로 제외한다.
+  어느 쪽이든 **지시("⚠ 유지")와 게이트("이모지 0건")가 충돌하지 않아야** 한다. 새 컬러 이모지 픽토그램 추가는 여전히 0건.
+- **바운스 모션 금지**(`prefers-reduced-motion` 존중).
+- **정직한 수치**: `Recall@1=0`·격차 `−0.018`·`REGRESS`를 미화하지 않는다. `prompt_tokens=0`엔 `(unreliable)` 앰버 태그(INV-4). 토큰 카운트로 길이 판단 금지.
+- **BGE-M3는 미채택 DECISION**: 화면 A 노출 금지(여긴 해당 없음). **화면 B 좌레일에서만** alert-triangle 아이콘+DECISION 모달로 노출. nomic 768·norm1이 활성, BGE-M3 1024는 비활성+경고. 토글을 실제로 모델 교체에 배선하지 말 것(모달만 띄움 — 단독변수 원칙·재인덱싱 비용 경고).
+- **벡터스토어**: LanceDB가 확정. ChromaDB는 미선택 `DECISION` placeholder(점선·`opacity` 흐림)로만 표기, 클릭 불가.
+- **INV-7 단일 변수 원칙(화면 C에서 UI 강제)**: 통제 실험에서 변수 1개=정상(check), **2개 이상 동시 변경 시 "통제 위반"** 경고(alert-triangle)를 띄운다. 실험 선택은 baseline/+bm25/+rrf 중 하나만(단일 변수 변경).
+- **데모 식별자·데모 지표는 가짜**: `hr-0412/tr-0203/p.N`은 시안용 가짜값. 확정 사실은 768·−0.018·0.687→0.695·12,972자·ctx 8192/65536·localhost:1234·데모 문서 `휴가규정.pdf`·`출장경비.docx` 2종뿐. 화면 C의 안정성 게이지(content 빈값률 8%·length 재시도율 12%)·`+0.012`는 **데모값** → 실 API가 해당 지표를 안 주면 **`(데모)` 배지**를 붙여 명시하고, `EvalResult`가 주는 값(recall_at_1/3/5/10·mrr·ndcg_at_10·per_query)만 실데이터로 채운다.
+- **`+rrf` 회귀 성공 경로 전체는 데모다(발명 금지 — SSOT 근거)**: SSOT(`docs/07_실행프롬프트/06_페이즈5_hybrid.md` line 40)는 *"RRF 하이브리드만으로 이 질의가 1위로 전환된다는 실측 근거는 없다… 미측정 결과를 '반드시 1로 전환'이라 단정하는 것 자체가 발명 금지 위반"*이라 명시하고, 이 −0.018/3위 실패의 직접 교정 수단을 **L2 임베딩 교체(BGE-M3) 또는 L3 리랭커**로 규정한다. 또한 `use_rerank=True`는 정본에서 `NotImplementedError("rerank: phase 7")`이고 이 페이즈는 `use_rerank=False`로만 호출하므로, 리랭커 기반 개선은 `evaluate`로 얻을 수 없다. 따라서 **`+rrf` 성공 데모 일체**(Recall@1 `0 ▸ 1`, 격차 `+0.012`, 회귀 순위 `3 ▸ 1`, `GateChip PASS`/G1 PASS, L2 타임라인 `done`, `dem-flash` 애니메이션)는 **백엔드가 줄 수 없는 값=데모**이며, KpiGap·안정성 게이지와 **동일하게 `(데모)` 배지를 의무 표기**한다. 실값으로 채울 수 있는 것은 오직 `evaluate`가 반환하는 `recall_at_1/3/5/10`·`mrr`·`ndcg_at_10`·`per_query`뿐이다.
+- **근거 부족 시 추측 금지**: 백엔드가 안 주는 필드는 만들어내지 말고 "—" 또는 `(데모)`로 명시.
+
+---
+
+### 백엔드 함수 계약 (고정 — 변경 금지, FastAPI는 이를 HTTP로 노출)
+
+```
+# eval/evaluate.py
+evaluate(golden_path="eval/queries.yaml", *, k_list=(1,3,5,10), use_bm25=False, use_rerank=False)
+  -> EvalResult(recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query)
+  # use_rerank=True 는 NotImplementedError("rerank: phase 7") — 이 페이즈는 항상 use_rerank=False.
+# src/app/answer.py (참고)
+answer(query, *, model, top_n) -> {"text": str, "citations": [{doc_id, source_path, page|section}]}
+# src/retrieve/search.py (참고)
+search(query, *, top_k, use_bm25) -> list[SearchHit(chunk, score, rank, source∈{dense,bm25,rrf,rerank})]
+  # use_bm25=False → source="dense" (dense 단독)
+  # use_bm25=True  → source="rrf"   (dense+BM25 RRF 하이브리드). 별도 RRF 결합 on/off 인자는 존재하지 않는다.
+# 인덱싱: src/ingest/{loaders,chunker} + src/store/vector_store.py (LanceDB, 사이드카 _index_header.json)
+```
+
+**실험→파라미터 매핑 (백엔드는 2상태뿐 — 정본 고정, 발명 금지)**: 정본 계약상 dense vs 하이브리드를 가르는 스위치는 `use_bm25` **하나뿐**이고, `use_bm25=True`가 곧 dense+BM25 RRF 결합(`source="rrf"`)이다. 별도 'RRF on/off' 인자는 없다. 따라서 백엔드 평가 호출은 정확히 **2상태**로 고정한다:
+
+- `baseline` → `use_bm25=False, use_rerank=False` (변수 0, 기준선)
+- `+bm25` 와 `+rrf` → **둘 다 `use_bm25=True, use_rerank=False`인 동일한 하이브리드 호출**. 백엔드가 반환하는 `EvalResult`는 두 라벨에서 같다.
+
+즉 **`+bm25`와 `+rrf`는 같은 백엔드 호출로 귀결됨을 인정**한다. `+rrf`를 `use_bm25=True`와 구분되는 별도 실 실험으로 취급하지 말 것(발명 금지). UI에서 `+rrf`를 별도 항목으로 보이고 싶다면 **`(데모)` 라벨**로 표기하고, 그 항목의 회귀 성공 시각화(0▸1·+0.012·3▸1·PASS)는 위 절대 규칙대로 **전부 `(데모)` 배지** 처리한다. 실 KPI(recall/mrr/ndcg/per_query)는 `use_bm25=True` 하이브리드 호출의 실값으로만 채운다.
+
+---
+
+### 작업 지시 (구체 단계)
+
+**0. 위치·패턴 확인.** 페이즈 10이 만든 `web/` 구조를 따른다. 아래는 기본 가정 경로다 — 페이즈 10이 다르게 뒀으면 그쪽을 따른다.
+- 화면 컴포넌트: `web/src/screens/`
+- API 클라이언트: `web/src/lib/api.js` (화면 A가 쓰는 `fetch` 래퍼 재사용; base는 같은 오리진 `/api` 또는 페이즈 9가 정한 dev 프록시)
+- DS 번들 노출: 페이즈 10이 `_ds_bundle.js`를 vendoring해 `window.DocsEmDesignSystem_afe3d1`로 노출하고 `AppShell`/`SideRail`/`RailSection`을 제공하는 방식 — 그대로 사용.
+
+**1. FastAPI 엔드포인트 추가** (페이즈 9 진입점 파일, 예: `web/server/main.py`). 화면 A가 쓰는 라우터에 인덱싱·평가 라우트를 **추가만** 한다(기존 변경 최소). 모두 백엔드 함수를 감싼다.
+
+- `POST /api/index/upload` — multipart 파일 수신. **확장자 화이트리스트 `.pdf`·`.docx`만 허용**, 그 외는 저장하지 않고 `{"accepted": [...], "rejected": [{"name","reason":"unsupported·skip"}]}` 반환(거부는 415가 아니라 본문에 사유). 허용분은 데모 문서 디렉토리(페이즈 2·3이 읽는 경로)에 저장.
+- `POST /api/index/run` — 업로드된(또는 기존) 문서를 `src/ingest/loaders`→`chunker`→`embed`→`vector_store`로 인덱싱. **멱등**: 문서ID+청크해시 동일 시 재생성 안 함(페이즈 3 멱등 로직 사용, 없으면 호출만 하고 백엔드가 처리). 진행 상황을 단계별로 반환. 구현 택1:
+  - 단순: 동기 처리 후 5단계 결과(파싱/문장분리/청킹/임베딩/저장 각 카운트)를 한 번에 JSON 반환.
+  - 진행형(권장): `POST /api/index/run`이 job_id 반환 + `GET /api/index/status?job_id=`로 폴링(2초 간격), 단계별 `{label, tool, count, state(done/active/pending), pct}` 배열. 파싱 실패 문서는 `state:"error"`로 스킵(전체 중단 금지).
+  - **`prompt_tokens`는 사용하지 않는다**(INV-4). 길이/청킹은 char 가드 기준. 응답에 토큰 카운트 넣지 말 것.
+- `GET /api/index/docs` — 색인된 문서 목록 `[{name, chunks, dim:768, model:"nomic", at, status:"ok"|"error", note}]`. 사이드카 `_index_header.json`/벡터스토어에서 읽는다. 파싱 실패 문서는 `status:"error"`(청크/차원/모델 "–").
+- `POST /api/eval` — body `{"experiment":"baseline|bm25|rrf"}`. **위 2상태 매핑대로** `evaluate(golden_path="eval/queries.yaml", k_list=[1,3,5,10], use_bm25=(experiment!="baseline"), use_rerank=False)` 호출 → `EvalResult`를 `{recall_at_1, recall_at_3, recall_at_5, recall_at_10, mrr, ndcg_at_10, per_query}`로 직렬화 반환. **`experiment`가 `"bm25"`든 `"rrf"`든 `use_bm25=True`로 동일 호출**(둘 다 RRF 하이브리드, 백엔드 결과 동일). `golden_path`는 페이즈 4 골든셋 경로 `eval/queries.yaml`(grep로 재확인). `use_rerank`는 절대 `True`로 주지 않는다(NotImplementedError).
+- 모든 라우트는 동기/예외 시 정직한 에러 JSON 반환. 외부 호출 0(백엔드만 localhost:1234 임베딩).
+
+**2. 화면 B `IndexScreen.jsx` 복사·배선** (`디자인/docs-em Design System/ui_kits/docs-em/IndexScreen.jsx` → `web/src/screens/IndexScreen.jsx`). 키트 레이아웃·디자인은 그대로 두고 하드코딩만 교체한다.
+
+- 키트 상단 `const { Icon, IconButton, Button, Input, StatusPill, Tag, Card, DataTable, ProgressBar } = window.DocsEmDesignSystem_afe3d1;` 와 `window.SideRail`·`window.RailSection`·`React.useState` 사용 패턴 유지(페이즈 10의 import 방식에 맞춰 조정).
+- **드롭존**: `<input type=file>`+드래그앤드롭. 클라이언트에서 먼저 `.pdf`/`.docx` 필터 → 그 외는 `Tag tone="amber" icon="x"`로 "거부: <name> · 지원 안 함·스킵" 표기(키트의 거부 목록 UI 재사용). 허용분을 `POST /api/index/upload`로 전송, 서버가 추가 거부한 항목도 합쳐 표시.
+- **파이프라인 5노드**: 키트 `PIPE`/`PipeNode` 구조 유지. 데이터를 `/api/index/run`(+status 폴링) 응답으로 채운다. `state`에 따라 색(done=green, active=teal, pending=faint)·`ProgressBar`·실시간 카운트. 파싱(pymupdf/python-docx)→문장분리(kss)→청킹→임베딩(nomic)→저장. 폴링은 `setInterval`(언마운트/완료 시 `clearInterval`).
+- 파이프라인 하단 **`prompt_tokens=0 (unreliable)`** 앰버 문구 유지(INV-4) — 정적 텍스트.
+- **색인 문서 테이블**: 키트 `DataTable` 컬럼(문서명·청크·차원·모델·색인 시각·상태) 유지, `rows`를 `/api/index/docs`로 교체. 파싱 실패행은 `StatusPill tone="error">파싱실패·스킵`. 멱등 안내 문구(`문서ID + 청크해시 동일 시 생성 안 함`)·전체/선택 재색인 버튼은 `/api/index/run`에 배선(재색인 시 멱등이라 변화 없으면 "재색인 0 · 변경 없음" note).
+- **좌레일 임베딩 토글**: nomic(768·norm1) 활성 고정. BGE-M3(1024)는 alert-triangle 아이콘 + 클릭 시 `DecisionModal`(키트 제공)만 띄움 — 실제 교체 배선 금지. 모달 문구(768→1024 전체 재인덱싱·norm 재측정 경고) 유지. 벡터스토어: LanceDB 표기, ChromaDB는 점선·흐림 `DECISION` placeholder(클릭 불가). 좌레일 하단 `localhost:1234/v1`·`api_key=lm-studio (dummy)` 유지.
+- 키트의 `✔`/`✓`/`⚠` 글리프는 **절대 규칙(이모지)** 항목에 따라 `Icon name="check"`/`Icon name="alert-triangle"`로 교체(또는 grep 화이트리스트 — 둘 중 채택한 방식 일관 적용).
+
+**3. 화면 C `EvalScreen.jsx` 복사·배선** (`…/ui_kits/docs-em/EvalScreen.jsx` → `web/src/screens/EvalScreen.jsx`). 키트의 KPI·골든셋·통제실험·드릴다운·타임라인 레이아웃 유지, 데이터만 실 API로.
+
+- 상단 `const { Icon, Button, Select, StatusPill, GateChip, Tag, Card, ScoreChip } = window.DocsEmDesignSystem_afe3d1;` 유지.
+- **실험 드롭다운/좌레일 실험 선택**(baseline/+bm25/+rrf) → 선택 시 `POST /api/eval {experiment}` 호출(로딩 상태 표시). 한 번에 하나만 선택(단일 변수). **`+bm25`와 `+rrf`는 같은 `use_bm25=True` 호출이라 백엔드 `EvalResult`가 동일**함을 인지하고, 두 라벨에서 같은 실값이 흐르는 것을 버그로 취급하지 말 것. `+rrf`의 회귀 성공 시각화는 아래 규칙대로 `(데모)`.
+- **거대 Recall@1 KPI**(`KpiRecall`): `recall_at_1` **실값**으로. `0`이면 red+`REGRESS`+`GateChip state="fail"`, `1.0`이면 green+`GateChip state="pass" G1 PASS`. `[□■■■]` 셀 배열은 `recall_at_1/3/5/10` **실값**으로. **단, `0 → 1` 전환 자체와 그에 결부된 `dem-flash`(red→green) 애니메이션·`G1 PASS` 점등은 `+rrf` 데모 경로에서만 발생하므로 `(데모)` 배지를 동반**한다(실 baseline/+bm25 하이브리드에서 회귀 케이스 Recall@1은 SSOT상 0으로 관측될 뿐, 1로 전환된다는 실측 근거 없음). `prefers-reduced-motion` 시 애니메이션 비활성.
+- **유사도 격차 KPI**(`KpiGap`): 회귀 케이스 정답−오답 격차. `per_query`에서 회귀 케이스(`q001`/"연차 휴가 신청 절차")의 격차를 뽑아 쓴다. `per_query`가 격차를 안 주면 확정 데모값 `−0.018`(baseline)에 **`(데모)` 배지**를 붙여 표기하고 실값 가능 시 교체. `+rrf`의 `+0.012`는 **데모값** → 항상 `(데모)` 배지. 미화 금지(음수는 red).
+- **골든셋 테이블**(`GOLDEN`/`GoldenRow`): before(baseline)▸after(현재 실험) Δ. 행 = Recall@1/3/5/10·MRR·nDCG@10. before는 baseline `EvalResult`(최초 1회 캐시), after는 현재 선택 실험. `DataTable`/미니 `ScoreBar` 막대로 시각화. Δ 양수=green▲ 음수=red▼. (after가 `+bm25`/`+rrf`면 같은 하이브리드 실값임에 유의.)
+- **통제 실험 비교**(`ExpRow`): baseline=변수0, +bm25=변수1(check), +rrf=변수1(check), "임베딩교체+RRF 동시"=변수2 → `StatusPill tone="warn">통제 위반`(alert-triangle). 변수 2개 동시 선택을 UI에서 막거나 경고(INV-7). 이 비교는 정적 라벨이어도 됨(원칙 시각화).
+- **안정성 게이지**(`Gauge`): content 빈값 발생률·length 재시도율. 실 API가 해당 지표를 주면 실값, 아니면 키트 데모값(8%/12%)에 **`(데모)`** 문구 유지(키트에 이미 있음). 임계 ≥25% 앰버.
+- **회귀 드릴다운**: "연차 휴가 신청 절차"(`q001`) → 휴가규정.pdf 정답 순위·정답 점수(0.695)·최상위 오답(출장경비.docx)·격차·게이트. **정답 순위·격차는 `per_query`의 실값을 우선**(baseline/+bm25 하이브리드 실값)으로 채운다. baseline·+bm25(=하이브리드 실값)에서 회귀 케이스는 SSOT상 실패(red)로 관측. **`+rrf` 성공 시각화(순위 `3 ▸ 1`·격차 `+0.012`·`GateChip PASS`)는 백엔드가 줄 수 없는 데모이므로 전부 `(데모)` 배지를 단다**(SSOT 06_페이즈5 line 40: RRF만으로 1위 전환 실측 근거 없음·교정 레버는 L2/L3). 데모 순위/격차를 실 `per_query` 값처럼 보이게 하지 말 것.
+- **L1→L2→L3 타임라인**(`TimelineNode`): 키트 유지(정적). **`+rrf` 성공 시 L2 `done` 점등은 데모 경로**이므로 `(데모)` 배지와 함께 표기(실 evaluate는 L2 임베딩 교체를 수행하지 않음).
+
+**4. AppShell 네비 연결**: 페이즈 10의 `web/src/App`(또는 라우터)에서 `index`·`eval` 탭이 새 `IndexScreen`/`EvalScreen`을 렌더하도록 연결(키트 `index.html`의 `active === "index" ? IndexScreen : EvalScreen` 분기 패턴). AppShell 헤더의 신뢰 클러스터는 손대지 않는다.
+
+---
+
+### 산출물 (생성/수정 파일)
+
+- 생성: `web/src/screens/IndexScreen.jsx` (키트 복사+배선)
+- 생성: `web/src/screens/EvalScreen.jsx` (키트 복사+배선)
+- 수정: 페이즈 9 FastAPI 진입점(예: `web/server/main.py`) — `/api/index/upload`·`/api/index/run`(+`/api/index/status`)·`/api/index/docs`·`/api/eval` 라우트 추가
+- 수정: `web/src/lib/api.js` — 인덱싱·평가용 fetch 함수 추가(화면 A 래퍼 재사용)
+- 수정: 페이즈 10의 라우팅/`App` 진입(예: `web/src/App.jsx`) — index/eval 탭 ↔ 새 화면 연결
+- (필요 시) `web/server/`의 업로드 저장 경로·골든셋 경로 상수(`eval/queries.yaml`)
+
+---
+
+### 완료 기준 (모두 통과해야 다음 페이즈 가능 — 미통과 시 커밋·진행 금지)
+
+1. **빌드 성공**: `web/`에서 `npm run build` 무오류.
+2. **외부 호출 0건 정적 점검**: 빌드 산출물(`web/dist` 또는 소스+index.html)에 `unpkg|jsdelivr|cdn|googleapis|gstatic|@babel/standalone` 문자열 **0건**. 프론트 코드가 `localhost:1234`를 직접 `fetch`하지 않음(백엔드만). 신뢰 클러스터(`ExternalCallsCounter count={0}`) 렌더됨.
+3. **화면 B 거부 동작**: 드롭존에 `.xlsx`/`.hwp` 투입 시 인덱싱 없이 "지원 안 함·스킵" 거부 표기. `.pdf`/`.docx`만 업로드 API로 전송.
+4. **화면 B 인덱싱 실데이터**: 데모 문서 2종 인덱싱 시 파이프라인 5노드가 실 카운트로 진행 완료, 색인 테이블에 차원 768·모델 nomic으로 행 표시. 재색인 멱등(2회째 변경 없음). 파싱 실패 문서는 error 행으로 스킵(전체 중단 안 함).
+5. **화면 C 평가 실데이터(2상태)**: 실험 baseline/+bm25/+rrf 전환 시 `POST /api/eval`가 `EvalResult`를 반환하고 Recall@1/3/5/10·MRR·nDCG@10 KPI·골든셋·드릴다운이 **실값**으로 갱신. **매핑은 2상태**(`baseline`=`use_bm25=False`, `+bm25`·`+rrf`=`use_bm25=True` 동일 호출)이며 `+bm25`와 `+rrf`가 같은 실값을 내는 것은 정상이다. baseline에서 회귀 케이스 Recall@1=0(red·REGRESS·G1 미달) 재현. **`+rrf` 회귀 성공 시각화 전체(`0 ▸ 1`·`+0.012`·순위 `3 ▸ 1`·`GateChip PASS`/G1 PASS·L2 `done`·`dem-flash`)에는 `(데모)` 배지가 붙어 있어야 하며, 실 `per_query`/실 KPI 자리에 데모 성공값이 새지 않는다**(실값은 evaluate가 주는 recall/mrr/ndcg/per_query뿐).
+6. **BGE-M3 미채택 규칙**: 화면 B 좌레일에서만 BGE-M3가 alert-triangle+DECISION 모달로 노출(실제 모델 교체 배선 없음). ChromaDB는 클릭 불가 placeholder. 화면 A·C 어디에도 BGE-M3 채택 UI 없음.
+7. **INV-4·INV-7 표기**: 화면 B에 `prompt_tokens=0 (unreliable)` 앰버 표기 존재. 화면 C 통제실험에서 변수 2개 동시 = "통제 위반"(alert-triangle).
+8. **디자인 토큰·이모지 점검**: 두 화면 JSX에 HEX 색상 리터럴(`#xxxxxx`) 신규 추가 0건(모두 `var(--…)` 토큰). **새 컬러 이모지 픽토그램 0건**. emoji-grep은 상태 마커 `⚠`/`✔`/`✓`를 오탐하므로, (a) 이들을 `Icon name="check|alert-triangle"`로 교체했거나 (b) grep 정규식에서 `U+26A0`·`U+2714`·`U+2713`을 화이트리스트 제외했어야 하며, 어느 경우든 게이트가 PASS여야 한다(채택한 방식과 게이트가 일치).
+
+---
+
+### 검증 명령 (macOS BSD 기준 — 복붙 실행)
+
+```bash
+# (A) 빌드
+( cd web && npm run build ) || { echo "BUILD FAIL"; exit 1; }
+
+# (B) 외부 호출/CDN 정적 점검 — 0건이어야 통과
+grep -rEn "unpkg|jsdelivr|cdn\.|jsdelivr|googleapis|fonts\.gstatic|@babel/standalone" web/dist web/index.html web/src 2>/dev/null \
+  && { echo "FAIL: 외부 호출 잔존"; exit 1; } || echo "PASS: 외부 호출 0"
+# 프론트가 LMStudio 직접 호출 안 함
+grep -rEn "localhost:1234|127\.0\.0\.1:1234" web/src 2>/dev/null \
+  && { echo "FAIL: 프론트가 LMStudio 직접 호출"; exit 1; } || echo "PASS: 프론트는 백엔드만 호출"
+
+# (C) HEX 색상 리터럴 신규 0건 / 컬러 이모지 0건 (배선한 두 화면)
+grep -nE "#[0-9a-fA-F]{6}" web/src/screens/IndexScreen.jsx web/src/screens/EvalScreen.jsx \
+  && { echo "FAIL: HEX 리터럴"; exit 1; } || echo "PASS: 토큰만 사용"
+# 이모지 grep: 상태 마커 ⚠(U+26A0)·✔(U+2714)·✓(U+2713)은 디자인시스템 허용 기호이므로 화이트리스트 제외.
+# (방식 a를 택해 Icon으로 교체했다면 애초에 매칭 0건. 방식 b를 택했다면 이 제외가 게이트.)
+grep -nP "[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}]" web/src/screens/*.jsx 2>/dev/null \
+  | grep -vP "[\x{26A0}\x{2714}\x{2713}]" \
+  && { echo "FAIL: 컬러 이모지"; exit 1; } || echo "PASS: 컬러 이모지 0 (⚠/✔/✓ 허용 제외)"
+
+# (D) 백엔드 라우트 존재 확인
+grep -nE "/api/index/upload|/api/index/run|/api/index/docs|/api/eval" web/server/main.py server/main.py 2>/dev/null | head
+# /api/eval 이 use_bm25 2상태 매핑이고 use_rerank=True를 절대 주지 않는지 확인
+grep -nE "use_bm25|use_rerank|experiment" web/server/main.py server/main.py 2>/dev/null | head
+grep -nE "use_rerank *= *True" web/server/main.py server/main.py 2>/dev/null \
+  && { echo "FAIL: use_rerank=True (NotImplementedError)"; exit 1; } || echo "PASS: use_rerank 미사용"
+
+# (E) 핵심 규칙 문자열 존재 확인
+grep -rn "prompt_tokens=0" web/src/screens/IndexScreen.jsx && echo "PASS: INV-4 표기"
+grep -rniE "통제 위반|단일 변수|변수 2" web/src/screens/EvalScreen.jsx && echo "PASS: INV-7 표기"
+grep -rniE "BGE-M3|DECISION" web/src/screens/IndexScreen.jsx && echo "PASS: BGE-M3 화면B 한정"
+grep -rniE "BGE-M3" web/src/screens/EvalScreen.jsx web/src/screens/QueryScreen.jsx 2>/dev/null \
+  && { echo "FAIL: BGE-M3가 화면 A/C에 노출"; exit 1; } || echo "PASS: A/C 미노출"
+# +rrf 성공 시각화에 (데모) 배지가 붙어 있는지 — 0▸1/+0.012/3▸1/PASS 인근에 데모 표기 필수
+grep -rniE "데모|demo" web/src/screens/EvalScreen.jsx | grep -iE "rrf|\+0.012|3 ?▸ ?1|0 ?▸ ?1|dem-flash|PASS" \
+  && echo "PASS: +rrf 성공경로 (데모) 표기" || { echo "FAIL: +rrf 성공값에 (데모) 배지 누락"; exit 1; }
+
+# (F) 런타임 스모크 (백엔드·LMStudio 기동 상태에서)
+#   FastAPI 기동(페이즈 9 방식) 후:
+curl -s -X POST localhost:8000/api/eval -H 'content-type: application/json' -d '{"experiment":"baseline"}' \
+  | python3 -c "import sys,json; d=json.load(sys.stdin); assert {'recall_at_1','recall_at_3','recall_at_5','recall_at_10','mrr','ndcg_at_10'} <= set(d), d; print('PASS eval keys; recall@1=',d['recall_at_1'])"
+# +bm25 와 +rrf 는 같은 use_bm25=True 호출 → 같은 EvalResult 여야 정상(2상태 매핑 검증)
+B=$(curl -s -X POST localhost:8000/api/eval -H 'content-type: application/json' -d '{"experiment":"bm25"}')
+R=$(curl -s -X POST localhost:8000/api/eval -H 'content-type: application/json' -d '{"experiment":"rrf"}')
+[ "$B" = "$R" ] && echo "PASS: +bm25 == +rrf (동일 use_bm25=True 호출)" || echo "WARN: +bm25 != +rrf — 매핑이 2상태인지 재확인"
+curl -s localhost:8000/api/index/docs | python3 -c "import sys,json; d=json.load(sys.stdin); print('docs rows:',len(d)); assert all(r.get('dim') in (768,'768','–') for r in d), d; print('PASS docs dim 768')"
+# 거부 동작: 더미 .xlsx 업로드 시 rejected에 잡혀야 함
+printf 'x' > /tmp/report.xlsx
+curl -s -X POST localhost:8000/api/index/upload -F file=@/tmp/report.xlsx \
+  | python3 -c "import sys,json; d=json.load(sys.stdin); assert d.get('rejected'), d; print('PASS reject xlsx')"
+```
+
+> 포트(8000)·진입점 경로·dev 프록시는 페이즈 9가 정한 값으로 치환한다. (F)는 LMStudio(localhost:1234, nomic 로드)·백엔드 기동을 전제로 한다. `+bm25`와 `+rrf`가 동일 결과인 것은 정본 2상태 매핑상 **정상**(버그 아님).
+
+---
+
+### 다음 페이즈 핸드오프
+
+- 화면 A(페이즈 10)·B·C 3화면이 모두 실 백엔드에 배선 완료 → docs-em 웹 UI 기능 셋 완성.
+- 다음 페이즈는 폐쇄망 패키징·E2E 통합 검증(전체 외부 호출 0 재확인)·운영 기동 스크립트(FastAPI+정적 빌드 서빙) 정리. 산출물: `web/dist` 정적 서빙 + 백엔드 통합 기동 1커맨드.
+- 인계 사실: 인덱싱/평가 API 계약(`/api/index/*`·`/api/eval` 응답 스키마), **실험→`evaluate` 파라미터 매핑은 2상태**(`baseline`=`use_bm25=False` / `+bm25`·`+rrf`=`use_bm25=True` 동일 RRF 하이브리드 호출, `use_rerank` 항상 False), **`+rrf` 회귀 성공 경로(0▸1·+0.012·3▸1·PASS·L2 done·dem-flash)는 데모이며 `(데모)` 배지 고정**(실 교정 레버는 L2 BGE-M3/L3 리랭커 — 미구현, SSOT 06_페이즈5 line 40), 안정성 게이지·KpiGap의 데모값 표기 위치(실 지표 연결 TODO), BGE-M3·ChromaDB는 DECISION placeholder로 동결 상태.
