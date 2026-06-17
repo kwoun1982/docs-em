@@ -16,6 +16,7 @@ const CAT_LABELS = {
   '03_DATABASE': 'DATABASE',
   '04_아키텍처_API': '아키텍처 · API',
   '05_운영_평가': '운영 · 평가',
+  '06_UIUX': 'UI · UX',
   '99_AI참조': 'AI 참조',
 };
 
