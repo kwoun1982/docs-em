@@ -207,7 +207,7 @@
 <td>1</td>
 <td><strong>한국어 주언어 여부</strong></td>
 <td>예 / 아니오</td>
-<td>(사용자 답)</td>
+<td>✅ <strong>예 (확정, 2026-06-17)</strong></td>
 <td>지금</td>
 <td>§B-9 #1</td>
 </tr>
@@ -279,6 +279,9 @@
 <hr>
 <h2>3. 각 결정 자세히 (쉬운 설명)</h2>
 <h3>결정 ① 임베딩 모델을 BGE-M3로 바꿀까?</h3>
+<blockquote>
+<p>✅ <strong>결정 #1(한국어 주언어)이 &quot;예&quot;로 확정</strong>되어(2026-06-17) <strong>BGE-M3 교체 검토 경로가 활성화</strong>됐습니다. 단 이는 &quot;검토 진입&quot;이며 <strong>채택 확정이 아닙니다</strong>. 채택은 아래 흐름대로 GGUF 다운로드 허용(결정 #6) → 골든셋 단독변수 재측정 → nomic 대비 개선 확인을 거쳐야 합니다(원칙 D2: 남의 사양만으로 채택 금지).</p>
+</blockquote>
 <p><strong>무슨 문제냐면</strong>: 지금 쓰는 임베딩 모델(<code>nomic</code>)이 한국어에 약합니다. 실제로 &quot;연차 휴가 신청 절차&quot;를 검색하면 <strong>정답이 1등이 아니라 3등</strong>으로 나옵니다(Recall@1 = 0, 정답이 오답보다 0.018 낮음). 이건 추측이 아니라 <strong>직접 측정된 사실</strong>입니다.</p>
 <p><strong>대안 후보</strong>: BGE-M3 (한국어 더 잘함, 1024차원, MIT 라이선스, 다운로드 1~2GB)</p>
 <table>
@@ -723,7 +726,7 @@
 </tbody></table>
 <blockquote>
 <p><strong>DECISION</strong> (시작프롬프트.md §B-9 #2) — BGE-M3 GGUF(1~2GB) 다운로드 및 채택 여부는 사용자 결정 사항입니다. 디스크/다운로드 비용 vs 한국어 변별력 트레이드오프. 허용 시 768→1024 인덱스 재생성 + norm 재측정이 따릅니다.
-<strong>DECISION</strong> (시작프롬프트.md §B-9 #1) — 주 사용 언어가 한국어인가? (예 가정) → 예이면 BGE-M3 교체 강력 권장.</p>
+✅ <strong>확정</strong> (시작프롬프트.md §B-9 #1, 2026-06-17) — 주 사용 언어는 <strong>한국어</strong>(사용자 결정) → BGE-M3 교체 검토 강력 권장(채택은 측정 후 결정 — §B-9 #2).</p>
 </blockquote>
 <p>→ 임베딩 교체 확정·실험은 <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F01_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D%EA%B2%B0%EC%A0%95%EC%84%9C.md" data-nav>01_기술스택결정서.md</a>(시작프롬프트.md §B-5)에서 진행합니다.</p>
 <hr>
@@ -940,7 +943,7 @@
 </tr>
 <tr>
 <td>스택</td>
-<td>미확정 (권장안만 존재, DECISION 4건 미확정)</td>
+<td>미확정 (권장안만 존재, DECISION 3건 미확정 — #1 한국어 주언어는 2026-06-17 확정)</td>
 </tr>
 <tr>
 <td>임베딩</td>
@@ -2391,7 +2394,7 @@ curl -s http://localhost:1234/v1/embeddings \
 <h3>4-3. (선택) 임베딩 모델 교체 — BGE-M3</h3>
 <p>한국어 검색 품질을 위해 BGE-M3(<strong>1024차원·ctx 8192</strong>, MIT, 한국어 Recall@1 우수) 교체를 권장하나, GGUF 1~2GB <strong>다운로드는 사용자 결정</strong>입니다. (nomic의 한국어 약점 실측치와 prefix 효과 미미 수치는 <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F02_%EB%A1%9C%EC%BB%AC%ED%99%98%EA%B2%BD_LMStudio%EC%8B%A4%EC%B8%A1.md" data-nav>02_로컬환경_LMStudio실측.md §4</a>에서 다룹니다.)</p>
 <ul>
-<li><strong>DECISION</strong>(시작프롬프트.md §B-9 #1): <strong>주 사용 언어가 한국어인가</strong> — BGE-M3 교체 권고의 대전제. 한국어 주언어이면 교체 검토 진입.</li>
+<li>✅ <strong>확정</strong>(시작프롬프트.md §B-9 #1, 2026-06-17): <strong>주 사용 언어 = 한국어</strong>(사용자 결정). BGE-M3 교체 권고의 대전제가 성립 → 교체 검토 진입(채택은 #2 다운로드 허용 + 측정 후 결정).</li>
 <li><strong>DECISION</strong>(시작프롬프트.md §B-9 #2): BGE-M3 GGUF 다운로드 허용 여부.</li>
 <li>교체하면 차원이 768 → 1024로 바뀌어 <strong>인덱스 전체 재생성</strong>이 필요하고, BGE-M3는 norm을 보장하지 않을 수 있어 <strong>norm 재측정 후 정규화 분기를 갱신</strong>해야 합니다(§4-2의 스모크 테스트를 BGE-M3 모델명으로 재실행, 기대 <code>dim= 1024</code>). → 시작프롬프트.md §B-5. 메타 필드 갱신은 <a href="#03_DATABASE%2F00_%EB%B2%A1%ED%84%B0%EC%8A%A4%ED%86%A0%EC%96%B4_%EC%8A%A4%ED%82%A4%EB%A7%88.md" data-nav>벡터스토어 스키마</a> 참조.</li>
 <li>셋업 단계에서는 <strong>현재 nomic을 그대로 두고</strong> L2에서 정량 비교 후 결정합니다.</li>
@@ -2541,11 +2544,11 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 <li><input disabled="" type="checkbox"> LMStudio 프리셋 reasoning 종료토큰 점검(§4-4 B) — 미해결 시 <strong>코드 폴백 필수</strong> 인지</li>
 <li><input disabled="" type="checkbox"> §B-11 디렉토리 스캐폴딩 생성, <code>.gitignore</code> 적용(<code>.env</code>·<code>data/</code> 제외 확인)</li>
 <li><input disabled="" type="checkbox"> README 작성(아키텍처·실행법), <code>git init</code> + 첫 커밋 완료(§5-3, SSOT §A-4-4·§A-1)</li>
-<li><input disabled="" type="checkbox"> <strong>DECISION</strong> 셋업 단계 1줄 확인: 한국어 주언어 여부(#1) · BGE-M3 다운로드(#2) · 벡터스토어(#4) · BM25 엔진(#5) · 기본 생성모델(#8) · reasoning 대응 방식(#10)</li>
+<li><input disabled="" type="checkbox"> <strong>DECISION</strong> 셋업 단계 1줄 확인: <del>한국어 주언어 여부(#1)</del> ✅ <strong>한국어 확정(2026-06-17)</strong> · BGE-M3 다운로드(#2) · 벡터스토어(#4) · BM25 엔진(#5) · 기본 생성모델(#8) · reasoning 대응 방식(#10)</li>
 </ul>
 <h3>다음 단계</h3>
 <ol>
-<li><strong>DECISION</strong> 확정: 한국어 주언어(§B-9 #1)·벡터스토어(#4)·BM25 엔진(#5)·BGE-M3 다운로드(#2)·기본 생성모델(#8)·reasoning 대응(#10) → 01_기술스택결정서.md <em>(작성 예정 — 우선 생성 권장)</em></li>
+<li><strong>DECISION</strong> 확정: <del>한국어 주언어(§B-9 #1)</del> ✅ <strong>한국어 확정(2026-06-17)</strong>·벡터스토어(#4)·BM25 엔진(#5)·BGE-M3 다운로드(#2)·기본 생성모델(#8)·reasoning 대응(#10) → 01_기술스택결정서.md <em>(작성 예정 — 우선 생성 권장)</em></li>
 <li><code>scripts/env_check.py</code>로 Phase 0 실측 자동화(본체 코드·결과 해석) → <a href="#01_%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%2F02_%EB%A1%9C%EC%BB%AC%ED%99%98%EA%B2%BD_LMStudio%EC%8B%A4%EC%B8%A1.md" data-nav>02_로컬환경_LMStudio실측.md §5</a></li>
 <li>운영 단계 reasoning BLOCKING 모니터링·롤백 경로 확인 → <a href="#05_%EC%9A%B4%EC%98%81_%ED%8F%89%EA%B0%80%2F01_%EC%9A%B4%EC%98%81_%EB%9F%B0%EB%B6%81.md" data-nav>운영 런북</a></li>
 <li>L1 검색 MVP 착수 → 02_기획서/02_범위_마일스톤.md <em>(작성 예정)</em> (시작프롬프트.md §B-10)</li>
@@ -2661,7 +2664,7 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>DECISION</strong> — 주 사용 언어를 <strong>한국어로 가정</strong>합니다(§B-9 #1). 이 가정 위에서 1순위 목표(한국어 검색 품질)가 성립하며, 한국어가 아닐 경우 임베딩 교체 전략(§B-5) 전제가 달라집니다. 진행 전 사용자 확인이 필요합니다.</p>
+<p>✅ <strong>확정 (2026-06-17)</strong> — 주 사용 언어는 <strong>한국어</strong>입니다(§B-9 #1, 사용자 결정). 이 확정 위에서 1순위 목표(한국어 검색 품질)가 성립하며, BGE-M3 임베딩 교체 검토 경로(§B-5)가 활성화됩니다(채택 자체는 측정 후 결정 — §9 참조).</p>
 </blockquote>
 <h3>2.2 비목표 (Non-Goals)</h3>
 <ul>
@@ -3079,8 +3082,8 @@ git commit -m &quot;chore: scaffold local RAG dev environment (Phase 0)&quot;
 </tr>
 </thead>
 <tbody><tr>
-<td>주 사용 언어 한국어 가정</td>
-<td><strong>DECISION</strong></td>
+<td>주 사용 언어 한국어</td>
+<td>✅ <strong>확정 (2026-06-17)</strong></td>
 <td>§B-9 #1</td>
 </tr>
 <tr>
