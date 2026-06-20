@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>docs-em 시스템 구조도 (AWS 스타일)</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --grid:#e3e8ef; --ink:#1a2433; --muted:#5a6b82;
+    --line:#7c8aa3; --line2:#aab7cc;
+    --compute:#ed7100; --storage:#7aa116; --net:#8c4fff;
+    --ai:#cd2264; --client:#232f3e; --eval:#01a88d; --infra:#e7157b;
+    --panel:#ffffff; --shadow:0 4px 18px rgba(20,40,80,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink)}
+
+  /* 상단 바 */
+  #topbar{position:fixed;top:0;left:0;right:0;height:54px;background:#fff;border-bottom:1px solid #dde3ec;
+    display:flex;align-items:center;gap:14px;padding:0 18px;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+  #topbar .title{font-weight:700;font-size:16px;letter-spacing:-.3px}
+  #topbar .title span{color:var(--muted);font-weight:500;font-size:13px;margin-left:8px}
+  #topbar .spacer{flex:1}
+
+  .tool{display:flex;align-items:center;gap:6px;background:#f0f3f8;border:1px solid #dde3ec;border-radius:8px;
+    padding:7px 11px;font-size:13px;cursor:pointer;color:var(--ink);transition:.12s;user-select:none;white-space:nowrap}
+  .tool:hover{background:#e6ebf3;border-color:#c8d2e2}
+  .tool.active{background:var(--client);color:#fff;border-color:var(--client)}
+  .tool svg{width:15px;height:15px}
+  .toolgroup{display:flex;gap:6px;align-items:center;padding-right:12px;border-right:1px solid #e4e9f1}
+  .toolgroup:last-child{border-right:none}
+  .zlabel{font-size:12px;color:var(--muted);min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
+
+  /* 캔버스 영역 — 기본 커서는 grab, 모드별로 JS가 교체 */
+  #stage{position:absolute;top:54px;left:0;right:0;bottom:0;overflow:hidden;cursor:grab;
+    background:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+      linear-gradient(#eef2f7 1px,transparent 1px),
+      linear-gradient(90deg,#eef2f7 1px,transparent 1px);
+    background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+  }
+  #stage.grabbing{cursor:grabbing}
+  #stage.draw{cursor:crosshair}
+  #stage.laser{cursor:none}              /* 레이저: 시스템 커서 숨김 */
+  #viewport{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+
+  svg.diagram{display:block;overflow:visible}
+  .grp-label{font-size:14px;font-weight:700;letter-spacing:.2px}
+  .grp-sub{font-size:12px;font-weight:500}
+
+  .node{cursor:pointer}
+  .node .box{fill:#fff;stroke-width:1.8px;rx:12;filter:drop-shadow(0 2px 5px rgba(20,40,80,.12))}
+  .node:hover .box{stroke-width:2.6px;filter:drop-shadow(0 5px 14px rgba(20,40,80,.24))}
+  .node.sel .box{stroke-width:3.2px}
+  .node .ttl{font-size:15px;font-weight:700;fill:var(--ink)}
+  .node .sub{font-size:11.5px;fill:var(--muted)}
+  .node .badge{font-size:14px;font-weight:800;fill:#fff}
+  .node .badge-num{font-size:15px;font-weight:900}
+
+  .edge{fill:none;stroke:var(--line);stroke-width:2px}
+  .edge.dash{stroke-dasharray:6 5;stroke:var(--line2)}
+  .edge.thick{stroke-width:2.6px}
+  .edge-lbl{font-size:11.5px;fill:#3b4a5e;font-weight:700}
+  .edge-lbl-bg{fill:#fff;rx:5;stroke:#e0e6ef;stroke-width:1}
+
+  #legend{position:fixed;left:16px;bottom:16px;background:var(--panel);border:1px solid #dde3ec;
+    border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);z-index:60;font-size:12px;max-width:230px}
+  #legend h4{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px}
+  #legend .row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  #legend .sw{width:13px;height:13px;border-radius:4px;flex:0 0 auto}
+  #legend .row span{font-size:12px}
+  #legend .hint{margin-top:9px;padding-top:9px;border-top:1px solid #eef2f7;color:var(--muted);font-size:11px;line-height:1.5}
+
+  /* 호버 툴팁 (빠른 요약) */
+  #tip{position:fixed;z-index:120;max-width:300px;background:#1b2433;color:#e6edf5;border-radius:10px;
+    padding:12px 14px;font-size:12.5px;line-height:1.55;box-shadow:0 8px 28px rgba(0,0,0,.35);
+    pointer-events:none;opacity:0;transition:opacity .12s;display:none}
+  #tip .tt{font-weight:700;font-size:13.5px;margin-bottom:5px}
+  #tip .tc{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    padding:2px 7px;border-radius:10px;color:#fff;margin-bottom:7px}
+  #tip .te{color:#a9d8c2;margin-bottom:6px}
+  #tip .more{margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.14);color:#9fb0c6;font-size:11px}
+
+  /* 상세 패널 (클릭 시 깊은 설명) */
+  #detail{position:fixed;top:70px;right:-460px;width:420px;max-height:calc(100vh - 90px);
+    background:var(--panel);border:1px solid #dde3ec;border-radius:14px;box-shadow:var(--shadow);
+    z-index:70;transition:right .28s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+  #detail.open{right:16px}
+  #detail .dhead{padding:18px 20px 14px;border-bottom:1px solid #eef2f7;position:sticky;top:0;background:#fff;border-radius:14px 14px 0 0}
+  #detail .dhead .cat{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;color:#fff;margin-bottom:8px}
+  #detail .dhead h3{font-size:18px;letter-spacing:-.3px}
+  #detail .dhead .path{font-size:12px;color:var(--muted);margin-top:3px;font-family:"SF Mono",Menlo,monospace}
+  #detail .dbody{padding:16px 20px 22px}
+  #detail .dbody p{font-size:13.5px;line-height:1.65;color:#33414f;margin-bottom:12px}
+  #detail .dbody .easy{background:#f0f8f4;border:1px solid #cfe9da;border-radius:9px;padding:11px 13px;margin-bottom:14px;font-size:13px;color:#1f5b3f}
+  #detail .dbody .easy b{color:#15803d}
+  #detail .dbody h5{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:14px 0 7px}
+  #detail .dbody table{width:100%;border-collapse:collapse;font-size:12.5px}
+  #detail .dbody td{padding:6px 8px;border-bottom:1px solid #eef2f7;vertical-align:top}
+  #detail .dbody td:first-child{color:var(--muted);width:38%;font-weight:600}
+  #detail .dbody .inv{background:#fff5f5;border:1px solid #fbd5d5;border-radius:8px;padding:10px 12px;font-size:12px;color:#9b2c2c;margin-top:12px;line-height:1.55}
+  #detail .close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:7px;border:1px solid #e4e9f1;
+    background:#f6f8fb;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+  #detail .close:hover{background:#eef2f7}
+  code{background:#f0f3f8;padding:1px 5px;border-radius:4px;font-size:11.5px;color:#8c4fff;font-family:"SF Mono",Menlo,monospace}
+
+  #draw{position:absolute;top:54px;left:0;right:0;bottom:0;z-index:40;pointer-events:none}
+  #draw.on{pointer-events:auto}
+
+  #laser{position:fixed;width:24px;height:24px;border-radius:50%;pointer-events:none;z-index:200;display:none;
+    background:radial-gradient(circle,rgba(255,40,40,.95) 0%,rgba(255,40,40,.5) 35%,rgba(255,40,40,0) 70%);
+    box-shadow:0 0 20px 7px rgba(255,40,40,.55);transform:translate(-50%,-50%)}
+
+  #penbar{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #dde3ec;
+    border-radius:30px;padding:7px 12px;display:none;gap:8px;align-items:center;z-index:90;box-shadow:var(--shadow)}
+  #penbar.show{display:flex}
+  .swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px #dde3ec}
+  .swatch.active{box-shadow:0 0 0 2px var(--client)}
+
+  #help{position:fixed;right:16px;bottom:16px;background:#232f3e;color:#dbe4ee;border-radius:10px;
+    padding:11px 15px;font-size:11.5px;line-height:1.6;z-index:60;max-width:250px;box-shadow:var(--shadow)}
+  #help b{color:#fff}
+  #help .x{float:right;cursor:pointer;color:#8b9bb4;margin-left:8px}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="title">docs-em 시스템 구조도<span>로컬 RAG · AWS 스타일</span></div>
+  <div class="spacer"></div>
+
+  <div class="toolgroup">
+    <div class="tool" id="zoomOut" title="축소">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+    </div>
+    <div class="zlabel" id="zlabel">100%</div>
+    <div class="tool" id="zoomIn" title="확대">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16" y1="16" x2="21" y2="21"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+    </div>
+    <div class="tool" id="fit" title="전체 보기">맞춤</div>
+  </div>
+
+  <div class="toolgroup">
+    <div class="tool" id="laserBtn" title="레이저 포인터 (L)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3" fill="currentColor"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+      레이저
+    </div>
+    <div class="tool" id="penBtn" title="펜 (P)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg>
+      펜
+    </div>
+    <div class="tool" id="hiBtn" title="형광펜 (H)">형광펜</div>
+    <div class="tool" id="clearBtn" title="그림 지우기">지우기</div>
+  </div>
+</div>
+
+<div id="penbar">
+  <div class="swatch active" style="background:#ff2d2d" data-c="#ff2d2d"></div>
+  <div class="swatch" style="background:#1971ff" data-c="#1971ff"></div>
+  <div class="swatch" style="background:#0ca678" data-c="#0ca678"></div>
+  <div class="swatch" style="background:#f59f00" data-c="#f59f00"></div>
+  <div class="swatch" style="background:#232f3e" data-c="#232f3e"></div>
+</div>
+
+<div id="stage">
+  <div id="viewport"></div>
+</div>
+<canvas id="draw"></canvas>
+<div id="laser"></div>
+<div id="tip"></div>
+
+<div id="legend">
+  <h4>색상 = 부품 종류</h4>
+  <div class="row"><span class="sw" style="background:#232f3e"></span><span>사용자 · 진입점 (app)</span></div>
+  <div class="row"><span class="sw" style="background:#8c4fff"></span><span>연결 어댑터 (llm)</span></div>
+  <div class="row"><span class="sw" style="background:#ed7100"></span><span>처리 (ingest · embed)</span></div>
+  <div class="row"><span class="sw" style="background:#7aa116"></span><span>저장 (store)</span></div>
+  <div class="row"><span class="sw" style="background:#cd2264"></span><span>검색·AI 모델 (retrieve)</span></div>
+  <div class="row"><span class="sw" style="background:#01a88d"></span><span>평가 하네스 (eval)</span></div>
+  <div class="row"><span class="sw" style="background:#7048e8"></span><span>지식 계층 · 온톨로지</span></div>
+  <div class="hint">실선 = 항상 연결 · 점선 = 보강/적재 한정<br><b>마우스를 올리면</b> 요약, <b>클릭하면</b> 상세.</div>
+</div>
+
+<div id="detail">
+  <button class="close" id="dClose">×</button>
+  <div class="dhead">
+    <span class="cat" id="dCat">CATEGORY</span>
+    <h3 id="dTitle">제목</h3>
+    <div class="path" id="dPath"></div>
+  </div>
+  <div class="dbody" id="dBody"></div>
+</div>
+
+<div id="help">
+  <span class="x" id="helpX">×</span>
+  <b>조작법</b><br>
+  · 마우스 휠 = 확대/축소<br>
+  · 빈 곳 드래그 = 이동<br>
+  · 노드에 <b>올리면</b> 요약 · <b>클릭</b>하면 상세<br>
+  · 단축키: <b>L</b>레이저 <b>P</b>펜 <b>H</b>형광펜 <b>F</b>맞춤 <b>Esc</b>해제
+</div>
+
+<script>
+const COLORS={client:"#232f3e",net:"#8c4fff",compute:"#ed7100",storage:"#7aa116",ai:"#cd2264",eval:"#01a88d",infra:"#e7157b",onto:"#7048e8"};
+const CATLABEL={client:"진입점 / 사용자",net:"연결 어댑터",compute:"데이터 처리",storage:"저장소",ai:"검색 · AI",eval:"평가",infra:"인프라",onto:"지식 계층 (온톨로지)"};
+
+/* 노드 배치: 겹침 방지를 위해 열 간격을 충분히 벌림.
+   레이아웃 그리드(가로): 사용자/문서 60 → 처리 360 → 620 → 저장 900
+   세로: 오프라인 행 y=110, 온라인 행 y=470, 하단 어댑터 y=640 */
+const NODES=[
+  {id:"docs",x:60,y:110,w:224,h:112,color:"client",icon:"doc",title:"원본 문서",sub:"PDF · DOCX",badge:"준비 1",detail:{
+    cat:"client",
+    easy:"회사에 쌓여 있는 휴가규정·출장경비 같은 PDF·워드 파일들.",
+    p:"<code>data/</code> 폴더의 원문 문서. 오프라인 인덱싱 파이프라인의 입력으로, 미리 한 번 정리해 둡니다.",
+    rows:[["형식","PDF, DOCX"],["위치","data/"]]}},
+
+  {id:"ingest",x:400,y:110,w:224,h:112,color:"compute",icon:"split",title:"ingest",sub:"글자 추출 + 잘게 쪼개기",badge:"준비 2",detail:{
+    cat:"compute",path:"src/ingest",
+    easy:"PDF에서 글자만 뽑아내고, 긴 문서를 검색하기 좋게 문단 단위로 잘게 나눕니다.",
+    p:"원본 문서를 텍스트로 변환(loaders)하고 한국어 친화적으로 청크 분할(chunker)합니다. 문장 분리는 kss, 형태소는 Kiwi를 씁니다.",
+    rows:[["라이브러리","pymupdf · python-docx · kss · Kiwi"],["출력","청크 + 메타데이터(출처·위치)"],["가드","청크 크기를 토큰 아닌 문자 기준으로 계산"]],
+    inv:"무음 잘림 방지: 토큰 카운트(prompt_tokens=0 오보고)를 신뢰하지 않고 문자 기준 입력 가드를 둡니다."}},
+
+  {id:"embed",x:740,y:110,w:224,h:112,color:"compute",icon:"vector",title:"embed",sub:"글 → 숫자(벡터) 변환",badge:"준비 3",detail:{
+    cat:"compute",path:"src/embed",
+    easy:"글의 '의미'를 숫자 목록으로 바꿉니다. 뜻이 비슷하면 숫자도 비슷해져서, 단어가 달라도 찾아낼 수 있습니다.",
+    p:"텍스트 리스트를 임베딩 벡터로 변환합니다. <code>llm.embed</code>를 호출하는 얇은 래퍼이되, 입력이 많으면 배치로 나눠 호출합니다. 문서 색인(3)과 질문 변환(5)에 같은 모델을 씁니다.",
+    rows:[["현재 모델","nomic-embed-text-v1.5 (768차원)"],["교체 후보","BGE-M3 (1024차원) — 측정 후 채택"],["의존","src/llm"]],
+    inv:"모델 교체(768→1024) 시 인덱스 전체 재생성 + norm 재측정 필수."}},
+
+  {id:"store",x:1080,y:110,w:224,h:112,color:"storage",icon:"db",title:"store",sub:"벡터 + BM25 저장 창고",badge:"준비 4",detail:{
+    cat:"storage",path:"src/store",
+    easy:"숫자로 바꾼 문서를 저장하고, '이 질문과 비슷한 문서'를 빠르게 꺼내주는 특수 창고. 서버 없이 파일로 동작.",
+    p:"벡터·메타데이터·BM25 코퍼스를 영속 저장하고 조회합니다. 인덱스 헤더(모델/차원/정규화/거리척도)를 함께 저장해 모델 교체 후 불일치를 조기에 차단합니다.",
+    rows:[["엔진","LanceDB (권장) · ChromaDB 폴백"],["거리척도","cosine / dot 명시 (기본 L2 금지)"],["헤더","model · dim · normalized · metric"]],
+    inv:"인덱스 헤더는 사이드카(_index_header.json)에 원자적으로 기록. 헤더-벡터 불일치 시 침묵 오답."}},
+
+  {id:"user",x:60,y:660,w:224,h:112,color:"client",icon:"user",title:"사용자",sub:"질문 입력 (CLI)",badge:"질의 1",detail:{
+    cat:"client",
+    easy:"평소 말투로 질문하는 사람. 예: \"연차 휴가 어떻게 신청해?\"",
+    p:"명령줄 인터페이스(<code>app/cli.py</code>)로 한국어 자연어 질의를 입력합니다. 이 질문이 온라인 파이프라인의 출발점입니다.",
+    rows:[["입력","자연어 질문 문자열"],["진입점","app/cli.py"]]}},
+
+  {id:"app",x:400,y:660,w:224,h:112,color:"client",icon:"cpu",title:"app",sub:"답변 생성 + CLI",badge:"질의 2",detail:{
+    cat:"client",path:"src/app",
+    easy:"찾아온 문서를 읽고, 사람이 보기 좋게 답을 정리해 출처와 함께 보여줍니다. 전체를 지휘하는 최상위 부품.",
+    p:"검색 결과를 컨텍스트로 답변을 생성(answer)하고 CLI를 제공합니다. retrieve·embed·llm에 의존하는 최상위 모듈로, 어떤 하위 모듈도 app을 import 하지 않습니다.",
+    rows:[["책임","답변 생성 + 진입점"],["의존","retrieve · embed · llm"],["출력","답변 + 출처"]]}},
+
+  {id:"retrieve",x:740,y:660,w:224,h:112,color:"ai",icon:"search",title:"retrieve",sub:"검색 + 결합 + (재정렬)",badge:"질의 3",detail:{
+    cat:"ai",path:"src/retrieve",
+    easy:"두 가지 방식으로 문서를 찾아 합칩니다: '뜻이 비슷한 것'(벡터)과 '단어가 똑같은 것'(BM25). 둘의 추천을 공정하게 합쳐 최종 순위를 냅니다.",
+    p:"dense(벡터)와 BM25(희소) 검색을 수행하고 RRF로 결합합니다. 선택적으로 리랭킹(L3)으로 한 번 더 정렬합니다.",
+    rows:[["밀집 검색","질의 임베딩 코사인 유사도"],["희소 검색","rank_bm25 + Kiwi 토큰화"],["결합","RRF (k=60)"],["리랭킹","BGE-reranker-v2-m3 (L3·선택)"]],
+    inv:"dense 단독은 '연차 휴가' 질의에서 정답 3위·Recall@1=0. 하이브리드로 한국어 약점 보완."}},
+
+  {id:"eval",x:400,y:898,w:224,h:112,color:"eval",icon:"chart",title:"eval 하네스",sub:"점수 매기는 채점표",detail:{
+    cat:"eval",path:"eval/",
+    easy:"부품을 바꿀 때마다 '진짜 좋아졌나'를 점수로 채점하는 모의고사. 느낌이 아니라 숫자로 판단.",
+    p:"골든셋(질문+정답 문서)을 로드해 Recall@k·MRR·nDCG를 측정합니다. 변수를 한 번에 하나만 바꿔 효과를 격리합니다.",
+    rows:[["파일","queries.yaml · evaluate.py"],["지표","Recall@1/3/5/10 · MRR · nDCG"],["핵심 목표","연차휴가 Recall@1: 0 → 1"]],
+    inv:"모든 개선은 정량 증명(INV-7). BGE-M3 교체와 리랭커 on을 동시에 켜지 않음."}},
+
+  {id:"llm",x:740,y:898,w:224,h:112,color:"net",icon:"plug",title:"llm",sub:"LMStudio 래퍼 (최하위)",badge:"질의 4",detail:{
+    cat:"net",path:"src/llm",
+    easy:"우리 컴퓨터 안의 AI 서버와 대화하는 유일한 창구. AI의 말썽(답을 엉뚱한 칸에 넣기)을 여기서 다 처리해 다른 부품은 신경 안 쓰게 함.",
+    p:"로컬 LMStudio 통신의 단일 진입점. chat(생성)·embed(임베딩) 두 함수를 제공합니다. openai SDK의 base_url만 로컬로 교체하고 외부 클라우드 API는 절대 호출하지 않습니다.",
+    rows:[["엔드포인트","http://localhost:1234/v1"],["api_key","'lm-studio' (더미)"],["함수","chat · embed"]],
+    inv:"reasoning 폴백: content 빈값→reasoning_content, <think> 정제, length 시 max_tokens×3 1회 재시도. norm 가드 abs(norm-1.0)<1e-3."}},
+
+  {id:"lmstudio",x:1080,y:898,w:224,h:112,color:"infra",icon:"server",title:"LMStudio 서버",sub:"localhost:1234 · 로컬 전용",detail:{
+    cat:"infra",path:"http://localhost:1234/v1",
+    easy:"우리 컴퓨터에서 돌아가는 AI 엔진. 인터넷의 챗GPT 대신 이걸 씁니다. 보안·비용 때문에 외부로 안 나갑니다.",
+    p:"OpenAI 호환 로컬 서버. 임베딩 모델 1종과 생성 모델 3종을 parallel=4로 서빙합니다. 모든 추론이 여기서 일어나며 외부 인터넷을 쓰지 않습니다.",
+    rows:[["임베딩","nomic-embed-text-v1.5 (768d)"],["생성①","gemma-4-e4b (ctx 65536·기본)"],["생성②","qwen3.5-9b (ctx 8192)"],["생성③","qwen3.6-35b-a3b (ctx 8192)"]],
+    inv:"3종 생성모델 모두 content 빈값 BLOCKING 이슈. 우회옵션 4종 전부 무효(실측)."}},
+
+  // ── 온톨로지 (지식 계층): 두 파이프라인 정중앙에 배치 — 인덱싱·질의 양쪽이 공유
+  {id:"ontology",x:740,y:384,w:224,h:112,color:"onto",icon:"graph",title:"온톨로지",sub:"동의어 · 관계 · 분류",detail:{
+    cat:"onto",path:"src/ontology · ontology/",
+    easy:"사람이 직접 만든 '지식 지도'. '연차=휴가=연가'처럼 같은 뜻 묶기, 부서·규정 사이 관계 잇기, 문서 주제 분류를 담당. 임베딩의 한국어 약점을 사람 지식으로 보완합니다.",
+    p:"임베딩이 통계로 추론하는 의미를, 온톨로지는 사람이 명시적으로 정의합니다. 세 부분 — ① 동의어 사전(질의 확장) ② 엔티티·관계 그래프(GraphRAG) ③ 분류 체계(택소노미 메타필터). 인덱싱(②④)·검색(⑤⑥)·생성(⑦)에 끼어들어 보강하되, 임베딩을 대체하지 않습니다.",
+    rows:[["① 동의어 사전","연차=휴가=연가 → 표제어 정규화·질의 확장"],["② 관계 그래프","휴가규정 --관할--> 인사팀 (관계 보강)"],["③ 분류 체계","인사/근태 vs 재무/경비 (주제 필터)"],["데이터","synonyms.yaml · taxonomy.yaml · entities.json"],["도입","L2 동의어 → L2~3 분류 → L3 그래프"]],
+    inv:"로컬 전용(INV-3): 엔티티 추출도 로컬 LMStudio만. 정량 증명(INV-7): 사전·그래프·분류 각각 단독 on/off 측정, 임베딩 교체와 동시 점등 금지. 사전 버전을 인덱스 무효화 키로."}},
+];
+
+const GROUPS=[
+  {x:372,y:72,w:944,h:190,color:"#1971ff",label:"오프라인 인덱싱 파이프라인",sub:"비실시간 · 미리 1회 처리"},
+  {x:372,y:630,w:944,h:420,color:"#0ca678",label:"온라인 질의 파이프라인",sub:"실시간 · 질문 시 처리"},
+  {x:716,y:368,w:492,h:144,color:"#7048e8",label:"지식 계층",sub:"인덱싱·질의 공유",dash:true,tabRight:true},
+];
+
+/* 연결선: 각 엣지의 경로를 명시적으로 지정해 노드 관통/겹침 제거.
+   fromSide/toSide 로 출발·도착 변을 고정, label 위치도 경로 중앙으로 자동 계산 */
+const EDGES=[
+  {from:"docs",to:"ingest",label:"원문",fromSide:"r",toSide:"l"},
+  {from:"ingest",to:"embed",label:"청크",fromSide:"r",toSide:"l"},
+  {from:"embed",to:"store",label:"벡터 저장",fromSide:"r",toSide:"l"},
+  {from:"ingest",to:"store",label:"BM25 코퍼스",fromSide:"t",toSide:"t",dash:true},
+
+  {from:"user",to:"app",label:"질문",fromSide:"r",toSide:"l",thick:true},
+  {from:"app",to:"retrieve",label:"검색 요청",fromSide:"r",toSide:"l"},
+  {from:"retrieve",to:"store",label:"인덱스 조회",fromSide:"t",toSide:"b"},
+  {from:"retrieve",to:"embed",label:"질의 임베딩",fromSide:"t",toSide:"b",dash:true,offset:-40,lblDy:119},
+  {from:"app",to:"llm",label:"답변 생성",fromSide:"b",toSide:"t",thick:true},
+  {from:"embed",to:"llm",label:"임베딩 호출",fromSide:"b",toSide:"l",dash:true,lblDx:-70,lblDy:40},
+  {from:"llm",to:"lmstudio",label:"API 호출",fromSide:"r",toSide:"l",thick:true},
+  {from:"eval",to:"retrieve",label:"채점",fromSide:"r",toSide:"b",dash:true},
+
+  // 온톨로지(지식 계층, 중앙) → 위로는 인덱싱, 아래로는 질의 보강 (점선)
+  {from:"ontology",to:"ingest",label:"분류 태깅",fromSide:"t",toSide:"b",dash:true,offset:-160,lblDy:-2},
+  {from:"ontology",to:"retrieve",label:"동의어 확장·관계 보강",fromSide:"b",toSide:"t",dash:true,offset:100,lblDy:2},
+];
+
+const W=1360, H=1080;
+const vp=document.getElementById("viewport");
+const SVGNS="http://www.w3.org/2000/svg";
+function el(t,a){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+const svg=el("svg",{class:"diagram",width:W,height:H,viewBox:`0 0 ${W} ${H}`});
+
+// 그룹 — 제목을 박스 '바깥 위쪽'의 탭으로 빼서 노드/엣지 라벨과 절대 겹치지 않게 함
+GROUPS.forEach(g=>{
+  // 박스
+  svg.appendChild(el("rect",{x:g.x,y:g.y,width:g.w,height:g.h,rx:16,fill:g.color,
+    "fill-opacity":g.dash?.05:.12,stroke:g.color,"stroke-width":1.6,"stroke-opacity":.5,
+    "stroke-dasharray":g.dash?"8 5":""}));
+  // 제목 탭 (박스 위쪽 바깥에 얹음 — 좌측 기본, tabRight면 우측)
+  // 한글은 글자당 폭이 넓으므로 label 16px/자, sub 12.5px/자 + 구분점 영역으로 넉넉히 계산
+  const labelW=g.label.length*16, subW=g.sub.length*12.5;
+  const padL=20, gap=18, padR=20;
+  const tabW=padL + labelW + gap + subW + padR;
+  const tabX=g.tabRight ? (g.x+g.w-14-tabW) : (g.x+14);
+  const ty=g.y-15;
+  svg.appendChild(el("rect",{x:tabX,y:ty-15,width:tabW,height:30,rx:15,fill:g.color}));
+  const t=el("text",{x:tabX+padL,y:ty+5,class:"grp-label",fill:"#fff"});t.textContent=g.label;svg.appendChild(t);
+  const s=el("text",{x:tabX+padL+labelW+gap,y:ty+5,class:"grp-sub",fill:"#fff","fill-opacity":.9});s.textContent=g.sub;svg.appendChild(s);
+});
+
+const nmap={};NODES.forEach(n=>nmap[n.id]=n);
+function anchor(n,side,off){
+  off=off||0;
+  const cx=n.x+n.w/2, cy=n.y+n.h/2;
+  if(side==="l")return[n.x,cy+off];
+  if(side==="r")return[n.x+n.w,cy+off];
+  if(side==="t")return[cx+off,n.y];
+  if(side==="b")return[cx+off,n.y+n.h];
+  return[cx,cy];
+}
+
+const defs=el("defs",{});
+[["arrow","#7c8aa3"],["arrowL","#aab7cc"]].forEach(([id,c])=>{
+  const m=el("marker",{id,markerWidth:9,markerHeight:9,refX:7,refY:3,orient:"auto",markerUnits:"strokeWidth"});
+  m.appendChild(el("path",{d:"M0,0 L7,3 L0,6 Z",fill:c}));
+  defs.appendChild(m);
+});
+svg.appendChild(defs);
+
+const edgeLayer=el("g",{});svg.appendChild(edgeLayer);
+const labelData=[];
+EDGES.forEach(e=>{
+  const a=nmap[e.from], b=nmap[e.to];
+  const [x1,y1]=anchor(a,e.fromSide,e.offset), [x2,y2]=anchor(b,e.toSide,e.offset);
+  let d, lx=(x1+x2)/2, ly=(y1+y2)/2;
+  const horiz=(e.fromSide==="r"||e.fromSide==="l"), tHoriz=(e.toSide==="r"||e.toSide==="l");
+  if(horiz&&tHoriz){
+    const mx=(x1+x2)/2;
+    d=`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+    lx=mx; ly=(y1+y2)/2;
+  }else if(!horiz&&!tHoriz){
+    // 둘 다 수직(t/b). 같은 변끼리면(t→t, b→b) 바깥으로 솟는 곡선 → 라벨을 정점에 둠
+    if(e.fromSide===e.toSide){
+      const dir=(e.fromSide==="t")?-1:1;          // t면 위로, b면 아래로
+      const peak=(e.fromSide==="t"?Math.min(y1,y2):Math.max(y1,y2))+dir*46;
+      d=`M${x1},${y1} C${x1},${peak} ${x2},${peak} ${x2},${y2}`;
+      lx=(x1+x2)/2; ly=peak+(dir<0?-2:14);        // 곡선 정점에 라벨
+    }else{
+      const my=(y1+y2)/2;
+      d=`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`;
+      lx=(x1+x2)/2; ly=my;
+    }
+  }else{
+    // 수평↔수직 혼합 → L자형 곡선, 라벨은 모서리 근처
+    if(horiz){ d=`M${x1},${y1} C${(x1+x2)/2},${y1} ${x2},${(y1+y2)/2} ${x2},${y2}`; lx=(x1+x2)/2+(x2>x1?-10:10); ly=y1; }
+    else{ d=`M${x1},${y1} C${x1},${(y1+y2)/2} ${(x1+x2)/2},${y2} ${x2},${y2}`; lx=x1; ly=(y1+y2)/2; }
+  }
+  // 라벨 오프셋 (엣지별 미세 조정)
+  if(e.lblDx)lx+=e.lblDx;
+  if(e.lblDy)ly+=e.lblDy;
+  const cls="edge"+(e.dash?" dash":"")+(e.thick?" thick":"");
+  edgeLayer.appendChild(el("path",{d,class:cls,"marker-end":`url(#${e.dash?"arrowL":"arrow"})`}));
+  if(e.label)labelData.push({lx,ly,label:e.label});
+});
+// 라벨은 맨 마지막(최상단 레이어)에 그려 노드·그룹에 가려지지 않게 함 — labelLayer는 아래 노드 렌더 후 추가
+
+const ICONS={
+  user:'<circle cx="8" cy="6" r="3.2"/><path d="M2.5 15c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/>',
+  doc:'<path d="M4 2h6l3 3v9a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M9 2v3h3"/><line x1="5.5" y1="8" x2="10.5" y2="8"/><line x1="5.5" y1="11" x2="10.5" y2="11"/>',
+  split:'<circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M6 8h2l2-3M8 8l2 3"/>',
+  vector:'<rect x="2" y="6" width="3" height="3" rx=".5"/><rect x="6.5" y="6" width="3" height="3" rx=".5"/><rect x="11" y="6" width="3" height="3" rx=".5"/><path d="M3.5 6V3.5h9"/>',
+  db:'<ellipse cx="8" cy="4" rx="5.5" ry="2"/><path d="M2.5 4v8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2V4"/><path d="M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2"/>',
+  search:'<circle cx="7" cy="7" r="4"/><line x1="10" y1="10" x2="14" y2="14"/>',
+  cpu:'<rect x="4" y="4" width="8" height="8" rx="1.5"/><rect x="6.5" y="6.5" width="3" height="3"/><path d="M6 4V2M10 4V2M6 14v-2M10 14v-2M4 6H2M4 10H2M14 6h-2M14 10h-2"/>',
+  plug:'<path d="M5 2v4M11 2v4M3 6h10v3a5 5 0 01-10 0V6zM8 14v-1"/>',
+  server:'<rect x="2" y="3" width="12" height="4" rx="1"/><rect x="2" y="9" width="12" height="4" rx="1"/><circle cx="5" cy="5" r=".7" fill="#fff"/><circle cx="5" cy="11" r=".7" fill="#fff"/>',
+  chart:'<line x1="3" y1="14" x2="3" y2="2"/><line x1="3" y1="14" x2="14" y2="14"/><rect x="5" y="8" width="2" height="6"/><rect x="8.5" y="5" width="2" height="9"/><rect x="12" y="9" width="2" height="5"/>',
+};
+
+const nodeLayer=el("g",{});svg.appendChild(nodeLayer);
+NODES.forEach(n=>{
+  const c=COLORS[n.color];
+  const g=el("g",{class:"node",id:"node-"+n.id});
+  g.appendChild(el("rect",{class:"box",x:n.x,y:n.y,width:n.w,height:n.h,rx:12,stroke:c}));
+  // 아이콘
+  const isz=40, iy=n.y+(n.h-isz)/2;
+  g.appendChild(el("rect",{x:n.x+14,y:iy,width:isz,height:isz,rx:10,fill:c}));
+  const ig=el("g",{transform:`translate(${n.x+14+(isz-16)/2},${iy+(isz-16)/2})`,stroke:"#fff","stroke-width":1.6,fill:"none","stroke-linecap":"round","stroke-linejoin":"round"});
+  ig.innerHTML=ICONS[n.icon]||"";g.appendChild(ig);
+  // 텍스트
+  const tx=n.x+14+isz+12;
+  const t1=el("text",{class:"ttl",x:tx,y:n.y+(n.h/2)-3});t1.textContent=n.title;g.appendChild(t1);
+  const t2=el("text",{class:"sub",x:tx,y:n.y+(n.h/2)+14});t2.textContent=n.sub;g.appendChild(t2);
+  // 배지 — "준비 2" 형식: 색 알약(라벨 흰글자) + 끝에 흰 원 안에 진한 색 숫자
+  if(n.badge){
+    const m=n.badge.match(/^(\S+)\s+(\d+)$/);
+    const label=m?m[1]:n.badge, num=m?m[2]:"";
+    const bh=26, padX=12, gap=8, circR=10;
+    const labelW=label.length*15;            // 한글 라벨 폭
+    const bw=padX + labelW + (num?gap+circR*2:0) + padX;
+    const bx=n.x+n.w-bw-10, by=n.y+10;
+    g.appendChild(el("rect",{x:bx,y:by,width:bw,height:bh,rx:bh/2,fill:c}));
+    const bt=el("text",{class:"badge",x:bx+padX,y:by+bh/2+5});bt.textContent=label;g.appendChild(bt);
+    if(num){
+      const cxp=bx+padX+labelW+gap+circR;
+      g.appendChild(el("circle",{cx:cxp,cy:by+bh/2,r:circR,fill:"#fff"}));
+      const nt=el("text",{class:"badge-num",x:cxp,y:by+bh/2,"text-anchor":"middle","dominant-baseline":"central",fill:c});nt.textContent=num;g.appendChild(nt);
+    }
+  }
+  g.addEventListener("mouseenter",ev=>showTip(n,ev));
+  g.addEventListener("mousemove",ev=>moveTip(ev));
+  g.addEventListener("mouseleave",hideTip);
+  g.addEventListener("click",ev=>{ev.stopPropagation();openDetail(n);selectNode(n.id);hideTip();});
+  nodeLayer.appendChild(g);
+});
+
+// 엣지 라벨을 최상단 레이어에 그림 (노드·그룹 위 → 가려짐/잘림 방지)
+const labelLayer=el("g",{});svg.appendChild(labelLayer);
+labelData.forEach(L=>{
+  const hasKo=/[가-힣]/.test(L.label);
+  const per=hasKo?13.5:7.2;                 // 한글은 글자당 폭이 넓음
+  const tw=L.label.length*per+16;
+  labelLayer.appendChild(el("rect",{x:L.lx-tw/2,y:L.ly-12,width:tw,height:23,class:"edge-lbl-bg",rx:6}));
+  const t=el("text",{x:L.lx,y:L.ly+4,class:"edge-lbl","text-anchor":"middle"});t.textContent=L.label;labelLayer.appendChild(t);
+});
+
+vp.appendChild(svg);
+
+//=============== 호버 툴팁 ===============//
+const tip=document.getElementById("tip");
+function showTip(n,ev){
+  if(mode==="pen"||mode==="hi")return;
+  const d=n.detail, cat=d.cat||n.color;
+  let h=`<span class="tc" style="background:${COLORS[cat]}">${CATLABEL[cat]||cat}</span>`;
+  h+=`<div class="tt">${n.title} — ${n.sub}</div>`;
+  if(d.easy)h+=`<div class="te">🟢 ${d.easy}</div>`;
+  if(d.rows&&d.rows[0])h+=`<div>${d.rows[0][0]}: <b>${d.rows[0][1]}</b></div>`;
+  h+=`<div class="more">클릭하면 핵심 사실·불변식까지 자세히 ▸</div>`;
+  tip.innerHTML=h;tip.style.display="block";requestAnimationFrame(()=>tip.style.opacity=1);
+  moveTip(ev);
+}
+function moveTip(ev){
+  const pad=16, tw=tip.offsetWidth, th=tip.offsetHeight;
+  let x=ev.clientX+18, y=ev.clientY+18;
+  if(x+tw>window.innerWidth-pad)x=ev.clientX-tw-18;
+  if(y+th>window.innerHeight-pad)y=ev.clientY-th-18;
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+function hideTip(){tip.style.opacity=0;setTimeout(()=>{if(tip.style.opacity==0)tip.style.display="none";},120);}
+
+//=============== 줌 / 팬 ===============//
+let scale=1, tx=0, ty=0;
+const stage=document.getElementById("stage");
+function applyT(){vp.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;document.getElementById("zlabel").textContent=Math.round(scale*100)+"%";}
+function fit(){
+  const r=stage.getBoundingClientRect();const pad=50;
+  const s=Math.min((r.width-pad*2)/W,(r.height-pad*2)/H);
+  scale=Math.min(s,1.3);
+  tx=(r.width-W*scale)/2; ty=(r.height-H*scale)/2;applyT();
+}
+function zoomAt(cx,cy,factor){
+  const r=stage.getBoundingClientRect();const px=cx-r.left, py=cy-r.top;
+  const ns=Math.max(.25,Math.min(3,scale*factor));
+  tx=px-(px-tx)*(ns/scale); ty=py-(py-ty)*(ns/scale);scale=ns; applyT();
+}
+stage.addEventListener("wheel",e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.12:1/1.12);},{passive:false});
+document.getElementById("zoomIn").onclick=()=>{const r=stage.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1.2);};
+document.getElementById("zoomOut").onclick=()=>{const r=stage.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1/1.2);};
+document.getElementById("fit").onclick=fit;
+
+let panning=false,sx=0,sy=0,stx=0,sty=0;
+stage.addEventListener("mousedown",e=>{
+  if(mode==="pen"||mode==="hi"||mode==="laser")return;
+  if(e.target.closest(".node"))return;
+  panning=true;sx=e.clientX;sy=e.clientY;stx=tx;sty=ty;stage.classList.add("grabbing");hideTip();
+});
+window.addEventListener("mousemove",e=>{if(panning){tx=stx+(e.clientX-sx);ty=sty+(e.clientY-sy);applyT();}});
+window.addEventListener("mouseup",()=>{panning=false;stage.classList.remove("grabbing");});
+stage.addEventListener("click",e=>{if(!e.target.closest(".node"))closeDetail();});
+
+//=============== 상세 패널 ===============//
+const detail=document.getElementById("detail");
+function selectNode(id){document.querySelectorAll(".node.sel").forEach(n=>n.classList.remove("sel"));const e2=document.getElementById("node-"+id);if(e2)e2.classList.add("sel");}
+function openDetail(n){
+  const d=n.detail, cat=d.cat||n.color;
+  document.getElementById("dCat").textContent=CATLABEL[cat]||cat;
+  document.getElementById("dCat").style.background=COLORS[cat]||"#555";
+  document.getElementById("dTitle").textContent=n.title+" — "+n.sub;
+  document.getElementById("dPath").textContent=d.path||"";
+  let html="";
+  if(d.easy)html+=`<div class="easy">🟢 <b>쉽게:</b> ${d.easy}</div>`;
+  if(d.p)html+=`<p>${d.p}</p>`;
+  if(d.rows){html+=`<h5>핵심 사실</h5><table>`;d.rows.forEach(r=>html+=`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`);html+=`</table>`;}
+  if(d.inv)html+=`<div class="inv"><b>⚠ 불변식/주의:</b> ${d.inv}</div>`;
+  document.getElementById("dBody").innerHTML=html;
+  detail.classList.add("open");
+}
+function closeDetail(){detail.classList.remove("open");document.querySelectorAll(".node.sel").forEach(n=>n.classList.remove("sel"));}
+document.getElementById("dClose").onclick=closeDetail;
+
+//=============== 도구 모드 ===============//
+let mode="pan";
+const laser=document.getElementById("laser");
+const penbar=document.getElementById("penbar");
+const canvas=document.getElementById("draw");
+const ctx=canvas.getContext("2d");
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight-54;}
+resizeCanvas();window.addEventListener("resize",resizeCanvas);
+
+function clearModeUI(){
+  document.querySelectorAll("#topbar .tool").forEach(b=>b.classList.remove("active"));
+  laser.style.display="none";penbar.classList.remove("show");
+  canvas.classList.remove("on");stage.classList.remove("draw","laser");
+}
+function setMode(m){
+  mode=(mode===m)?"pan":m;
+  clearModeUI();
+  if(mode==="laser"){document.getElementById("laserBtn").classList.add("active");laser.style.display="block";stage.classList.add("laser");}
+  if(mode==="pen"){document.getElementById("penBtn").classList.add("active");penbar.classList.add("show");canvas.classList.add("on");stage.classList.add("draw");}
+  if(mode==="hi"){document.getElementById("hiBtn").classList.add("active");penbar.classList.add("show");canvas.classList.add("on");stage.classList.add("draw");}
+  hideTip();
+}
+document.getElementById("laserBtn").onclick=()=>setMode("laser");
+document.getElementById("penBtn").onclick=()=>setMode("pen");
+document.getElementById("hiBtn").onclick=()=>setMode("hi");
+document.getElementById("clearBtn").onclick=()=>ctx.clearRect(0,0,canvas.width,canvas.height);
+
+// 레이저 추적 (시스템 커서는 #stage.laser 에서 none)
+window.addEventListener("mousemove",e=>{if(mode==="laser"){laser.style.left=e.clientX+"px";laser.style.top=e.clientY+"px";}});
+
+// 그리기
+let penColor="#ff2d2d",drawing=false,lastX,lastY;
+document.querySelectorAll(".swatch").forEach(s=>s.onclick=()=>{
+  document.querySelectorAll(".swatch").forEach(x=>x.classList.remove("active"));
+  s.classList.add("active");penColor=s.dataset.c;});
+function dpos(e){return[e.clientX,e.clientY-54];}
+canvas.addEventListener("mousedown",e=>{if(mode!=="pen"&&mode!=="hi")return;drawing=true;[lastX,lastY]=dpos(e);});
+canvas.addEventListener("mousemove",e=>{
+  if(!drawing)return;const[x,y]=dpos(e);
+  ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(x,y);ctx.lineCap="round";ctx.lineJoin="round";
+  if(mode==="hi"){ctx.strokeStyle=penColor;ctx.globalAlpha=.32;ctx.lineWidth=16;}
+  else{ctx.strokeStyle=penColor;ctx.globalAlpha=1;ctx.lineWidth=3;}
+  ctx.stroke();[lastX,lastY]=[x,y];
+});
+window.addEventListener("mouseup",()=>drawing=false);
+
+window.addEventListener("keydown",e=>{
+  if(e.key==="l"||e.key==="L")setMode("laser");
+  else if(e.key==="p"||e.key==="P")setMode("pen");
+  else if(e.key==="h"||e.key==="H")setMode("hi");
+  else if(e.key==="f"||e.key==="F")fit();
+  else if(e.key==="Escape"){mode="pan";clearModeUI();closeDetail();hideTip();}
+});
+
+document.getElementById("helpX").onclick=()=>document.getElementById("help").style.display="none";
+
+fit();
+</script>
+</body>
+</html>
