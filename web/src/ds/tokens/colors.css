@@ -1,0 +1,136 @@
+/* docs-em color system — exact tokens from the UI/UX spec.
+   Air-gapped dark console. Two "normal" signals are intentionally split:
+   TEAL  #2DD4BF = connection-ok / accent action / focus
+   GREEN #3FB950 = success / Recall achieved / score up / positive delta
+   Only risk earns amber/red. Blue is neutral meta, kept apart from the 3 states. */
+
+:root {
+  /* ---- Backgrounds ---- */
+  --bg-canvas:  #0D1117;   /* bottom canvas (header, main ground) */
+  --bg-sunken:  #0A0C10;   /* sidebar, code blocks — one step deeper */
+
+  /* ---- Surfaces ---- */
+  --surface-1:  #161B22;   /* card / panel, tier 1 */
+  --surface-2:  #1C2128;   /* hover / nested panel, tier 2 */
+
+  /* ---- Borders ---- */
+  --border-default: #30363D;  /* default divider */
+  --border-strong:  #3D444D;  /* emphasis border */
+  --border-subtle:  #21262D;  /* fine internal divider */
+
+  /* ---- Text ---- */
+  --fg-default: #E6EDF3;   /* primary body */
+  --fg-muted:   #9DA7B3;   /* secondary, labels */
+  --fg-faint:   #6E7681;   /* disabled, placeholder */
+
+  /* ---- Teal: connection ok / accent action / focus ---- */
+  --teal:        #2DD4BF;
+  --teal-tint:   rgba(45, 212, 191, 0.10);
+  --teal-tint-2: rgba(45, 212, 191, 0.18);
+  --teal-border: rgba(45, 212, 191, 0.40);
+
+  /* ---- Green: success / Recall achieved / score up / positive delta ---- */
+  --green:        #3FB950;
+  --green-tint:   rgba(63, 185, 80, 0.10);
+  --green-tint-2: rgba(63, 185, 80, 0.18);
+  --green-border: rgba(63, 185, 80, 0.40);
+
+  /* ---- Amber: retry / thinking-cut / cutoff-near / unreliable token ---- */
+  --amber:        #D29922;
+  --amber-tint:   rgba(210, 153, 34, 0.10);
+  --amber-tint-2: rgba(210, 153, 34, 0.18);
+  --amber-border: rgba(210, 153, 34, 0.40);
+
+  /* ---- Red: failure / regression / Recall@1=0 / disconnect ---- */
+  --red:        #F85149;
+  --red-tint:   rgba(248, 81, 73, 0.10);
+  --red-tint-2: rgba(248, 81, 73, 0.18);
+  --red-border: rgba(248, 81, 73, 0.40);
+
+  /* ---- Blue: neutral link / meta info (kept apart from the 3 states) ---- */
+  --blue:        #58A6FF;
+  --blue-tint:   rgba(88, 166, 255, 0.10);
+  --blue-border: rgba(88, 166, 255, 0.40);
+
+  /* =========================================================
+     Semantic aliases — prefer these in components
+     ========================================================= */
+  --surface-app:    var(--bg-canvas);
+  --surface-panel:  var(--bg-canvas);
+  --surface-rail:   var(--bg-sunken);
+  --surface-card:   var(--surface-1);
+  --surface-hover:  var(--surface-2);
+  --surface-inset:  var(--bg-sunken);
+
+  --text-primary:   var(--fg-default);
+  --text-secondary: var(--fg-muted);
+  --text-muted:     var(--fg-faint);
+  --text-faint:     var(--fg-faint);
+  --text-on-accent: #04231F;   /* dark ink on teal/green fills */
+
+  --border-card:  var(--border-default);
+  --border-input: var(--border-strong);
+
+  /* accent (interactive) = teal; success (status) = green */
+  --accent:        var(--teal);
+  --accent-hover:  #45E0CC;
+  --accent-fg:     var(--text-on-accent);
+  --accent-tint:   var(--teal-tint);
+  --accent-border: var(--teal-border);
+
+  --ok:        var(--green);
+  --ok-tint:   var(--green-tint);
+  --ok-border: var(--green-border);
+
+  --warn:        var(--amber);
+  --warn-tint:   var(--amber-tint);
+  --warn-border: var(--amber-border);
+
+  --danger:        var(--red);
+  --danger-tint:   var(--red-tint);
+  --danger-border: var(--red-border);
+
+  --info:        var(--blue);
+  --info-tint:   var(--blue-tint);
+  --info-border: var(--blue-border);
+
+  --focus-ring: 0 0 0 2px rgba(45, 212, 191, 0.55);
+  --selection:  var(--teal-tint-2);
+
+  /* =========================================================
+     Back-compat aliases (older primitives reference these names)
+     ========================================================= */
+  --bg-base:    var(--bg-canvas);
+  --bg-subtle:  var(--bg-sunken);
+  --bg-raised:  var(--surface-1);
+  --bg-overlay: var(--surface-2);
+  --bg-inset:   var(--bg-sunken);
+
+  --signal:        var(--teal);
+  --signal-bright: var(--accent-hover);
+  --signal-dim:    #1C8C7E;
+  --signal-bg:     var(--teal-tint);
+  --signal-bg-hi:  var(--teal-tint-2);
+  --signal-border: var(--teal-border);
+  --text-on-signal: var(--text-on-accent);
+
+  --warn-bright: var(--amber);
+  --warn-bg:     var(--amber-tint);
+  --warn-bg-hi:  var(--amber-tint-2);
+
+  --error:        var(--red);
+  --error-bright: var(--red);
+  --error-bg:     var(--red-tint);
+  --error-bg-hi:  var(--red-tint-2);
+  --error-border: var(--red-border);
+
+  --slate:        var(--blue);
+  --slate-bg:     var(--blue-tint);
+  --slate-border: var(--blue-border);
+
+  --score-0: var(--red);
+  --score-1: var(--amber);
+  --score-2: var(--amber);
+  --score-3: var(--green);
+  --score-4: var(--green);
+}

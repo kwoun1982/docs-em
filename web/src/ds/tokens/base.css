@@ -1,0 +1,59 @@
+/* docs-em base layer — resets + console ambient defaults.
+   Scoped lightly so specimen cards and kits inherit the right ground. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--surface-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  font-weight: var(--weight-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--selection); }
+
+/* Numeric / identifier text reads as tabular mono with .mono */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: var(--tracking-mono);
+}
+
+/* Uppercase eyebrow label used across the system */
+.eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Quiet console scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--fg-faint); background-clip: content-box; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--fg-default); }
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+hr { border: none; border-top: 1px solid var(--border-subtle); margin: var(--space-4) 0; }

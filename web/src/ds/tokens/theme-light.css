@@ -1,0 +1,59 @@
+/* docs-em — 라이트(밝은) 테마 오버라이드.
+   colors.css(:root, 다크)를 정본 보존하고, <html data-theme="light"> 일 때만
+   베이스 색 변수를 밝은 값으로 덮어쓴다. 시맨틱 alias·틴트는 베이스를 참조하므로
+   여기서 베이스만 바꾸면 전 컴포넌트가 함께 라이트로 전환된다.
+   액센트(teal/green/amber/red/blue) 색상(hue)은 공통 유지하되, 밝은 배경에서
+   대비를 살리려 틴트 불투명도만 약간 높이고 일부 액센트를 톤다운한다. */
+
+:root[data-theme="light"] {
+  /* ---- Backgrounds ---- */
+  --bg-canvas:  #FFFFFF;   /* header, main ground */
+  --bg-sunken:  #F2F4F7;   /* sidebar, code blocks — one step deeper */
+
+  /* ---- Surfaces ---- */
+  --surface-1:  #F7F9FB;   /* card / panel */
+  --surface-2:  #EBEFF3;   /* hover / nested */
+
+  /* ---- Borders ---- */
+  --border-default: #D5DBE2;
+  --border-strong:  #BFC7D1;
+  --border-subtle:  #E6EAEF;
+
+  /* ---- Text ---- */
+  --fg-default: #1A2027;   /* primary body */
+  --fg-muted:   #56606C;   /* secondary, labels */
+  --fg-faint:   #8A94A0;   /* disabled, placeholder */
+
+  /* ---- Accents: hue 유지, 밝은 배경 대비 위해 약간 톤다운 ---- */
+  --teal:        #0FA593;
+  --teal-tint:   rgba(15, 165, 147, 0.12);
+  --teal-tint-2: rgba(15, 165, 147, 0.20);
+  --teal-border: rgba(15, 165, 147, 0.42);
+
+  --green:        #2DA44E;
+  --green-tint:   rgba(45, 164, 78, 0.12);
+  --green-tint-2: rgba(45, 164, 78, 0.20);
+  --green-border: rgba(45, 164, 78, 0.42);
+
+  --amber:        #B07908;
+  --amber-tint:   rgba(176, 121, 8, 0.12);
+  --amber-tint-2: rgba(176, 121, 8, 0.20);
+  --amber-border: rgba(176, 121, 8, 0.42);
+
+  --red:        #D1242F;
+  --red-tint:   rgba(209, 36, 47, 0.10);
+  --red-tint-2: rgba(209, 36, 47, 0.18);
+  --red-border: rgba(209, 36, 47, 0.40);
+
+  --blue:        #0969DA;
+  --blue-tint:   rgba(9, 105, 218, 0.10);
+  --blue-border: rgba(9, 105, 218, 0.40);
+
+  /* teal/green 채움 위 텍스트: 라이트에선 흰 잉크가 대비가 낫다 */
+  --text-on-accent: #FFFFFF;
+
+  --accent-hover:  #0C8E7F;
+  --signal-dim:    #0B7A6C;
+
+  --focus-ring: 0 0 0 2px rgba(15, 165, 147, 0.55);
+}
