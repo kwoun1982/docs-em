@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# docs/*.md 또는 build.mjs가 스테이징되면 index.html을 재빌드해 같은 커밋에 포함.
+# 사이트(GitHub Pages)는 빌드 산출물 index.html을 서빙하므로 재빌드 누락 시 변경이 미반영됨.
+set -euo pipefail
+
+# 이번 커밋의 스테이징 변경에 docs/ 또는 build.mjs가 있는지 확인
+if ! git diff --cached --name-only | grep -qE '^(docs/|build\.mjs$)'; then
+  exit 0
+fi
+
+# node 탐색 (GUI 클라이언트 등 PATH가 빈약한 환경 대비로 nvm 경로 폴백)
+NODE_BIN="$(command -v node || true)"
+if [ -z "$NODE_BIN" ] && [ -s "$HOME/.nvm/nvm.sh" ]; then
+  # shellcheck disable=SC1091
+  . "$HOME/.nvm/nvm.sh" >/dev/null 2>&1 || true
+  NODE_BIN="$(command -v node || true)"
+fi
+if [ -z "$NODE_BIN" ]; then
+  echo "pre-commit: node를 찾을 수 없어 빌드를 건너뜁니다. 수동으로 'node build.mjs' 실행 후 커밋하세요." >&2
+  exit 1
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+echo "pre-commit: docs/build.mjs 변경 감지 → index.html 재빌드"
+( cd "$ROOT" && "$NODE_BIN" build.mjs )
+
+# 빌드로 index.html이 변했으면 같은 커밋에 포함
+if ! git diff --quiet -- "$ROOT/index.html"; then
+  git add "$ROOT/index.html"
+  echo "pre-commit: index.html을 커밋에 포함했습니다."
+fi
